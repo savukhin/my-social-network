@@ -1,0 +1,25 @@
+{
+  "name": "my-social-network",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm start --prefix client-angular",
+    "clientinstall": "npm install --prefix client-angular",
+    "start": "concurrently --kill-others-on-fail \"./serve.sh\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/savukhin/my-social-network.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/savukhin/my-social-network/issues"
+  },
+  "homepage": "https://github.com/savukhin/my-social-network#readme",
+  "dependencies": {
+    "concurrently": "^7.2.2"
+  }
+}
