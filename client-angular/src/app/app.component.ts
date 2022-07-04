@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 
 interface Answer {
   title: string
@@ -9,11 +9,11 @@ interface Answer {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'client-angular';
 
   constructor() {}
 
-  ngOnInit() {
+  ngAfterViewInit(): void {
   }
 }

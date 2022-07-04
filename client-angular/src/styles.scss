@@ -1,12 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'scss exports/var-colors';
+@import 'scss exports/mixins';
 
 body {
     margin: 0;
     display: block;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     // background-color: $main-color;
+}
+
+button {
+    background-color: unset;
+    border: unset;
+    cursor: pointer;
+}
+
+button:hover {
+    color: rgb(50, 50, 50, 1);
 }
 
 .button {
@@ -19,4 +30,52 @@ body {
 
 .button:hover {
     background-color: $button-hover-color;
+}
+
+.blocks-wrapper {
+    position: relative;
+    padding: 0 10px 0 10px;
+}
+
+.blocks-header {
+    background-color: $block-color;
+    border: $block-border-color solid 1px;
+    padding: 10px;
+}
+
+.block {
+    border: $block-border-color solid 1px;
+    background-color: $block-color;
+    padding: 10px;
+    margin: 0 0 10px 0;
+
+    .button {
+        width: 100%;
+        margin-bottom: 4px;
+    }
+}
+
+img {
+    width: 100%;
+}
+
+input[type=input] {
+    border-radius: 5px;
+}
+
+.invisible {
+    display: none;
+}
+
+.grid-2-col {
+    @include columns-2(50%, 50%);
+}
+
+.avatar-mini {
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    object-fit:cover;
+    padding: 4px;
+    cursor: pointer;
 }

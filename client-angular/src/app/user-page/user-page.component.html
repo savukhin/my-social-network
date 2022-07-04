@@ -1,1 +1,61 @@
-<p>user-page works!</p>
+<div class="profile-wrapper">
+    <div class="blocks-wrapper">
+        <div class="block">
+            <img class="" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+            <button class="button">Change photo</button>
+            <button class="button">Add friend</button>
+            <button class="button">Write message</button>
+        </div>
+        <div class="block">
+            <div class="block-header">
+                <button>Friends</button>
+            </div>
+            <div class="profile-friends">
+                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+            </div>
+        </div>
+    </div>
+    <div class="blocks-wrapper">
+        <div class="block profile-page-top">
+            <span>{{ profile.isOnline ? 'online' : 'offline' }}</span>
+            <h1>{{ profile.name }}</h1>
+            <div class="hidden-input-wrapper" *ngIf="!editStatus" (click)="showEditStatus()">   
+                <p>{{ profile.status }}</p>
+            </div>
+            <div class="edit-status" *ngIf="editStatus">
+                <input type="text" #pleaseDoIt/>
+                <button class="button">Edit</button>
+                <button class="button" (click)="hideEditStatus()">Cancel</button>
+            </div>
+        </div>
+        <div class="block">
+            <table class="profile-info-table">
+                <tbody>
+                    <tr>
+                        <td>Date of birth:</td>
+                        <td>{{ profile.birthDate }}</td>
+                    </tr>
+                    <tr>
+                        <td>City:</td>
+                        <td>{{ profile.city }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="button">Change information</button>
+        </div>
+        <div class="block">
+            <div class="write-post-wrapper">
+                <textarea placeholder="Don't you want to tell something about?"></textarea>
+                <button class="button">Post</button>
+            </div>
+        </div>
+        <div class="blocks-header">
+            POSTS
+        </div>
+        <div class="block post">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+    </div>
+</div>

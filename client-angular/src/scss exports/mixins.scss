@@ -1,4 +1,5 @@
-@mixin columns-2($left-size, $right-size) {
+@mixin columns-2($left-size, $right-size, $gap: 0) {
     display: grid;
     grid-template-columns: $left-size $right-size;
+    gap: $gap;
 }
