@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'scss exports/var-colors';
+
+body {
+    margin: 0;
+    display: block;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    // background-color: $main-color;
+}
+
+.button {
+    background-color: $button-color;
+    border: $button-border-color solid 1px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.button:hover {
+    background-color: $button-hover-color;
+}

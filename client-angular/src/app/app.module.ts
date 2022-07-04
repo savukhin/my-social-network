@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, Title } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { HelloWorldService } from './hello-world.service';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    AppRoutingModule
   ],
-  providers: [HelloWorldService, Title],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
