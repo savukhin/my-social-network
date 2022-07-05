@@ -26,6 +26,21 @@ button:hover {
     cursor: pointer;
     padding: 4px;
     border-radius: 4px;
+    text-decoration: none;
+    color: $text-color;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    text-align: center;
+    align-items: flex-start;
+    appearance: auto;
+    writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    margin: 0em;
+    box-sizing: border-box;
 }
 
 .button:hover {
