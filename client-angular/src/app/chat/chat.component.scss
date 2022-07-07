@@ -1,0 +1,85 @@
+@import '../../scss exports/var-colors.scss';
+@import '../../scss exports/var-sizes.scss';
+@import '../../scss exports/mixins.scss';
+
+$chat-footer-bottom: 100px;
+$chat-footer-height: 60px;
+
+.chat-block {
+    height: calc(100vh - ($navbar-height + $chat-footer-bottom + $chat-footer-height + 20px));
+    padding: 0;
+    border: none;
+}
+
+.chat-header-wrapper {
+    z-index: 2;
+    @include columns-2(80px, auto);
+    background-color: $secondary-bg-color;
+    position: fixed;
+    top: $navbar-height + 20px;
+    width: 800px;
+    border: white 0px solid;
+    border-top-width: 20px;
+    margin-top: -20px;
+
+    h4{
+        text-align: center;
+    }
+}
+
+.chat-picture-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.chat-content {
+    position: absolute;
+    bottom: 0;
+}
+
+.chat-message {
+    margin: 3px 0 15px 0;
+    padding: 10px;
+    z-index: 2;
+    @include columns-2(80px, auto);
+    top: $navbar-height + 20px;
+    cursor: pointer;
+
+    h4{
+        text-align: center;
+    }
+}
+
+.chat-message:hover {
+    background-color: rgb(255, 255, 255, 0.3);
+}
+
+.chat-footer-wrapper {
+    position: fixed;
+    bottom: $chat-footer-bottom;
+    height: $chat-footer-height;
+    width: 800px;
+    background-color: $secondary-bg-color;
+    // padding: 2px;
+
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+}
+
+.chat-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: 5px;
+
+    @include columns-2(auto, 100px, 10px);
+
+    textarea {
+        resize: none;
+        
+
+    }
+}

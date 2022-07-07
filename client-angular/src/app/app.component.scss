@@ -1,12 +1,13 @@
 @import '../scss exports/var-colors';
+@import '../scss exports/var-sizes';
 @import '../scss exports/mixins';
 @import '../scss exports/extends';
 
-$navbar-height: 60px;
 $content-width: min(100vw, 1000px);
 
 .navbar {
     @extend %centerize-content;
+    z-index: 2;
     position: fixed;
     height: $navbar-height;
     width: 100vw;

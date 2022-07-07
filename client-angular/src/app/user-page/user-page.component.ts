@@ -15,9 +15,7 @@ export class UserPageComponent implements AfterViewInit {
     }
     editStatus = false
     
-    // @ViewChild('status', { static: false, read: ElementRef }) status: ElementRef<HTMLInputElement> = {} as ElementRef;
-    @ViewChild('pleaseDoIt') input: ElementRef<HTMLInputElement> = {} as ElementRef;;
-    // @ViewChild('pleaseDoIt') input: ElementRef;
+    @ViewChild('pleaseDoIt') input: ElementRef<HTMLInputElement> = {} as ElementRef;
 
     showEditStatus() {
         // document.getElementById('statusInput')?.focus();

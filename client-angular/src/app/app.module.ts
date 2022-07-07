@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MessagesComponent } from './messages/messages.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserPageComponent,
     MessagesComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

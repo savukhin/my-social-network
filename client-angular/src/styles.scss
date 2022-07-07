@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'scss exports/var-colors';
+@import 'scss exports/var-sizes';
 @import 'scss exports/mixins';
 
 body {
@@ -59,9 +60,10 @@ button:hover {
 }
 
 .block {
+    position: relative;
     border: $block-border-color solid 1px;
     background-color: $block-color;
-    padding: 10px;
+    padding: $block-padding;
     margin: 0 0 10px 0;
 
     .button {

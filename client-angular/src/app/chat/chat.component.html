@@ -1,0 +1,23 @@
+<div class="block chat-block" #block (window:resize)="onResize()">
+    <div class="chat-header-wrapper" [ngStyle]="{ 'width' : contentWidth + 'px'}">
+        <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+        <h4>Kirill Klimonov</h4>
+    </div>
+    <div class="chat-content" [ngStyle]="{ 'width' : contentWidth + 'px'}">
+        <div class="chat-message">
+            <div class="folder-picture-wrapper">
+                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+            </div>
+            <div>
+                <span>Kirill Klimonov</span><span> 10:12</span>
+                <p>Hi! How are you doing?</p>
+            </div>
+        </div>
+    </div>
+    <div class="chat-footer-wrapper" [ngStyle]="{ 'width' : contentWidth + 'px'}">
+        <div class="chat-footer">
+            <textarea placeholder="Start typing..."></textarea>
+            <button class="button">Send</button>
+        </div>
+    </div>
+</div>
