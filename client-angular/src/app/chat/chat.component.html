@@ -4,13 +4,16 @@
         <h4>Kirill Klimonov</h4>
     </div>
     <div class="chat-content" [ngStyle]="{ 'width' : contentWidth + 'px'}">
-        <div class="chat-message">
+        <div class="chat-message" *ngFor="let message of chat.messages">
             <div class="folder-picture-wrapper">
-                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+                <img class="avatar-mini"
+                    [src]="chat.participants[message.authorId].avatarURL 
+                        ? chat.participants[message.authorId].avatarURL
+                        : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
             </div>
             <div>
-                <span>Kirill Klimonov</span><span> 10:12</span>
-                <p>Hi! How are you doing?</p>
+                <span>{{ chat.participants[message.authorId].name }}</span><span> {{ message.time.toLocaleDateString("en-US") }}</span>
+                <p>{{ message.text }}</p>
             </div>
         </div>
     </div>

@@ -6,7 +6,7 @@ export class Message {
     constructor(text="", time=new Date(), authorId=0) {
         this.text = text;
         this.time = time;
-        this,authorId = authorId;
+        this.authorId = authorId;
     }
   
 }
