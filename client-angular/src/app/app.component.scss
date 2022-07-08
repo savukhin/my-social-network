@@ -3,6 +3,7 @@
 @import '../scss exports/mixins';
 @import '../scss exports/extends';
 
+$menu-width: 200px;
 $content-width: min(100vw, 1000px);
 
 .navbar {
@@ -35,10 +36,12 @@ $content-width: min(100vw, 1000px);
 
 .authed-layout {
     width: $content-width;
-    @include columns-2(200px, auto);
+    @include columns-2($menu-width, auto);
 }
 
 .menu {
+    position: fixed;
+    width: $menu-width - 20px;
     padding: 2px 10px 1px 10px;
     .button {
         margin-top: 10px;

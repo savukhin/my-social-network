@@ -34,12 +34,15 @@ $chat-footer-height: 60px;
 
 .chat-content {
     position: absolute;
-    bottom: 0;
+    padding-bottom: $chat-footer-bottom + $chat-footer-height;
+}
+
+.chat-message-wrapper {
+    background-color: $block-color;
 }
 
 .chat-message {
-    margin: 3px 0 15px 0;
-    padding: 10px;
+    padding: 13px 10px 25px 10px;
     z-index: 2;
     @include columns-2(80px, auto);
     top: $navbar-height + 20px;
@@ -56,10 +59,11 @@ $chat-footer-height: 60px;
 
 .chat-footer-wrapper {
     position: fixed;
-    bottom: $chat-footer-bottom;
+    bottom: 0;
     height: $chat-footer-height;
     width: 800px;
     background-color: $secondary-bg-color;
+    border-bottom: white $chat-footer-bottom solid;
     // padding: 2px;
 
     // display: flex;

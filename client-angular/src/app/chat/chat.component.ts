@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Chat } from 'src/models/chat';
 import { Message } from 'src/models/message';
@@ -11,6 +11,9 @@ import { User } from 'src/models/user';
 })
 export class ChatComponent implements AfterViewInit {
   @ViewChild('block') block: ElementRef<HTMLDivElement> = {} as ElementRef;
+  // @ViewChild('chatContent') myScrollContainer: ElementRef<HTMLDivElement> = {} as ElementRef;
+  @ViewChild('chatContent') myScrollContainer: any;
+  @ViewChild('targetView') targetView: ElementRef<HTMLDivElement> = {} as ElementRef;
   contentWidth = 0;
  
   chat: Chat = new Chat(0, "Kirill Klimonov",
@@ -22,6 +25,13 @@ export class ChatComponent implements AfterViewInit {
         new Message("I was really cool party, thanks!", new Date(new Date().getSeconds() - 24 * 60 * 60), 1),
         new Message("I glad you've enjoyed :)", new Date(new Date().getSeconds() - 24 * 60 * 60 + 14), 2),
         new Message("Hi! How are you doing?", new Date(), 2),
+        new Message("Hi! How are you doing?", new Date(), 2),
+        new Message("Hi! How are you doing?", new Date(), 2),
+        new Message("Hi! How are you doing?", new Date(), 2),
+        new Message("Hi! How are you doing?", new Date(), 2),
+        new Message("Hi! How are you doing?", new Date(), 2),
+        new Message("Hi! How are you doing?", new Date(), 2),
+        new Message("Hi! How are you doing?", new Date(), 2),
     ]
   )
 
@@ -32,6 +42,8 @@ export class ChatComponent implements AfterViewInit {
 
     // this.chatId = +(id as string);
   }
+  ngOnInit(): void {
+  }
 
   onResize(): void {
     this.contentWidth = this.block.nativeElement.scrollWidth;
@@ -41,7 +53,20 @@ export class ChatComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.contentWidth = this.block.nativeElement.scrollWidth;
     this.cdref.detectChanges();
+    // this.scrollToBottom();
+    let x = this.targetView.nativeElement as HTMLElement;
+    setTimeout(() => {
+      console.log("Before Scroll");
+      this.scroll(x);
+      console.log("Scrolled");
+      
+    }, 20);
+    this.targetView.nativeElement.scrollIntoView();
+    console.log(this.targetView.nativeElement.offsetTop);
     
   }
 
+  scroll(el: HTMLElement) {
+    el.scrollIntoView();
+  }
 }
