@@ -3,7 +3,6 @@
         <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
         <h4>Kirill Klimonov</h4>
     </div>
-    <!-- <div #chatContent style="overflow: scroll; height: xyz;" #scrollMe [scrollTop]="scrollMe.scrollHeight"> -->
         <div class="chat-content" [ngStyle]="{ 'width' : contentWidth + 'px'}">
             <div class="chat-message-wrapper" *ngFor="let message of chat.messages">
                 <div class="chat-message">
@@ -21,7 +20,6 @@
             </div>
             <div #targetView></div>
         </div>
-    <!-- </div> -->
     <div class="chat-footer-wrapper" [ngStyle]="{ 'width' : contentWidth + 'px'}">
         <div class="chat-footer">
             <textarea placeholder="Start typing..."></textarea>

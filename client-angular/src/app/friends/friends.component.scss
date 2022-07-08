@@ -1,0 +1,29 @@
+@import '../../scss exports/mixins.scss';
+
+.firend-list-wrapper {
+    list-style: none;
+    ul {
+        padding: 5px;
+        @include columns-2(80px, auto);
+        cursor: pointer;
+    }
+
+    ul:hover {
+        background-color: rgb(255, 255, 255, 0.3);
+    }
+}
+
+.friend-picture-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.friend-info-wrapper {
+    svg {
+        width: 10px;
+    }
+
+    .button {
+        width: auto;
+    }
+}

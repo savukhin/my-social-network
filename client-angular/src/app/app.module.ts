@@ -9,6 +9,7 @@ import { UserPageComponent } from './user-page/user-page.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MessagesComponent } from './messages/messages.component';
 import { ChatComponent } from './chat/chat.component';
+import { FriendsComponent } from './friends/friends.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ChatComponent } from './chat/chat.component';
     UserPageComponent,
     MessagesComponent,
     ChatComponent,
+    FriendsComponent,
   ],
   imports: [
     BrowserModule,
