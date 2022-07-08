@@ -1,5 +1,5 @@
-@import "../../scss exports/var-colors.scss";
-@import "../../scss exports/mixins.scss";
+@import "../../../scss exports/var-colors.scss";
+@import "../../../scss exports/mixins.scss";
 
 .profile-wrapper {
     @include columns-2(250px, auto, 10px);

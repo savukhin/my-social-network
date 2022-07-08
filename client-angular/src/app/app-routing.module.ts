@@ -3,7 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { ChatComponent } from './chat/chat.component';
 import { FriendsComponent } from './friends/friends.component';
 import { MessagesComponent } from './messages/messages.component';
-import { UserPageComponent } from './user-page/user-page.component';
+import { UpdateProfileComponent } from './profile/update-profile/update-profile.component';
+import { UserPageComponent } from './profile/user-page/user-page.component';
 
 const routes: Routes = [
     {
@@ -21,6 +22,10 @@ const routes: Routes = [
     {
       path: 'friends',
       component: FriendsComponent
+    },
+    {
+      path: 'edit-profile',
+      component: UpdateProfileComponent
     },
 ];
 
