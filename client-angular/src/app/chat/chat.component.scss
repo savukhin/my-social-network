@@ -35,6 +35,7 @@ $chat-footer-height: 60px;
 .chat-content {
     position: absolute;
     padding-bottom: $chat-footer-bottom + $chat-footer-height;
+    padding-top: 80px;
 }
 
 .chat-message-wrapper {
