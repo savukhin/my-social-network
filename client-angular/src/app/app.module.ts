@@ -13,6 +13,7 @@ import { FriendsComponent } from './friends/friends.component';
 import { UpdateProfileComponent } from './profile/update-profile/update-profile.component';
 import { LoginComponent } from './auth/login/login.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
     UpdateProfileComponent,
     LoginComponent,
     MainLayoutComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,

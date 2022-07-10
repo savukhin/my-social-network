@@ -15,10 +15,12 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  register(login: string, email:string, password: string, password2: string) {
+    return of("TOKEN");
+  }
+
   login(login: string, password: string) {
-    return new Observable<User>((observer) => {
-        observer.next(new User(0, "Saveliy Karpukhin", true));
-    })
+    return of("TOKEN");
     // return this.http.post<User>('/api/auth/login', {login, password}).pipe(
     //     tap((res: any) => this.setSession),
     //     shareReplay()

@@ -1,0 +1,31 @@
+<div class="block">
+    <form [formGroup]="form">
+        <legend><b>Register</b></legend>
+        <br/>
+        <fieldset>
+            <div>
+                <label>Login:</label>
+                <br/>
+                <label>Email:</label>
+                <br/>
+                <label>Password:</label>
+                <br/>
+                <label>Password repeat:</label>
+            </div>
+            <div>
+                <input name="login" formControlName="login">
+                <br/>
+                <input name="email" formControlName="email">
+                <br/>
+                <input name="password" formControlName="password" type="password">
+                <br/>
+                <input name="password2" formControlName="password2" type="password">
+            </div>
+        </fieldset>
+        <div class="form-buttons">
+            <button class="button" (click)="register()">Register</button>
+            <br/>
+        <a class="button" routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</a>
+        </div>
+    </form>
+</div>
