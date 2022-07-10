@@ -29,6 +29,8 @@
 .logo {
     font-size: 30px;
     display: flex;
+    cursor: pointer;
+    user-select: none;
     
     span {
         margin: 0 10px;
