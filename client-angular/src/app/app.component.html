@@ -5,19 +5,15 @@
             <span style="background-color: rgb(177, 177, 255)">Social</span>
             <span style="background-color: rgb(122, 239, 122)">Network</span>
         </div>
-        <div>PROFILE</div>
+        <div *ngIf="user != undefined">
+            <img class="avatar-mini"
+                    [src]="user.avatarURL 
+                        ? user.avatarURL
+                        : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
+        </div>
     </div>
 </div>
 <div class="under-nav">
-    <div class="authed-layout">
-        <div></div>
-        <div class="menu">
-            <a class="button" routerLink="/user" routerLinkActive="active" ariaCurrentWhenActive="page">Profile</a>
-            <a class="button" routerLink="/messages" routerLinkActive="active" ariaCurrentWhenActive="page">Messages</a>
-            <a class="button" routerLink="/friends" routerLinkActive="active" ariaCurrentWhenActive="page">Friends</a>
-        </div>
-        <div class="content">
-            <router-outlet></router-outlet>
-        </div>
-    </div>
+    <app-main-layout *ngIf="user != undefined"></app-main-layout>
+    <router-outlet *ngIf="user == undefined"></router-outlet>
 </div>

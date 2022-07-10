@@ -9,11 +9,3 @@
         width: 100px;
     }
 }
-
-.edit-profile-inputs {
-    @include columns-2(1fr, 1fr, 30px);
-
-    label {
-        float: right;
-    }
-}

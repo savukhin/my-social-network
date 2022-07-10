@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { UserPageComponent } from './profile/user-page/user-page.component';
@@ -11,6 +11,8 @@ import { MessagesComponent } from './messages/messages.component';
 import { ChatComponent } from './chat/chat.component';
 import { FriendsComponent } from './friends/friends.component';
 import { UpdateProfileComponent } from './profile/update-profile/update-profile.component';
+import { LoginComponent } from './auth/login/login.component';
+import { MainLayoutComponent } from './main-layout/main-layout.component';
 
 @NgModule({
   declarations: [
@@ -20,13 +22,16 @@ import { UpdateProfileComponent } from './profile/update-profile/update-profile.
     ChatComponent,
     FriendsComponent,
     UpdateProfileComponent,
+    LoginComponent,
+    MainLayoutComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
