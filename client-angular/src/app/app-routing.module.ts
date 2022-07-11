@@ -5,6 +5,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { ChatComponent } from './chat/chat.component';
 import { FriendsComponent } from './friends/friends.component';
 import { MessagesComponent } from './messages/messages.component';
+import { ChangePasswordComponent } from './profile/change-password/change-password.component';
 import { UpdateProfileComponent } from './profile/update-profile/update-profile.component';
 import { UserPageComponent } from './profile/user-page/user-page.component';
 
@@ -36,6 +37,10 @@ const routes: Routes = [
     {
       path: 'register',
       component: RegisterComponent
+    },
+    {
+      path: 'change-password',
+      component: ChangePasswordComponent
     },
 ];
 

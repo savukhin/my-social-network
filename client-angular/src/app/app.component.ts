@@ -23,25 +23,27 @@ export class AppComponent implements AfterViewInit, OnInit {
       }
     )
 
-    setInterval(() => {
-      let name = (Math.random() + 1).toString(36).substring(7);
-      this.auth.setUser(new User(0, name));
-    }, 1000)
+    // setTimeout(() => {
+    //   let name = (Math.random() + 1).toString(36).substring(7);
+    //   this.auth.setUser(new User(0, name));
+    // }, 1000)
 
   }
 
   ngAfterViewInit(): void {
-    
+    let name = (Math.random() + 1).toString(36).substring(7);
+      this.auth.setUser(new User(0, name));
   }
 
   ngOnInit(): void {
     this.token = "asdf";
     
-    if (this.token != null)
-      this.auth.authWithToken(this.token)
-        .subscribe((user) => {
-          console.log(user);
-          this.auth.setUser(user);
-        })
+    // if (this.token != null) 
+      // this.auth.authWithToken(this.token)
+      //   .subscribe((user) => {
+      //     console.log(user);
+      //     this.auth.setUser(user);
+      //   })
+      
   }
 }

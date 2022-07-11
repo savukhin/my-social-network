@@ -67,6 +67,16 @@ button:hover {
     margin: 0 0 10px 0;
 }
 
+.block-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    .button {
+        width: 100px;
+    }
+}
+
 .small-block {
     .button {
         width: 100%;

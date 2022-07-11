@@ -14,6 +14,7 @@ import { UpdateProfileComponent } from './profile/update-profile/update-profile.
 import { LoginComponent } from './auth/login/login.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { ChangePasswordComponent } from './profile/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { RegisterComponent } from './auth/register/register.component';
     LoginComponent,
     MainLayoutComponent,
     RegisterComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     BrowserModule,
