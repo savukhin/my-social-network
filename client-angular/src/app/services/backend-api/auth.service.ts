@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { Observable, Subject, of, from } from 'rxjs';
-import { tap, shareReplay } from 'rxjs/operators';
+import { tap, shareReplay, filter } from 'rxjs/operators';
 import { User } from 'src/models/user';
 import * as moment from "moment";
 
@@ -10,10 +10,30 @@ import * as moment from "moment";
 })
 export class AuthService {
 
-  private userLogged = new Subject<User>();
-  userLogged$ = this.userLogged.asObservable();
+  private user = new Subject<User>();
+  // user$ = this.user.asObservable();
 
-  constructor(private http: HttpClient) { }
+  get user$() {
+    return this.user.asObservable().pipe(
+      filter(user => !!user)
+    );
+  }
+
+  constructor(private http: HttpClient, private cdref: ChangeDetectorRef) { }
+
+  setUser(user: User) {
+    this.user.next(user);
+  }
+
+  authWithToken(token: string) {
+    let new_user = new User(0, "Saveliy Karpukhin");
+    return of(new_user);
+    // return new Observable<User>((observer) => {
+    //   setTimeout(() => {
+    //     observer.next(tmp)
+    //   }, 1000)
+    // })
+  }
 
   register(login: string, email:string, password: string, password2: string) {
     return of("TOKEN");
@@ -26,6 +46,7 @@ export class AuthService {
     //     shareReplay()
     //   )
   }
+
 
   private setSession(authResult: { expiresIn: any; idToken: string; }) {
     const expiresAt = moment().add(authResult.expiresIn,'second');
@@ -51,11 +72,6 @@ export class AuthService {
       const expiration = localStorage.getItem("expires_at");
       const expiresAt = JSON.parse(expiration!);
       return moment(expiresAt);
-  }    
-
-  authWithToken(token: string) {
-    // return of(new User(0, "Saveliy Karpukhin", true));
-    return of(undefined);
   }
 }
 

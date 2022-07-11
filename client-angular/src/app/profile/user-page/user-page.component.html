@@ -2,11 +2,17 @@
     <div class="blocks-wrapper">
         <div class="block small-block">
             <img class="" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
-            <button class="button">Change photo</button>
-            <br/>
-            <button class="button">Add friend</button>
-            <br/>
-            <button class="button">Write message</button>
+            {{user?.id}}
+            {{profile.id}}
+            <div *ngIf="user && profile.id == user.id">
+                <button class="button">Change photo</button>
+                <br/>
+            </div>
+            <div *ngIf="!user || profile.id != user.id">
+                <button class="button">Add friend</button>
+                <br/>
+                <button class="button">Write message</button>
+            </div>
         </div>
         <div class="block">
             <div class="block-header">
