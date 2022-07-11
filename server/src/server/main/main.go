@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"server/utils"
+
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+
 	// "github.com/rs/cors"
 	"log"
 	"net/http"
@@ -31,10 +34,12 @@ func main() {
 	// }
 
 	// log.Fatal(srv.ListenAndServe())
+	// handler := middleware.Logging(router)
 	log.Fatal(http.ListenAndServe(":4201", handlers.CORS(credentials, methods, origins)(router)))
 	fmt.Println("Starting...")
 	// log.Fatal(http.ListenAndServe(":4201", router))
 	fmt.Println("Server started")
+	fmt.Println(middleware.vodka())
 }
 
 func setupCorsResponse(w *http.ResponseWriter, req *http.Request) {
@@ -52,7 +57,7 @@ func helloWorld(w http.ResponseWriter, r *http.Request) {
 		Title: "Golang + Angular Starter Kit",
 	}
 
-	jsonBytes, err := StructToJSON(data)
+	jsonBytes, err := utils.StructToJSON(data)
 	if err != nil {
 		fmt.Print(err)
 	}
