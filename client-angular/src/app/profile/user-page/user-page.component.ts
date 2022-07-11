@@ -5,8 +5,7 @@ import { User } from 'src/models/user';
 @Component({
     selector: 'app-user-page',
     templateUrl: './user-page.component.html',
-    styleUrls: ['./user-page.component.scss'],
-    providers: [AuthService]
+    styleUrls: ['./user-page.component.scss']
 })
 export class UserPageComponent implements AfterViewInit {
     user?: User;
@@ -29,11 +28,13 @@ export class UserPageComponent implements AfterViewInit {
 
     constructor(private auth: AuthService, private cdref: ChangeDetectorRef) {
         console.log("subscription");
-        this.auth.user$.subscribe(
+        this.auth.getUser().subscribe(
             user => {
-                console.log("User changed in userpage");
-                
-                this.user = user;
+                console.log("UserPageComponent: User changed in userpage");
+
+                if (user) {
+                    this.profile = user;
+                }
                 this.cdref.detectChanges();
             }
         )

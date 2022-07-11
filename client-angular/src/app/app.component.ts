@@ -14,14 +14,20 @@ export class AppComponent implements AfterViewInit, OnInit {
   token = localStorage.getItem("token");
 
   constructor(private auth: AuthService, private cdref: ChangeDetectorRef) {
-    this.auth.user$.subscribe(
+    this.auth.getUser().subscribe(
       user => {
-        console.log("User changed in app");
+        console.log("AppComponent User changed in app");
         
         this.user = user;
         this.cdref.detectChanges();
       }
     )
+
+    setInterval(() => {
+      let name = (Math.random() + 1).toString(36).substring(7);
+      this.auth.setUser(new User(0, name));
+    }, 1000)
+
   }
 
   ngAfterViewInit(): void {
