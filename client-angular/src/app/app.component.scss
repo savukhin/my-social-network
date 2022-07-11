@@ -1,0 +1,40 @@
+@import '../scss exports/var-colors';
+@import '../scss exports/var-sizes';
+@import '../scss exports/mixins';
+@import '../scss exports/extends';
+
+.navbar {
+    @extend %centerize-content;
+    z-index: 2;
+    position: fixed;
+    height: $navbar-height;
+    width: 100vw;
+    background-color: $block-color;
+}
+
+.navbar-content {
+    width: $content-width;
+    @include columns-2(auto, 100px);
+
+    .avatar-mini {
+        width: 40px;
+    }
+}
+
+.under-nav {
+    @extend %centerize-content;
+    padding-top: $navbar-height + 20px;
+}
+
+.logo {
+    font-size: 30px;
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+    
+    span {
+        margin: 0 10px;
+        padding: 6px;
+        border-radius: 10px ;
+    }
+}

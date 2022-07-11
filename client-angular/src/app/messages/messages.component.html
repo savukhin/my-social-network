@@ -1,0 +1,18 @@
+<div class="block" *ngFor="let item of items">
+    <a [routerLink]="'/chat/' + item.author.id" routerLinkActive="active" ariaCurrentWhenActive="page">
+        
+        <div class="chat-folder">
+            <div class="folder-picture-wrapper">
+                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+            </div>
+            <div>
+                <p>{{ item.author.name }}</p>
+                <div class="folder-text">
+                    <span>{{ item.message.text }}</span>
+                    <span>{{ item.message.time.toLocaleTimeString('it-IT').substr(0, 5) }}</span>
+                </div>
+            </div>
+        </div>
+
+    </a>
+</div>

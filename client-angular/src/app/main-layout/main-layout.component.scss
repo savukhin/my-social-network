@@ -1,0 +1,25 @@
+@import '../../scss exports/var-sizes';
+@import '../../scss exports/mixins';
+
+.authed-layout {
+    width: $content-width;
+    @include columns-2($menu-width, auto);
+}
+
+.menu {
+    position: fixed;
+    width: $menu-width - 20px;
+    padding: 2px 10px 1px 10px;
+    .button {
+        margin-top: 10px;
+        display: block;
+        width: 100%;
+    }
+    :first-child {
+        margin-top: 0;
+    }
+}
+
+.content {
+    padding: 3px;
+}

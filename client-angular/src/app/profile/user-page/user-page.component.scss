@@ -1,0 +1,60 @@
+@import "../../../scss exports/var-colors.scss";
+@import "../../../scss exports/mixins.scss";
+
+.profile-wrapper {
+    @include columns-2(250px, auto, 10px);
+}
+
+.profile-page-top {
+    span {
+        float: right;
+        text-align: right;
+    }
+}
+
+.hidden-input {
+
+}
+
+.hidden-input-wrapper {
+    position: relative;
+    // width: fit-content;
+    // padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    p {
+        padding: 6px 4px 6px 4px;
+    }
+}
+
+.hidden-input-wrapper:hover {
+    background-color: $main-color;
+}
+
+.edit-status {
+    background-color: $main-bg-color;
+
+    input {
+        width:100%;
+    }
+}
+
+.profile-info-table {
+    width: 100%;
+    padding: 10px 15px 10px 15px;
+    margin-bottom: 10px;
+}
+
+.profile-friends {
+    display: inline-block;
+}
+
+.write-post-wrapper {
+    position: relative;
+
+    textarea {
+        resize: none;
+        width: 99%;
+    }
+}

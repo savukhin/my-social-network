@@ -1,0 +1,22 @@
+<div class="block">
+    <li class="firend-list-wrapper" *ngFor="let friend of friends">
+        <ul>
+            <div class="friend-picture-wrapper">
+                <img class="avatar-mini"
+                    [src]="friend.avatarURL 
+                        ? friend.avatarURL
+                        : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
+            </div>
+            <div class="friend-info-wrapper">
+                <div>
+                    <b>{{ friend.name }}  </b>
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" [attr.fill]="friend.isOnline ? 'lime' : 'red'">
+                        <circle cx="50" cy="50" r="50"/>
+                    </svg>
+                </div>
+                <br/>
+                <a class="button" [routerLink]="'/chat/' + friend.id" routerLinkActive="active" ariaCurrentWhenActive="page">Write message</a>
+            </div>
+        </ul>
+    </li>
+</div>

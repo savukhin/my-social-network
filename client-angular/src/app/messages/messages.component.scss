@@ -1,0 +1,27 @@
+@import "../../scss exports/mixins.scss";
+@import "../../scss exports/var-colors.scss";
+
+.chat-folder {
+    @include columns-2(80px, auto);
+    border: $main-color 1px solid;
+    cursor: pointer;
+}
+
+.chat-folder:hover {
+    background-color: rgb(255, 255, 255, 0.2);
+}
+
+.folder-picture-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.folder-text {
+    @include columns-2(auto, 100px);
+
+    span {
+        overflow: hidden;
+        max-height: 1.8em;
+        line-height: 1.8em;
+    }
+}
