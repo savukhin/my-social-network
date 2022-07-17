@@ -4,6 +4,7 @@ import { Observable, Subject, of, from } from 'rxjs';
 import { tap, shareReplay, filter } from 'rxjs/operators';
 import { User } from 'src/models/user';
 import * as moment from "moment";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -36,15 +37,19 @@ export class AuthService {
   }
 
   register(login: string, email:string, password: string, password2: string) {
-    return of("TOKEN");
+    return this.http.post<String>(`${environment.serverUrl}/user/registration`, {login, email, password, password2}).pipe(
+      // tap((res: any) => this.setSession),
+      shareReplay()
+    )
+    // return of("TOKEN");
   }
 
   login(login: string, password: string) {
-    return of("TOKEN");
-    // return this.http.post<User>('/api/auth/login', {login, password}).pipe(
-    //     tap((res: any) => this.setSession),
-    //     shareReplay()
-    //   )
+    // return of("TOKEN");
+    return this.http.post<User>(`${environment.serverUrl}/user/login`, {login, password}).pipe(
+        // tap((res: any) => this.setSession),
+        shareReplay()
+      )
   }
 
 

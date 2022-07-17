@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.method.annotation.ViewNameMethodReturnValueHandler;
 
 import com.socialNetwork.server.dto.UserLoginDTO;
 import com.socialNetwork.server.dto.UserRegisterDTO;
@@ -23,8 +22,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value="/registration", method=RequestMethod.POST)
+    @RequestMapping(value="/registration")
     public void registration(@RequestBody UserRegisterDTO user, HttpServletResponse response) throws IOException {
+        System.out.println("============================");
+        System.out.println(user);
+        // System.out.println(user.getPassword2());
         if (!user.getPassword().equals(user.getPassword2())) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
