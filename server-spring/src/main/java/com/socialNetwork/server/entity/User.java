@@ -7,6 +7,15 @@ import javax.persistence.*;
 
 import org.springframework.lang.Nullable;
 
+import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name="users")
 public class User {
@@ -34,4 +43,7 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Like> likes;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
