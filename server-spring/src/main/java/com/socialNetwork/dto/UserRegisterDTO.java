@@ -1,4 +1,4 @@
-package com.socialNetwork.server.dto;
+package com.socialNetwork.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserLoginDTO {
+public class UserRegisterDTO {
     private String username;
     private String password;
+    private String password2;
+    private String email;
 }

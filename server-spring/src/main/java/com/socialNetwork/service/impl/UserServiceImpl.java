@@ -1,6 +1,6 @@
-package com.socialNetwork.server.service.impl;
+package com.socialNetwork.service.impl;
 
-import com.socialNetwork.server.service.UserService;
+import com.socialNetwork.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.socialNetwork.server.dto.UserLoginDTO;
-import com.socialNetwork.server.dto.UserRegisterDTO;
-import com.socialNetwork.server.entity.Role;
-import com.socialNetwork.server.entity.User;
-import com.socialNetwork.server.repository.UserRepository;
+import com.socialNetwork.dto.UserLoginDTO;
+import com.socialNetwork.dto.UserRegisterDTO;
+import com.socialNetwork.entity.Role;
+import com.socialNetwork.entity.User;
+import com.socialNetwork.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {

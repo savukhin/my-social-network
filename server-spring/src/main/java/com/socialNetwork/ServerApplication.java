@@ -1,9 +1,11 @@
-package com.socialNetwork.server;
+package com.socialNetwork;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
-@SpringBootApplication
+@ServletComponentScan
+@SpringBootApplication()
 public class ServerApplication {
 
 	public static void main(String[] args) {

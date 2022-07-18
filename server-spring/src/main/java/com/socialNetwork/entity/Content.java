@@ -1,4 +1,4 @@
-package com.socialNetwork.server.entity;
+package com.socialNetwork.entity;
 
 import java.sql.Timestamp;
 import java.util.List;

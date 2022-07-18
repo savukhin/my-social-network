@@ -1,10 +1,10 @@
-package com.socialNetwork.server.service;
+package com.socialNetwork.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import com.socialNetwork.server.dto.UserLoginDTO;
-import com.socialNetwork.server.dto.UserRegisterDTO;
-import com.socialNetwork.server.entity.User;
+import com.socialNetwork.dto.UserLoginDTO;
+import com.socialNetwork.dto.UserRegisterDTO;
+import com.socialNetwork.entity.User;
 
 public interface UserService extends UserDetailsService {
     boolean save(UserRegisterDTO userDTO);

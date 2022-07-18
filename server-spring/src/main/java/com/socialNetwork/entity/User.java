@@ -1,4 +1,4 @@
-package com.socialNetwork.server.entity;
+package com.socialNetwork.entity;
 
 import java.sql.Date;
 import java.util.List;

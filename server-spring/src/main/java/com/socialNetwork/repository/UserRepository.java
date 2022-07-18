@@ -1,8 +1,8 @@
-package com.socialNetwork.server.repository;
+package com.socialNetwork.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.socialNetwork.server.entity.User;
+import com.socialNetwork.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);

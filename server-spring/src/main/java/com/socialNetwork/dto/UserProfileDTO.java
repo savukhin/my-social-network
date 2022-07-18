@@ -1,4 +1,4 @@
-package com.socialNetwork.server.dto;
+package com.socialNetwork.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
