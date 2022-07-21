@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { Observable, Subject, of, from } from 'rxjs';
 import { tap, shareReplay, filter } from 'rxjs/operators';
@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   register(login: string, email:string, password: string, password2: string) {
-    return this.http.post<String>(`${environment.serverUrl}/user/registration`, {login, email, password, password2}).pipe(
+    return this.http.post<String>(`${environment.serverUrl}/user/registration`, {username: login, email, password, password2}).pipe(
       // tap((res: any) => this.setSession),
       shareReplay()
     )
