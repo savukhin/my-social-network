@@ -1,5 +1,7 @@
 package com.socialNetwork.config;
 
+import org.junit.jupiter.api.Order;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -19,6 +22,7 @@ import com.socialNetwork.entity.Role;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
+// @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder()
@@ -29,10 +33,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-            .csrf().disable()
+                .httpBasic()
+            .and()
+                .csrf().disable()
+                
             .authorizeRequests()
                 .antMatchers("/user").permitAll()
                 .antMatchers("/user/registration").permitAll()
-                .antMatchers("/user/login").permitAll();
+                .antMatchers("/user/login").permitAll()
+                .anyRequest().authenticated();
+            // .and()
+            //     .csrf()
+            //     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+            // .and()
+            //     .oauth2ResourceServer()
+            //       .jwt();
     }
 }

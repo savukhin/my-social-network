@@ -13,6 +13,7 @@ export class AuthService {
 
   private user = new Subject<User>();
   // user$ = this.user.asObservable();
+  authenticated = false;
 
   getUser(): Observable<User|undefined> {
     return this.user.asObservable().pipe(

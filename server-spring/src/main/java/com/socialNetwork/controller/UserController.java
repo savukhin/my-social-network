@@ -1,6 +1,7 @@
 package com.socialNetwork.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,6 +28,8 @@ public class UserController {
 
     @RequestMapping(value="/registration", method=RequestMethod.POST, produces = {"application/json"})
     public ResponseEntity<String> registration(@RequestBody UserRegisterDTO user) throws IOException {
+        System.out.println("<==========>");
+        System.out.println(user.getUsername());
         if (!user.getPassword().equals(user.getPassword2())) {
             return new ResponseEntity<>("{\"message\":\"Password doesn't match!\"}", HttpStatus.CONFLICT);
         }
@@ -39,7 +42,9 @@ public class UserController {
     }
 
     @RequestMapping(value="/login", method=RequestMethod.POST)
-    public void registration(@RequestBody UserLoginDTO user, HttpServletResponse response) throws IOException {
+    public void registration(@RequestBody UserLoginDTO user, HttpServletResponse response, Principal principal) throws IOException {
+        System.out.println("<==========>s");
+        System.out.println(user.getUsername());
         if (!userService.login(user)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;

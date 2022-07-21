@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/services/backend-api/auth.service';
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    providers: [AuthService, FormBuilder]
+    providers: [FormBuilder]
 })
 export class LoginComponent implements OnInit {
     form: FormGroup;
