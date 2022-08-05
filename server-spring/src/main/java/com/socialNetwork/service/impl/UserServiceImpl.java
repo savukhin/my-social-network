@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,10 +23,15 @@ import com.socialNetwork.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder password_encoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl( PasswordEncoder a, UserRepository b){
-        this.password_encoder = a;
+    // @Autowired
+    // public void setUserRepository(UserRepository userRepository) {
+    //     this.userRepository = userRepository;
+    // }
+
+    public UserServiceImpl(PasswordEncoder a, UserRepository b){
+        this.passwordEncoder = a;
         this.userRepository = b;
     }
 
@@ -54,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
         User user=User.builder()
                 .username(userDTO.getUsername())
-                .password(password_encoder.encode(userDTO.getPassword()))
+                .password(passwordEncoder.encode(userDTO.getPassword()))
                 .email(userDTO.getEmail())
                 .role(Role.USER)
                 .build();
@@ -73,6 +79,11 @@ public class UserServiceImpl implements UserService {
     public boolean login(UserLoginDTO userDTO) {
         User user = userRepository.findByUsername(userDTO.getUsername());
 
-        return password_encoder.encode(userDTO.getPassword()) == user.getPassword();
+        return passwordEncoder.encode(userDTO.getPassword()) == user.getPassword();
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

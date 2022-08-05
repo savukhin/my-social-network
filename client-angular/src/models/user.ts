@@ -1,5 +1,6 @@
 export class User {
     id: number = 0;
+    username: string = "";
     name: string = "";
     isOnline: boolean = true;
     status: string = "";
@@ -7,8 +8,9 @@ export class User {
     city: string = "";
     avatarURL: string | null = null;
 
-    constructor(id=0, name="", isOnline=true, status="", birthDate="", city="", avatarURL=null) {
+    constructor(id=0, username="", name="", isOnline=true, status="", birthDate="", city="", avatarURL=null) {
         this.id = id;
+        this.username = username;
         this.name = name;
         this.isOnline = isOnline;
         this.status = status;

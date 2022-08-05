@@ -10,4 +10,5 @@ public interface UserService extends UserDetailsService {
     boolean save(UserRegisterDTO userDTO);
     void save(User user);
     boolean login(UserLoginDTO userDTO);
+    User findUserByUsername(String username);
 }

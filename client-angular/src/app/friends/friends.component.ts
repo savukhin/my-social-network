@@ -8,8 +8,8 @@ import { User } from 'src/models/user';
 })
 export class FriendsComponent implements OnInit {
   friends: User[] = [
-    new User(1, "Kirill Klimonov"),
-    new User(2, "Kirill Klimonov2", false)
+    new User(1, "kklimonov23", "Kirill Klimonov"),
+    new User(2, "kklimonov2", "Kirill Klimonov2", false)
   ];
 
   constructor() { }

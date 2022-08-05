@@ -1,4 +1,9 @@
 spring:
+  web:
+    resources:
+      add-mappings: false
+  main:
+    allow-circular-references: true
   jpa:
     hibernate:
       ddl-auto: create-drop

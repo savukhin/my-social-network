@@ -18,8 +18,8 @@ export class ChatComponent implements AfterViewInit {
  
   chat: Chat = new Chat(0, "Kirill Klimonov",
      {
-        1: new User(1, "Saveliy Karpukhin", true),
-        2: new User(2, "Kirill Klimonov", false),
+        1: new User(1, "savukhin", "Saveliy Karpukhin", true),
+        2: new User(2, "kklimonov23", "Kirill Klimonov", false),
     },
     [
         new Message("I was really cool party, thanks!", new Date(new Date().getSeconds() - 24 * 60 * 60), 1),

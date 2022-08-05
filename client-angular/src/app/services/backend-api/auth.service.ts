@@ -14,6 +14,17 @@ export class AuthService {
   private user = new Subject<User>();
   // user$ = this.user.asObservable();
   authenticated = false;
+  token = "";
+
+  isAuthenticated(): boolean {
+    // return this.authenticated;
+    return localStorage.getItem("authenticated")! == "true";
+  }
+
+  getToken(): string {
+    // return this.token;
+    return localStorage.getItem("token")!;
+  }
 
   getUser(): Observable<User|undefined> {
     return this.user.asObservable().pipe(
@@ -21,10 +32,18 @@ export class AuthService {
     );
   }
 
-  constructor(private http: HttpClient, private cdref: ChangeDetectorRef) { }
+  constructor(private http: HttpClient) { }
 
   setUser(user: User) {
     this.user.next(user);
+  }
+  
+  updateToken() {
+    return this.http.get(`${environment.serverUrl}/user/token`, { headers: {}}).subscribe(( data ) => {
+      this.token = (data as { token: string }).token;
+      console.log(data);
+      localStorage.setItem('token', this.token);
+    });
   }
 
   authWithToken(token: string) {
@@ -37,22 +56,62 @@ export class AuthService {
     // })
   }
 
-  register(login: string, email:string, password: string, password2: string) {
-    return this.http.post<String>(`${environment.serverUrl}/user/registration`, {username: login, email, password, password2}).pipe(
-      // tap((res: any) => this.setSession),
-      shareReplay()
-    )
-    // return of("TOKEN");
+  register(login: string, email:string, password: string, password2: string, callback = () => {}) {
+    return this.http.post<{message: string}>(`${environment.serverUrl}/user/registration`, {username: login, email, password, password2})
+      .subscribe(response => {
+        console.log(response['message']);
+        
+        // if (response['message'] == "OK") {
+        this.authenticated = true;
+        localStorage.setItem('authenticated', "true");
+        // } else {
+        //   this.authenticated = false;
+        // }
+        console.log(response);
+        console.log(this.authenticated);
+        
+        
+
+        // authWithToken();
+        this.updateToken();
+        // return this.login(login, password, callback)
+        return callback && callback();
+      })
   }
 
-  login(login: string, password: string) {
-    // return of("TOKEN");
-    return this.http.post<User>(`${environment.serverUrl}/user/login`, {login, password}).pipe(
-        // tap((res: any) => this.setSession),
-        shareReplay()
-      )
+  login(userName: string, password: string, callback = () => {}) {
+    const credentials = {
+      userName: userName,
+      password: password
+    }
+
+    const headers = new HttpHeaders(credentials ? {
+      authorization : 'Basic ' + btoa(credentials.userName + ':' + credentials.password)
+    } : {auth: "empty"});
+
+    console.log(headers);
+    console.log(credentials);
+    
+    return this.http.get<User>(`${environment.serverUrl}/user/login`, { headers: headers })
+      .subscribe(response => {
+        if (response['name']) {
+          this.authenticated = true;
+        } else {
+          this.authenticated = false;
+        }
+        
+        this.updateToken();
+        return callback && callback();
+      })
   }
 
+  getProfile(username: string, callback = () => {}) {
+    return this.http.get<User>(`${environment.serverUrl}/user/profile/${username}`);
+      // .subscribe(response => {
+      //   callback && callback();
+      //   return response;
+      // })
+  }
 
   private setSession(authResult: { expiresIn: any; idToken: string; }) {
     const expiresAt = moment().add(authResult.expiresIn,'second');
@@ -62,8 +121,8 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("id_token");
-    localStorage.removeItem("expires_at");
+    // localStorage.removeItem("id_token");
+    // localStorage.removeItem("expires_at");
   }
 
   public isLoggedIn() {

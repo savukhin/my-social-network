@@ -21,7 +21,7 @@ export class MessagesComponent implements OnInit {
   items: Item[] = [
     new Item(
       new Message("Hi! How are you doing?", new Date()),
-      new User(1, "Kirill Klimonov", false),
+      new User(1, "kklimonov23", "Kirill Klimonov", false),
     )
   ];
 

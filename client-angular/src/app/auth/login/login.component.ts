@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
             private router: Router) {
 
         this.form = this.fb.group({
-            login: ['',Validators.required],
+            username: ['',Validators.required],
             password: ['',Validators.required]
         });
     }
@@ -29,14 +29,15 @@ export class LoginComponent implements OnInit {
     login() {
         const val = this.form.value;
 
-        if (val.email && val.password) {
-            this.authService.login(val.login, val.password)
-                .subscribe(
-                    () => {
-                        console.log("User is logged in");
-                        // this.router.navigateByUrl('/');
-                    }
-                );
+        if (val.username && val.password) {
+            this.authService.login(
+                val.username, 
+                val.password,
+                () => {
+                    console.log("User is logged in");
+                    // this.router.navigateByUrl('/');
+                }
+            )
         }
     }
 

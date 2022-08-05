@@ -22,6 +22,7 @@ export class RegisterComponent implements OnInit {
           password: ['',Validators.required],
           password2: ['',Validators.required]
       });
+      localStorage.setItem('authenticated', "false");
   }
 
   ngOnInit(): void {
@@ -31,13 +32,16 @@ export class RegisterComponent implements OnInit {
     const val = this.form.value;
 
     if (val.email && val.password) {
-        this.authService.register(val.login, val.email, val.password, val.password2)
-            .subscribe(
-                () => {
-                    console.log("User is registered in");
-                    // this.router.navigateByUrl('/');
-                }
-            );
+        this.authService.register(
+            val.login, 
+            val.email, 
+            val.password, 
+            val.password2,
+            () => {
+                console.log("User is registered in");
+                // this.router.navigateByUrl('/');
+            }
+        );
     }
 }
 

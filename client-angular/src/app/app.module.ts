@@ -1,4 +1,4 @@
-import { Injectable, NgModule } from '@angular/core';
+import { ChangeDetectorRef, Injectable, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -19,11 +19,25 @@ import { AuthService } from './services/backend-api/auth.service';
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
+  constructor(private auth: AuthService) {
+
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    const xhr = req.clone({
+    let xhr = req.clone({
       headers: req.headers.set('X-Requested-With', 'XMLHttpRequest')
     });
+
+    console.log(this.auth.isAuthenticated());
+
+    // if (this.auth.isAuthenticated()) {
+      console.log(this.auth.getToken());
+      
+      xhr = xhr.clone({
+        headers: xhr.headers.set('X-Auth-Token', this.auth.getToken())
+      });
+    // }
+
     return next.handle(xhr);
   }
 }

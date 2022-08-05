@@ -9,7 +9,7 @@ import { User } from 'src/models/user';
 })
 export class UserPageComponent implements AfterViewInit {
     user?: User;
-    profile = new User(0,"Saveliy Karpukhin", true, "#notforwar", "30.08.2002", "Moscow")
+    profile = new User(0, "savukhin", "Saveliy Karpukhin", true, "#notforwar", "30.08.2002", "Moscow")
     editStatus = false
     
     @ViewChild('pleaseDoIt') input: ElementRef<HTMLInputElement> = {} as ElementRef;
@@ -41,5 +41,10 @@ export class UserPageComponent implements AfterViewInit {
     }
     
     ngAfterViewInit(): void {
+        this.auth.getProfile("savukhin").subscribe(
+            data => {
+                this.user = data;
+            }
+        )
     }
 }
