@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -7,10 +7,10 @@ import (
 	// "github.com/rs/cors"
 	"log"
 	"net/http"
-    "api/main/utils"
+    "api/app/utils"
 )
 
-func main() {
+func Launch() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/hello-world", helloWorld)
