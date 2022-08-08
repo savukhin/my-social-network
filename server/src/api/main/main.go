@@ -7,6 +7,7 @@ import (
 	// "github.com/rs/cors"
 	"log"
 	"net/http"
+    "api/main/utils"
 )
 
 func main() {
@@ -52,7 +53,7 @@ func helloWorld(w http.ResponseWriter, r *http.Request) {
 		Title: "Golang + Angular Starter Kit",
 	}
 
-	jsonBytes, err := StructToJSON(data)
+	jsonBytes, err := utils.StructToJSON(data)
 	if err != nil {
 		fmt.Print(err)
 	}
