@@ -2,18 +2,23 @@ package app
 
 import (
 	"fmt"
+
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+
 	// "github.com/rs/cors"
+
+	"api/app/auth"
+	"api/app/utils"
 	"log"
 	"net/http"
-    "api/app/utils"
 )
 
 func Launch() {
-	router := mux.NewRouter()
-
-	router.HandleFunc("/hello-world", helloWorld)
+	r := mux.NewRouter()
+	router := r.PathPrefix("api/").Subrouter()
+	// router.HandleFunc("/hello-world", helloWorld)
+	auth.Routes(router.PathPrefix("users").Subrouter())
 
 	credentials := handlers.AllowCredentials()
 	methods := handlers.AllowedMethods([]string{"GET"})
