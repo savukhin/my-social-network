@@ -15,7 +15,7 @@ var (
 )
 
 func init() {
-	fmt.Print("Start connecting DB")
+	fmt.Println("Start connecting DB")
 	err := Connect()
 	if err != nil {
 		fmt.Print("Error connecting DB", err)
@@ -33,6 +33,7 @@ func Connect() error {
 	psqlInfo := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", user, password, host, port, dbname)
 	result, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
+		fmt.Println("Error connecting: ", err)
 		return err
 	}
 
