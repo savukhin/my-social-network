@@ -1,21 +1,43 @@
 package auth
 
-import "net/http"
+import (
+	"api/app/utils"
+	"fmt"
+	"net/http"
+)
 
-func Login(r http.ResponseWriter, h *http.Request) {
-	// data, err := models.GetRoom(r, h)
-	// if err != nil {
-	// 	SentryInit(err)
-	// 	return nil, err
-	// }
-	// return data, nil
+func Login(res http.ResponseWriter, req *http.Request) {
+	fmt.Println("new request")
+	// setupCorsResponse(&w, r)
+	var data = struct {
+		Title string `json:"title"`
+	}{
+		Title: "Login",
+	}
+
+	jsonBytes, err := utils.StructToJSON(data)
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	res.Header().Set("Content-Type", "application/json")
+	res.Write(jsonBytes)
 }
 
-func Register(r http.ResponseWriter, h *http.Request) {
-	// data, err := models.GetRoom(r, h)
-	// if err != nil {
-	// 	SentryInit(err)
-	// 	return nil, err
-	// }
-	// return data, nil
+func Register(res http.ResponseWriter, req *http.Request) {
+	fmt.Println("new request")
+	// setupCorsResponse(&w, r)
+	var data = struct {
+		Title string `json:"title"`
+	}{
+		Title: "Register",
+	}
+
+	jsonBytes, err := utils.StructToJSON(data)
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	res.Header().Set("Content-Type", "application/json")
+	res.Write(jsonBytes)
 }
