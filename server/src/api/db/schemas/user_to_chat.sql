@@ -1,4 +1,4 @@
-CREATE TABLE user_to_chat
+CREATE TABLE IF NOT EXISTS user_to_chat
 (
     id SERIAL NOT NULL,
     user_id INTEGER NOT NULL,

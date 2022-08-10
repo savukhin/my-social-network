@@ -1,4 +1,4 @@
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
     id SERIAL NOT NULL,
     username VARCHAR(200) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE users
     birthDate DATE,
     avatar_id INTEGER,
     isOnline boolean NOT NULL,
-    created_at TIMESTAMP NOT NULL SET DEFAULT now(),
+    created_at TIMESTAMP DEFAULT now(),
     deleted_at TIMESTAMP,
 
     CONSTRAINT User_PK PRIMARY KEY(id),

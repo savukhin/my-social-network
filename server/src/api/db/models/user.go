@@ -12,18 +12,19 @@ import (
 )
 
 type User struct {
-	ID         int       `json:"id,omitempty"`
-	Username   string    `json:"username,omitempty"`
-	Name       string    `json:"name,omitempty"`
-	Email      string    `json:"email,omitempty"`
-	Password   string    `json:"password,omitempty"`
-	IsOnline   bool      `json:"isOnline,omitempty"`
-	Status     string    `json:"status,omitempty"`
-	BirthDate  time.Time `json:"birthDate,omitempty"`
-	City       string    `json:"city,omitempty"`
-	Avatar_ID  int       `json:"avatar_id,omitempty"`
-	created_at time.Time `json:"user_created_at,omitempty`
-	deleted_at time.Time `json:"user_created_at,omitempty`
+	ID        int       `json:"id,omitempty"`
+	Username  string    `json:"username,omitempty"`
+	Name      string    `json:"name,omitempty"`
+	Email     string    `json:"email,omitempty"`
+	Password  string    `json:"password,omitempty"`
+	Password2 string    `json:"password2,omitempty"`
+	IsOnline  bool      `json:"isOnline,omitempty"`
+	Status    string    `json:"status,omitempty"`
+	BirthDate time.Time `json:"birthDate,omitempty"`
+	City      string    `json:"city,omitempty"`
+	Avatar_ID int       `json:"avatar_id,omitempty"`
+	CreatedAt time.Time `json:"user_created_at,omitempty"`
+	DeletedAt time.Time `json:"user_deleted_at,omitempty"`
 }
 
 // Validate function for validate
@@ -83,9 +84,8 @@ func (user *User) Register() map[string]interface{} {
 	return map[string]interface{}{"status": "valid", "message": "Account is successfully created ", "token": tokenString}
 }
 
-// Login function for checking login valid or not
 func (user *User) Login() map[string]interface{} {
-	sql := fmt.Sprintf("SELECT id,email,username,password FROM users WHERE email = '%s'", user.Email)
+	sql := fmt.Sprintf("SELECT id, email, username, password FROM users WHERE email = '%s'", user.Email)
 	data, err := db.DB.Query(sql)
 	if err != nil {
 		log.Println("error query : ", err)

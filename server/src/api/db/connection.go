@@ -20,6 +20,11 @@ func init() {
 	if err != nil {
 		fmt.Print("Error connecting DB", err)
 	}
+
+	err = CreateTables()
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 // Connect function for checking connection to postgresql

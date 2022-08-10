@@ -1,4 +1,4 @@
-CREATE TABLE chat_contents
+CREATE TABLE IF NOT EXISTS chat_contents
 (
     id SERIAL NOT NULL,
     chat_id INTEGER NOT NULL,
