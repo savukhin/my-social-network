@@ -36,8 +36,8 @@ export class RegisterComponent implements OnInit {
                 (response) => {
                     // console.log("User is logged in");
                     console.log(response);
-                    
-                    // this.router.navigateByUrl('/');
+                    // if (response.status == "ok")
+                    //     this.router.navigateByUrl('/');
                 }
             );
     }

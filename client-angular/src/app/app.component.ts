@@ -11,17 +11,16 @@ import { AuthService } from './services/backend-api/auth.service';
 export class AppComponent implements AfterViewInit, OnInit {
   user?: User;
   title = 'client-angular';
-  token = localStorage.getItem("token");
 
   constructor(private auth: AuthService, private cdref: ChangeDetectorRef) {
-    this.auth.getUser().subscribe(
-      user => {
-        console.log("AppComponent User changed in app");
+    // this.auth.getUser().subscribe(
+    //   user => {
+    //     console.log("AppComponent User changed in app");
         
-        this.user = user;
-        this.cdref.detectChanges();
-      }
-    )
+    //     this.user = user;
+    //     this.cdref.detectChanges();
+    //   }
+    // )
 
     // setTimeout(() => {
     //   let name = (Math.random() + 1).toString(36).substring(7);
@@ -32,18 +31,15 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit(): void {
     let name = (Math.random() + 1).toString(36).substring(7);
-      this.auth.setUser(new User(0, name));
+      // this.auth.setUser(new User(0, name));
   }
 
   ngOnInit(): void {
-    this.token = "asdf";
+    let token = this.auth.getToken();
+    console.log(token);
     
-    // if (this.token != null) 
-      // this.auth.authWithToken(this.token)
-      //   .subscribe((user) => {
-      //     console.log(user);
-      //     this.auth.setUser(user);
-      //   })
+    if (token != null) 
+      this.auth.authWithToken(token)
       
   }
 }

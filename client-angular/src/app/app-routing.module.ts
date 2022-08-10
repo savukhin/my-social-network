@@ -11,7 +11,16 @@ import { UserPageComponent } from './profile/user-page/user-page.component';
 
 const routes: Routes = [
     {
-        path: 'user',
+      path: '',
+      redirectTo: 'user',
+      pathMatch: 'full'
+    },
+    {
+      path: 'user',
+      component: UserPageComponent
+    },
+    {
+        path: 'user/:id',
         component: UserPageComponent
     },
     {

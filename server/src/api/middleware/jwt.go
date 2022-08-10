@@ -4,6 +4,7 @@ import (
 	"api/db/models"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -14,6 +15,7 @@ import (
 // JwtAuthentication for JWT
 var JwtAuthentication = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		fmt.Println("Check token in middleware")
 
 		noAuthPath := []string{"/api/user/register", "/api/user/login"}
 		requestPath := req.URL.Path

@@ -2,6 +2,7 @@ package models
 
 import (
 	"api/db"
+	"database/sql"
 	"fmt"
 	"strings"
 	"time"
@@ -11,19 +12,19 @@ import (
 )
 
 type User struct {
-	ID        int       `json:"id,omitempty"`
-	Username  string    `json:"username,omitempty"`
-	Name      string    `json:"name,omitempty"`
-	Email     string    `json:"email,omitempty"`
-	Password  string    `json:"password,omitempty"`
-	Password2 string    `json:"password2,omitempty"`
-	IsOnline  bool      `json:"isOnline,omitempty"`
-	Status    string    `json:"status,omitempty"`
-	BirthDate time.Time `json:"birthDate,omitempty"`
-	City      string    `json:"city,omitempty"`
-	Avatar_ID int       `json:"avatar_id,omitempty"`
-	CreatedAt time.Time `json:"user_created_at,omitempty"`
-	DeletedAt time.Time `json:"user_deleted_at,omitempty"`
+	ID        int            `json:"id,omitempty"`
+	Username  string         `json:"username,omitempty"`
+	Name      string         `json:"name,omitempty"`
+	Email     string         `json:"email,omitempty"`
+	Password  string         `json:"password,omitempty"`
+	Password2 string         `json:"password2,omitempty"`
+	IsOnline  bool           `json:"isOnline,omitempty"`
+	Status    sql.NullString `json:"status,omitempty"`
+	BirthDate sql.NullTime   `json:"birthDate,omitempty"`
+	City      sql.NullString `json:"city,omitempty"`
+	Avatar_ID sql.NullInt64  `json:"avatar_id,omitempty"`
+	CreatedAt time.Time      `json:"user_created_at,omitempty"`
+	DeletedAt time.Time      `json:"user_deleted_at,omitempty"`
 }
 
 // Validate function for validate
@@ -79,7 +80,7 @@ func (user *User) Register() map[string]interface{} {
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	tokenString, _ := token.SignedString([]byte("asdf"))
 
-	return map[string]interface{}{"status": "valid", "message": "Account is successfully created ", "token": tokenString}
+	return map[string]interface{}{"status": "valid", "message": "Account is successfully created ", "id_token": tokenString, "expires_at": timein}
 }
 
 func (user *User) Login() map[string]interface{} {
@@ -110,5 +111,26 @@ func (user *User) Login() map[string]interface{} {
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	tokenString, _ := token.SignedString([]byte("asdf"))
 
-	return map[string]interface{}{"status": "valid", "message": "Login is Success", "token": tokenString}
+	return map[string]interface{}{"status": "ok", "message": "Login is Success", "id_token": tokenString, "expires_at": timein}
+}
+
+func (user *User) GetProfile() interface{} {
+	sql := fmt.Sprintf("SELECT id, username, name, email, status, city, birthDate, avatar_id, isOnline FROM users WHERE id = %d", user.ID)
+	row := db.DB.QueryRow(sql)
+
+	temp := &User{}
+	// err := row.Scan(&temp.ID, &temp.Email, &temp.Password)
+	err := row.Scan(
+		&temp.ID, &temp.Username, &temp.Name, &temp.Email,
+		&temp.Status, &temp.City, &temp.BirthDate, &temp.Avatar_ID, &temp.IsOnline,
+	)
+
+	if err != nil {
+		return map[string]interface{}{
+			"status":  "error",
+			"message": "No such user with this id",
+		}
+	}
+
+	return temp
 }

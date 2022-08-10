@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"api/app/auth"
+	"api/app/users"
 	"log"
 	"net/http"
 )
@@ -14,11 +15,12 @@ import (
 func Launch() {
 	r := mux.NewRouter()
 	router := r.PathPrefix("/api").Subrouter()
-	router = auth.Routes(router.PathPrefix("/auth").Subrouter())
+	auth.Routes(router.PathPrefix("/auth").Subrouter())
+	users.Routes(router.PathPrefix("/users").Subrouter())
 
 	credentials := handlers.AllowCredentials()
 	methods := handlers.AllowedMethods([]string{"POST"})
-	headers := handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With"})
+	headers := handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With", "Authorization"})
 	ttl := handlers.MaxAge(3600)
 	origins := handlers.AllowedOrigins([]string{"*"})
 

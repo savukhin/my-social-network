@@ -1,6 +1,7 @@
 export class User {
     id: number = 0;
     name: string = "";
+    username: string = "";
     isOnline: boolean = true;
     status: string = "";
     birthDate: string = "";

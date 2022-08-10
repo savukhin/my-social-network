@@ -30,7 +30,6 @@ func Login(res http.ResponseWriter, req *http.Request) {
 }
 
 func Register(res http.ResponseWriter, req *http.Request) {
-	fmt.Println("Register request")
 	user := &models.User{}
 	err := json.NewDecoder(req.Body).Decode(user)
 	if err != nil {
@@ -38,6 +37,30 @@ func Register(res http.ResponseWriter, req *http.Request) {
 	}
 
 	response := user.Register()
+
+	res.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(res).Encode(response)
+}
+
+func CheckToken(res http.ResponseWriter, req *http.Request) {
+	jwt := req.Header.Get("Authorization")
+	fmt.Println(req.Header)
+	token, err := utils.UnpackJWT(jwt)
+	res.Header().Add("Content-Type", "application/json")
+	response := map[string]interface{}{
+		"id_token":   "",
+		"expires_at": "",
+		"message":    "ok",
+	}
+
+	if err != nil {
+		res.WriteHeader(http.StatusUnauthorized)
+		response["message"] = err
+		response["id_token"] = jwt
+	} else {
+		response["id_token"] = jwt
+		response["expires_at"] = token.TimeExp
+	}
 
 	res.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(res).Encode(response)
