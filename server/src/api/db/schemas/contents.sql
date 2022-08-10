@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS contents (
     user_id INTEGER NOT NULL,
     attach_order INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
-    updated_at TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT now(),
     deleted_at TIMESTAMP,
 
     CONSTRAINT Content_PK PRIMARY KEY(id)

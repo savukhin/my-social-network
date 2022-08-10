@@ -30,17 +30,15 @@ func Login(res http.ResponseWriter, req *http.Request) {
 }
 
 func Register(res http.ResponseWriter, req *http.Request) {
-	var data = struct {
-		Title string `json:"title"`
-	}{
-		Title: "Register",
-	}
-
-	jsonBytes, err := utils.StructToJSON(data)
+	fmt.Println("Register request")
+	user := &models.User{}
+	err := json.NewDecoder(req.Body).Decode(user)
 	if err != nil {
-		fmt.Print(err)
+		return
 	}
 
-	res.Header().Set("Content-Type", "application/json")
-	res.Write(jsonBytes)
+	response := user.Register()
+
+	res.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(res).Encode(response)
 }

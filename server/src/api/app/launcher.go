@@ -17,10 +17,16 @@ func Launch() {
 	router = auth.Routes(router.PathPrefix("/auth").Subrouter())
 
 	credentials := handlers.AllowCredentials()
-	methods := handlers.AllowedMethods([]string{"GET", "POST"})
+	methods := handlers.AllowedMethods([]string{"POST"})
+	headers := handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With"})
+	ttl := handlers.MaxAge(3600)
 	origins := handlers.AllowedOrigins([]string{"*"})
 
 	fmt.Println("Starting...")
-	log.Fatal(http.ListenAndServe(":4201", handlers.CORS(credentials, methods, origins)(router)))
+	log.Fatal(http.ListenAndServe(
+		":4201",
+		handlers.CORS(credentials, methods, origins, ttl, headers)(router),
+		// router,
+	))
 	fmt.Println("Server started")
 }

@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { Observable, Subject, of, from } from 'rxjs';
 import { tap, shareReplay, filter } from 'rxjs/operators';
 import { User } from 'src/models/user';
 import * as moment from "moment";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import * as moment from "moment";
 export class AuthService {
 
   private user = new Subject<User>();
+  private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
   // user$ = this.user.asObservable();
 
   getUser(): Observable<User|undefined> {
@@ -35,16 +37,12 @@ export class AuthService {
     // })
   }
 
-  register(login: string, email:string, password: string, password2: string) {
-    return of("TOKEN");
+  register(username: string, email:string, password: string, password2: string) {
+    return this.http.post<User>(`${environment.serverUrl}/api/auth/register`, {username, email, password, password2}, this.options)
   }
 
-  login(login: string, password: string) {
-    return of("TOKEN");
-    // return this.http.post<User>('/api/auth/login', {login, password}).pipe(
-    //     tap((res: any) => this.setSession),
-    //     shareReplay()
-    //   )
+  login(username: string, password: string) {
+    return this.http.post<User>(`${environment.serverUrl}/api/auth/login`, {username, password}, this.options)
   }
 
 

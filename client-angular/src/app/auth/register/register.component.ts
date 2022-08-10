@@ -33,8 +33,10 @@ export class RegisterComponent implements OnInit {
     if (val.email && val.password) {
         this.authService.register(val.login, val.email, val.password, val.password2)
             .subscribe(
-                () => {
-                    console.log("User is logged in");
+                (response) => {
+                    // console.log("User is logged in");
+                    console.log(response);
+                    
                     // this.router.navigateByUrl('/');
                 }
             );

@@ -9,8 +9,9 @@ CREATE TABLE IF NOT EXISTS users
     city VARCHAR(100),
     birthDate DATE,
     avatar_id INTEGER,
-    isOnline boolean NOT NULL,
+    isOnline boolean DEFAULT false,
     created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now(),
     deleted_at TIMESTAMP,
 
     CONSTRAINT User_PK PRIMARY KEY(id),
