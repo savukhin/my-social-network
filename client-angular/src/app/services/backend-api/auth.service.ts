@@ -10,41 +10,88 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-
-  private user = new Subject<User>();
-  private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
-  // user$ = this.user.asObservable();
-
-  getUser(): Observable<User|undefined> {
-    return this.user.asObservable().pipe(
-      filter(user => !!user)
-    );
+  getToken() {
+    return localStorage.getItem("id_token")
   }
 
-  constructor(private http: HttpClient, private cdref: ChangeDetectorRef) { }
+  private headers = new HttpHeaders().set('Content-Type', 'application/json')
+  
+  user!: User;
+  isAuthenticated = false;
 
-  setUser(user: User) {
-    this.user.next(user);
-  }
+  constructor(private http: HttpClient) { }
 
+¡
   authWithToken(token: string) {
-    let new_user = new User(0, "Saveliy Karpukhin");
-    return of(new_user);
-    // return new Observable<User>((observer) => {
-    //   setTimeout(() => {
-    //     observer.next(tmp)
-    //   }, 1000)
-    // })
+    let headers = new HttpHeaders().set("Authorization", token)
+    console.log(headers);
+    
+    let observer = this.http.post<{message: string, id_token: string, expires_at: string}>(
+      `${environment.serverUrl}/api/auth/check_token`, 
+      {},
+      {headers: headers, observe: 'response'}
+    )
+
+    observer.subscribe((response) => {
+      if (response.status == 200 && response.body) {
+        this.isAuthenticated = true
+        this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
+      }
+    })
+
+    return observer
   }
 
   register(username: string, email:string, password: string, password2: string) {
-    return this.http.post<User>(`${environment.serverUrl}/api/auth/register`, {username, email, password, password2}, this.options)
+    let observer = this.http.post<{status: string, message: string, id_token: string, expires_at: string}>(
+      `${environment.serverUrl}/api/auth/register`, 
+      {username, email, password, password2}, 
+      {headers: this.headers, observe: 'response'}
+    )
+
+    observer.subscribe((response) => {
+      if (response.status == 200 && response.body) {
+        this.isAuthenticated = true
+        this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
+      }
+    })
+
+    return observer
   }
 
   login(username: string, password: string) {
-    return this.http.post<User>(`${environment.serverUrl}/api/auth/login`, {username, password}, this.options)
+
+    let observer = this.http.post<{status: string, message: string, id_token: string, expires_at: string}>(
+      `${environment.serverUrl}/api/auth/login`, 
+      {username, password}, 
+      {headers: this.headers, observe: 'response'}
+    )
+
+    observer.subscribe((response) => {
+      if (response.status == 200 && response.body) {
+        this.isAuthenticated = true
+        this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
+      } 
+    })
+
+    return observer
   }
 
+  getProfile(id: number) {
+    let observer = this.http.post<User>(
+      `${environment.serverUrl}/api/users/profile`, 
+      {id}, 
+      {observe: 'response'}
+    )
+
+    observer.subscribe((response) => {
+      if (response.status == 200)
+        this.isAuthenticated = true   
+      console.log(response.body?.username);
+    })
+
+    return observer
+  }
 
   private setSession(authResult: { expiresIn: any; idToken: string; }) {
     const expiresAt = moment().add(authResult.expiresIn,'second');
