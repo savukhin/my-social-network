@@ -21,7 +21,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-¡
+
   authWithToken(token: string) {
     let headers = new HttpHeaders().set("Authorization", token)
     console.log(headers);
