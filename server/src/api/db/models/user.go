@@ -2,8 +2,10 @@ package models
 
 import (
 	"api/db"
+	"api/dto"
 	"database/sql"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -115,7 +117,7 @@ func (user *User) Login() map[string]interface{} {
 }
 
 func (user *User) GetProfile() interface{} {
-	sql := fmt.Sprintf("SELECT id, username, name, email, status, city, birthDate, avatar_id, isOnline FROM users WHERE id = %d", user.ID)
+	sql := fmt.Sprintf("SELECT id, username, name, email, status, city, birthdate, avatar_id, isOnline FROM users WHERE id = %d", user.ID)
 	row := db.DB.QueryRow(sql)
 
 	temp := &User{}
@@ -132,5 +134,28 @@ func (user *User) GetProfile() interface{} {
 		}
 	}
 
-	return temp
+	return ToUserProfile(temp)
+}
+
+func ToUserProfile(user *User) *dto.UserProfile {
+	response := &dto.UserProfile{}
+
+	response.ID = user.ID
+	response.Username = user.Username
+	response.Name = user.Name
+	response.IsOnline = user.IsOnline
+	if user.Status.Valid {
+		response.Status = user.Status.String
+	}
+	if user.BirthDate.Valid {
+		response.BirthDate = user.BirthDate.Time.String()
+	}
+	if user.City.Valid {
+		response.City = user.City.String
+	}
+	if user.Avatar_ID.Valid {
+		response.Avatar_URL = strconv.Itoa(int(user.Avatar_ID.Int64))
+	}
+
+	return response
 }

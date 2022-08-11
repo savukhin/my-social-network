@@ -4,7 +4,6 @@ import (
 	"api/app/utils"
 	"api/db/models"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -44,7 +43,6 @@ func Register(res http.ResponseWriter, req *http.Request) {
 
 func CheckToken(res http.ResponseWriter, req *http.Request) {
 	jwt := req.Header.Get("Authorization")
-	fmt.Println(req.Header)
 	token, err := utils.UnpackJWT(jwt)
 	res.Header().Add("Content-Type", "application/json")
 	response := map[string]interface{}{

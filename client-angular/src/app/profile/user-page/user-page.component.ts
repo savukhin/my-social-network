@@ -37,11 +37,11 @@ export class UserPageComponent implements AfterViewInit {
 
         console.log("subscription", id);
         this.auth.getProfile(+id).subscribe(
-            user => {
-                console.log("UserPageComponent: User changed in userpage");
-
-                if (user) {
-                    // this.profile = user;
+            response => {
+                console.log(response.body);
+                
+                if (response.status == 200 && response.body) {
+                    this.profile = response.body;
                 }
                 this.cdref.detectChanges();
             }
