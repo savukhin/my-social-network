@@ -17,7 +17,7 @@ export class AuthService {
   private headers = new HttpHeaders().set('Content-Type', 'application/json')
   
   user!: User;
-  isAuthenticated = false;
+  isAuthenticated = true;
 
   constructor(private http: HttpClient) { }
 
@@ -35,7 +35,11 @@ export class AuthService {
     observer.subscribe((response) => {
       if (response.status == 200 && response.body) {
         this.isAuthenticated = true
+
         this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
+      } else {
+        this.isAuthenticated = false
+        this.logout()
       }
     })
 

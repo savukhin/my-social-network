@@ -51,6 +51,8 @@ export class ChatComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    console.log("chat init");
+    
     this.contentWidth = this.block.nativeElement.scrollWidth;
     this.cdref.detectChanges();
     // this.scrollToBottom();
