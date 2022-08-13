@@ -4,6 +4,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ChatComponent } from './chat/chat.component';
 import { FriendsComponent } from './friends/friends.component';
+import { AuthGuard } from './guard/auth.guard';
 import { MessagesComponent } from './messages/messages.component';
 import { ChangePasswordComponent } from './profile/change-password/change-password.component';
 import { UpdateProfileComponent } from './profile/update-profile/update-profile.component';
@@ -17,7 +18,8 @@ const routes: Routes = [
     },
     {
       path: 'user',
-      component: UserPageComponent
+      component: UserPageComponent,
+      canActivate: [AuthGuard]
     },
     {
         path: 'user/:id',
@@ -25,19 +27,27 @@ const routes: Routes = [
     },
     {
       path: 'messages',
-      component: MessagesComponent
+      component: MessagesComponent,
+      canActivate: [AuthGuard]
     },
     {
       path: 'chat/:id',
-      component: ChatComponent
+      component: ChatComponent,
+      canActivate: [AuthGuard]
     },
     {
       path: 'friends',
-      component: FriendsComponent
+      component: FriendsComponent,
+      canActivate: [AuthGuard]
+    },
+    {
+      path: 'friends/:id',
+      component: FriendsComponent,
     },
     {
       path: 'edit-profile',
-      component: UpdateProfileComponent
+      component: UpdateProfileComponent,
+      canActivate: [AuthGuard]
     },
     {
       path: 'login',
@@ -49,7 +59,8 @@ const routes: Routes = [
     },
     {
       path: 'change-password',
-      component: ChangePasswordComponent
+      component: ChangePasswordComponent,
+      canActivate: [AuthGuard]
     },
 ];
 

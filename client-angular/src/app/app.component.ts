@@ -10,7 +10,7 @@ import { AuthService } from './services/backend-api/auth.service';
   providers: [AuthService]
 })
 export class AppComponent implements AfterViewInit, OnInit {
-  private isLoaded = false;
+  private isLoaded = true;
 
   user?: User;
   title = 'client-angular';
@@ -41,24 +41,6 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    let token = this.auth.getToken();
-    let unathorized_pages = new Set(["user", "login", "register"])
-    let url = window.location.pathname
-    let is_need_redirect = !(unathorized_pages.has(url.split('/')[1]))
-
-    if (token != null) {
-      this.auth.authWithToken(token).subscribe((response) => {
-        this.isLoaded = true
-        this.cdref.detectChanges()
-
-        if (response.status != 200 && is_need_redirect)
-         this.router.navigate(['/login'], { queryParams: { returnUrl: url }});
-      })
-    } else {
-      this.isLoaded = true
-      this.cdref.detectChanges()
-      if (is_need_redirect)
-        this.router.navigate(['/login'], { queryParams: { returnUrl: url }});
-    }
+    
   }
 }
