@@ -10,6 +10,7 @@ require (
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/fatih/structs v1.1.0
 	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/lib/pq v1.10.6
 )

@@ -7,7 +7,7 @@ import (
 )
 
 type Token struct {
-	UserID  uint      `json:"user_id,omitemp"`
+	UserID  int       `json:"user_id,omitemp"`
 	Email   string    `json:"email,omitemp"`
 	TimeExp time.Time `json:"time_exp,omitemp"`
 	jwt.StandardClaims

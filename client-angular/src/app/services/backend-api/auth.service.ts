@@ -24,7 +24,6 @@ export class AuthService {
 
   authWithToken(token: string) {
     let headers = new HttpHeaders().set("Authorization", token)
-    console.log(headers);
     
     let observer = this.http.post<{message: string, id_token: string, expires_at: string}>(
       `${environment.serverUrl}/api/auth/check_token`, 
@@ -82,20 +81,45 @@ export class AuthService {
   }
 
   getProfile(id: number) {
+    const token = this.getToken()
+    if (!token)
+      return false
+    
+    let headers = new HttpHeaders().set("Authorization", token)
+
     let observer = this.http.post<User>(
       `${environment.serverUrl}/api/users/profile`, 
       {id}, 
-      {observe: 'response'}
+      {headers: headers, observe: 'response'}
     )
-
-    observer.subscribe((response) => {
-      if (response.status == 200)
-        this.isAuthenticated = true   
-      console.log(response.body?.username);
-    })
 
     return observer.pipe(
       map((response) => {
+        if (response.status == 200 && response.body) {
+          return response.body as User
+        }
+        return false;
+      })
+    )
+  }
+
+  changeProfile(name: string, birthDate: Date, city: string) {
+    const token = this.getToken()
+    if (!token)
+      return false
+    
+    let headers = new HttpHeaders().set("Authorization", token)
+
+    let observer = this.http.post<User>(
+      `${environment.serverUrl}/api/users/change_profile`, 
+      {name, birthDate, city}, 
+      {headers: headers, observe: 'response'}
+    )
+
+    return observer.pipe(
+      map((response) => {
+        console.log(response);
+        
         if (response.status == 200 && response.body)
           return response.body as User
         return false;

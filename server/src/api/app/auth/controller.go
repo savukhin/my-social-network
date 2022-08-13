@@ -16,7 +16,7 @@ func Login(res http.ResponseWriter, req *http.Request) {
 		var data = struct {
 			Title string `json:"error"`
 		}{
-			Title: "Error",
+			Title: err.Error(),
 		}
 
 		jsonBytes, _ := utils.StructToJSON(data)

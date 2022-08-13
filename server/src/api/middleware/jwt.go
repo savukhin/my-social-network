@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -36,24 +35,8 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return
 		}
 
-		headerAuthorizationString := strings.Split(tokenHeader, " ")
-		if len(headerAuthorizationString) != 2 {
-			rsp := map[string]interface{}{"status": "invalid", "message": "Invalid/Format Auth Token ;"}
-			res.Header().Add("Content-Type", "application/json")
-			json.NewEncoder(res).Encode(rsp)
-			return
-		}
-
-		barier := headerAuthorizationString[0]
-		if barier != "Bearer" {
-			rsp := map[string]interface{}{"status": "invalid", "message": "Token is not Barier ;"}
-			res.Header().Add("Content-Type", "application/json")
-			json.NewEncoder(res).Encode(rsp)
-			return
-		}
-
 		tk := &models.Token{}
-		tokenValue := headerAuthorizationString[1]
+		tokenValue := tokenHeader
 		token, err := jwt.ParseWithClaims(tokenValue, tk, func(token *jwt.Token) (interface{}, error) {
 			return []byte("asdf"), nil
 		})

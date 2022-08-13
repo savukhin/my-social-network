@@ -1,20 +1,22 @@
 <div class="block block-form">
-    <fieldset>
-        <div>
-            <label for="name">Name: </label>
-            <br/>
-            <label for="birthDate">Birth date: </label>
-            <br/>
-            <label for="city">City: </label>
-        </div>
-        <div>
-            <input type="text" id="name"/>
-            <br/>
-            <input type="date" id="birthDate"/>
-            <br/>
-            <input type="text" id="city"/>
-        </div>
-    </fieldset>
-    <br/>
-    <button class="button">Submit</button>
+    <form [formGroup]="form">
+        <fieldset>
+            <div>
+                <label for="name">Name: </label>
+                <br/>
+                <label for="birthDate">Birth date: </label>
+                <br/>
+                <label for="city">City: </label>
+            </div>
+            <div>
+                <input type="text" id="name" formControlName="name"/>
+                <br/>
+                <input type="date" id="birthDate" formControlName="birthDate"/>
+                <br/>
+                <input type="text" id="city" formControlName="city"/>
+            </div>
+        </fieldset>
+        <br/>
+        <button class="button" (click)="changeProfile()">Submit</button>
+    </form>
 </div>
