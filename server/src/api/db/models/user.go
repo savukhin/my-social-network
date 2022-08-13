@@ -159,3 +159,17 @@ func ToUserProfile(user *User) *dto.UserProfile {
 
 	return response
 }
+
+func (user *User) ChangeProfile() (interface{}, error) {
+	temp, err := GetUserByID(user.ID)
+
+	if err != nil {
+		return map[string]interface{}{
+			"status":  "error",
+			"message": "No such user with this id",
+		}, err
+	}
+
+	// return ToUserProfile(temp)
+	return temp, nil
+}
