@@ -19,14 +19,16 @@ export class AppComponent implements AfterViewInit, OnInit {
     private router: Router, 
     private cdref: ChangeDetectorRef) {
 
-    // this.auth.getUser().subscribe(
-    //   user => {
-    //     console.log("AppComponent User changed in app");
-        
-    //     this.user = user;
-    //     this.cdref.detectChanges();
-    //   }
-    // )
+    this.auth.getProfile(0).subscribe(
+      response => {
+        console.log("AppComponent User changed in app");
+        if (response == false)
+          return
+
+        this.user = response;
+        this.cdref.detectChanges();
+      }
+    )
 
     // setTimeout(() => {
     //   let name = (Math.random() + 1).toString(36).substring(7);

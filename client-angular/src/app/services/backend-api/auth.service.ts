@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { Observable, Subject, of, from } from 'rxjs';
-import { tap, shareReplay, filter } from 'rxjs/operators';
+import { tap, shareReplay, filter, map } from 'rxjs/operators';
 import { User } from 'src/models/user';
 import * as moment from "moment";
 import { environment } from 'src/environments/environment';
@@ -94,7 +94,13 @@ export class AuthService {
       console.log(response.body?.username);
     })
 
-    return observer
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body)
+          return response.body as User
+        return false;
+      })
+    )
   }
 
   private setSession(authResult: { expiresIn: any; idToken: string; }) {

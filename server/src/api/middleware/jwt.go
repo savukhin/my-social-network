@@ -4,7 +4,6 @@ import (
 	"api/db/models"
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -12,11 +11,13 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+type ContextKey string
+
+const ContextUserIDKey ContextKey = "user_id"
+
 // JwtAuthentication for JWT
 var JwtAuthentication = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		fmt.Println("Check token in middleware")
-
 		noAuthPath := []string{"/api/user/register", "/api/user/login"}
 		requestPath := req.URL.Path
 		// looping for check pathnya
@@ -80,7 +81,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(req.Context(), "user_id", tk.UserID)
+		ctx := context.WithValue(req.Context(), ContextUserIDKey, tk.UserID)
 		req = req.WithContext(ctx)
 		next.ServeHTTP(res, req)
 	})

@@ -38,10 +38,10 @@ export class UserPageComponent implements AfterViewInit {
         console.log("subscription", id);
         this.auth.getProfile(+id).subscribe(
             response => {
-                console.log(response.body);
+                console.log(response);
                 
-                if (response.status == 200 && response.body) {
-                    this.profile = response.body;
+                if (response != false) {
+                    this.profile = response;
                 }
                 this.cdref.detectChanges();
             }
