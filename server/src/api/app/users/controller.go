@@ -51,9 +51,10 @@ func ChangeProfile(res http.ResponseWriter, req *http.Request) {
 		var data = struct {
 			Title string `json:"error"`
 		}{
-			Title: "Error",
+			Title: err.Error(),
 		}
 
+		res.WriteHeader(400)
 		jsonBytes, _ := utils.StructToJSON(data)
 		res.Write(jsonBytes)
 		return
@@ -65,7 +66,6 @@ func ChangeProfile(res http.ResponseWriter, req *http.Request) {
 	var response interface{}
 
 	if err != nil {
-		fmt.Println(err)
 		response = struct {
 			Title string "json:\"error\""
 		}{Title: err.Error()}

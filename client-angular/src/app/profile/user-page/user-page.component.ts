@@ -30,12 +30,24 @@ export class UserPageComponent implements AfterViewInit {
     constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService, private cdref: ChangeDetectorRef) {
     }
 
+    editStatusClick(): void {
+        const newStatus = this.input.nativeElement.value
+        const subscription = this.auth.changeProfileStatus(newStatus)
+        if (subscription == false)
+            return
+
+        subscription.subscribe((response) => {
+            if (response != false) {
+                this.profile.status = newStatus
+                this.hideEditStatus()
+            }
+        })
+    }
+
     ngAfterViewInit(): void {
         let id = this.route.snapshot.paramMap.get("id");
         if (id == null) {
             this.auth.userSubscription?.subscribe((response) => {
-                console.log(response);
-                
                 if (response != false) {
                     this.user = response
                     this.router.navigateByUrl('user/' + this.user.id)

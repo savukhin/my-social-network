@@ -32,7 +32,7 @@
             </div>
             <div class="edit-status" *ngIf="editStatus">
                 <input type="text" #pleaseDoIt/>
-                <button class="button">Edit</button>
+                <button class="button" (click)="editStatusClick()">Edit</button>
                 <button class="button" (click)="hideEditStatus()">Cancel</button>
             </div>
         </div>

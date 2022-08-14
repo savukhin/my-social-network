@@ -137,6 +137,29 @@ export class AuthService {
     )
   }
 
+  changeProfileStatus(status: string) {
+    const token = this.getToken()
+    if (!token)
+      return false
+    
+    let headers = new HttpHeaders().set("Authorization", token)
+    
+
+    let observer = this.http.post<User>(
+      `${environment.serverUrl}/api/users/change_profile`, 
+      {status}, 
+      {headers: headers, observe: 'response'}
+    )
+
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body)
+          return response.body as User
+        return false;
+      })
+    )
+  }
+
   private setSession(authResult: { expiresIn: any; idToken: string; }) {
     const expiresAt = moment().add(authResult.expiresIn,'second');
 

@@ -2,11 +2,10 @@ package dto
 
 import (
 	"api/db"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
-
-	"github.com/fatih/structs"
 )
 
 type UserEdit struct {
@@ -23,7 +22,12 @@ func (user UserEdit) ApllyChanges(id int) error {
 		SET`
 
 	queries := make([]string, 0)
-	for key, value := range structs.Map(user) {
+	tmp, _ := json.Marshal(user)
+
+	var response map[string]interface{}
+	json.Unmarshal(tmp, &response)
+
+	for key, value := range response {
 		queries = append(queries, fmt.Sprintf(" %s = '%s'", key, value.(string)))
 	}
 	sql += strings.Join(queries[:], ",")
