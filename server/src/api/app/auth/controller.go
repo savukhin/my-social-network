@@ -3,6 +3,8 @@ package auth
 import (
 	"api/app/utils"
 	"api/db/models"
+	"api/dto"
+	"api/mappers"
 	"encoding/json"
 	"net/http"
 )
@@ -45,19 +47,14 @@ func CheckToken(res http.ResponseWriter, req *http.Request) {
 	jwt := req.Header.Get("Authorization")
 	token, err := utils.UnpackJWT(jwt)
 	res.Header().Add("Content-Type", "application/json")
-	response := map[string]interface{}{
-		"id_token":   "",
-		"expires_at": "",
-		"message":    "ok",
-	}
+
+	response := &dto.TokenCheckStruct{}
 
 	if err != nil {
 		res.WriteHeader(http.StatusUnauthorized)
-		response["message"] = err
-		response["id_token"] = jwt
 	} else {
-		response["id_token"] = jwt
-		response["expires_at"] = token.TimeExp
+		user, _ := models.GetUserByID(token.UserID)
+		response = mappers.ToTokenCheckStruct(user, jwt, token.TimeExp)
 	}
 
 	res.Header().Add("Content-Type", "application/json")

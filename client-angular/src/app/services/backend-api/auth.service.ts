@@ -6,9 +6,7 @@ import { User } from 'src/models/user';
 import * as moment from "moment";
 import { environment } from 'src/environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
   getToken() {
     return localStorage.getItem("id_token")
@@ -16,7 +14,8 @@ export class AuthService {
 
   private headers = new HttpHeaders().set('Content-Type', 'application/json')
   
-  user!: User;
+  userSubscription?: Observable<User | false>;
+  user?: User;
   isAuthenticated = true;
 
   constructor(private http: HttpClient) { }
@@ -25,22 +24,33 @@ export class AuthService {
   authWithToken(token: string) {
     let headers = new HttpHeaders().set("Authorization", token)
     
-    let observer = this.http.post<{message: string, id_token: string, expires_at: string}>(
+    console.log("authWithToken");
+    let observer = this.http.post<User>(
       `${environment.serverUrl}/api/auth/check_token`, 
       {},
       {headers: headers, observe: 'response'}
+    ).pipe(
+      map((response) => {
+        if (response.status == 200 && response.body && response.body.id_token) {
+          this.isAuthenticated = true
+          // const json = JSON.parse(response.body)
+  
+          this.user = response.body
+          // console.log(typeof this.user, "user is ", this.user);
+          
+          this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
+          return response.body
+        } else {
+          this.isAuthenticated = false
+          this.logout()
+          return false;
+        }
+      })
     )
 
-    observer.subscribe((response) => {
-      if (response.status == 200 && response.body) {
-        this.isAuthenticated = true
-
-        this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
-      } else {
-        this.isAuthenticated = false
-        this.logout()
-      }
-    })
+    console.log("this.user = observer");
+    this.userSubscription = observer
+    console.log(this.user);
 
     return observer
   }

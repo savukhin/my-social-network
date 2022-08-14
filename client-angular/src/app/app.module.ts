@@ -15,6 +15,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ChangePasswordComponent } from './profile/change-password/change-password.component';
+import { AuthService } from './services/backend-api/auth.service';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import { ChangePasswordComponent } from './profile/change-password/change-passwo
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

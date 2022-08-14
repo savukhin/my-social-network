@@ -19,11 +19,7 @@ export class AuthGuard implements CanActivate {
     
     return this.auth.authWithToken(token).pipe(
       map((response) => {
-          if (response.status == 200 ) {
-            return true;
-          } else {
-            return false;
-          }
+        return response != false
       }),
       catchError(() => {
         this.router.navigate(['/login']);

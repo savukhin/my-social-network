@@ -7,7 +7,6 @@ import { AuthService } from './services/backend-api/auth.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [AuthService]
 })
 export class AppComponent implements AfterViewInit, OnInit {
   private isLoaded = true;
@@ -25,7 +24,6 @@ export class AppComponent implements AfterViewInit, OnInit {
 
       subscription.subscribe(
       response => {
-        console.log("AppComponent User changed in app");
         if (response == false)
           return
 

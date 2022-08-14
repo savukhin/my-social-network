@@ -7,6 +7,8 @@ export class User {
     birthDate: string = "";
     city: string = "";
     avatarURL: string | null = null;
+    id_token: string | null = null;
+    expires_at: string | null = null;
 
     constructor(id=0, name="", isOnline=true, status="", birthDate="", city="", avatarURL=null) {
         this.id = id;

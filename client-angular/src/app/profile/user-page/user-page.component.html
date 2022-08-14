@@ -2,8 +2,6 @@
     <div class="blocks-wrapper">
         <div class="block small-block">
             <img class="" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
-            {{user?.id}}
-            {{profile.id}}
             <div *ngIf="user && profile.id == user.id">
                 <button class="button">Change photo</button>
                 <br/>
@@ -51,7 +49,10 @@
                     </tr>
                 </tbody>
             </table>
-            <a class="button" routerLink="/edit-profile" routerLinkActive="active" ariaCurrentWhenActive="page">Change information</a>
+            <a class="button" *ngIf="profile.id == user?.id" routerLink="/edit-profile" routerLinkActive="active" ariaCurrentWhenActive="page">Change information</a>
+            {{profile.id == user?.id}}
+            profi {{profile.id}}
+            user {{user?.id}}
         </div>
         <div class="block">
             <div class="write-post-wrapper">

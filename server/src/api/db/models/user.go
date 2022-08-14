@@ -2,10 +2,8 @@ package models
 
 import (
 	"api/db"
-	"api/dto"
 	"database/sql"
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
@@ -115,69 +113,21 @@ func (user *User) Login() map[string]interface{} {
 	return map[string]interface{}{"status": "ok", "message": "Login is Success", "id_token": tokenString, "expires_at": timein}
 }
 
-func (user *User) EditProfile() interface{} {
+func (user *User) GetProfile() (*User, error) {
 	sql := fmt.Sprintf("SELECT id, username, name, email, status, city, birthdate, avatar_id, isOnline FROM users WHERE id = %d", user.ID)
 	row := db.DB.QueryRow(sql)
 
 	temp := &User{}
-	// err := row.Scan(&temp.ID, &temp.Email, &temp.Password)
 	err := row.Scan(
 		&temp.ID, &temp.Username, &temp.Name, &temp.Email,
 		&temp.Status, &temp.City, &temp.BirthDate, &temp.Avatar_ID, &temp.IsOnline,
 	)
 
 	if err != nil {
-		return map[string]interface{}{
-			"status":  "error",
-			"message": "No such user with this id",
-		}
+		return nil, err
 	}
 
-	return ToUserProfile(temp)
-}
-
-func (user *User) GetProfile() interface{} {
-	sql := fmt.Sprintf("SELECT id, username, name, email, status, city, birthdate, avatar_id, isOnline FROM users WHERE id = %d", user.ID)
-	row := db.DB.QueryRow(sql)
-
-	temp := &User{}
-	// err := row.Scan(&temp.ID, &temp.Email, &temp.Password)
-	err := row.Scan(
-		&temp.ID, &temp.Username, &temp.Name, &temp.Email,
-		&temp.Status, &temp.City, &temp.BirthDate, &temp.Avatar_ID, &temp.IsOnline,
-	)
-
-	if err != nil {
-		return map[string]interface{}{
-			"status":  "error",
-			"message": "No such user with this id",
-		}
-	}
-
-	return ToUserProfile(temp)
-}
-
-func ToUserProfile(user *User) *dto.UserProfile {
-	response := &dto.UserProfile{}
-
-	response.ID = user.ID
-	response.Username = user.Username
-	response.Name = user.Name
-	response.IsOnline = user.IsOnline
-	if user.Status.Valid {
-		response.Status = user.Status.String
-	}
-	if user.BirthDate.Valid {
-		response.BirthDate = user.BirthDate.Time.Format("02.01.2006")
-	}
-	if user.City.Valid {
-		response.City = user.City.String
-	}
-	if user.Avatar_ID.Valid {
-		response.Avatar_URL = strconv.Itoa(int(user.Avatar_ID.Int64))
-	}
-
-	return response
+	return temp, nil
 }
 
 func (user *User) ChangeProfile() (interface{}, error) {
@@ -190,6 +140,5 @@ func (user *User) ChangeProfile() (interface{}, error) {
 		}, err
 	}
 
-	// return ToUserProfile(temp)
 	return temp, nil
 }

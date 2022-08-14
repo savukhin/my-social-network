@@ -28,10 +28,20 @@ export class UserPageComponent implements AfterViewInit {
     }
 
     constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService, private cdref: ChangeDetectorRef) {
+    }
+
+    ngAfterViewInit(): void {
         let id = this.route.snapshot.paramMap.get("id");
         if (id == null) {
-            this.router.navigateByUrl('user/1')
-            // this.router.navigateByUrl('user/' + this.auth.user.id, {skipLocationChange: true})
+            this.auth.userSubscription?.subscribe((response) => {
+                console.log(response);
+                
+                if (response != false) {
+                    this.user = response
+                    this.router.navigateByUrl('user/' + this.user.id)
+                }
+            })
+
             return
         }
 
@@ -50,8 +60,5 @@ export class UserPageComponent implements AfterViewInit {
                 this.cdref.detectChanges();
             }
         )
-    }
-    
-    ngAfterViewInit(): void {
     }
 }

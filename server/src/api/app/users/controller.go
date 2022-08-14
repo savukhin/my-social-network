@@ -4,6 +4,7 @@ import (
 	"api/app/utils"
 	"api/db/models"
 	"api/dto"
+	"api/mappers"
 	"api/middleware"
 	"encoding/json"
 	"errors"
@@ -97,6 +98,7 @@ func GetProfile(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	b, _ := json.Marshal(response.GetProfile())
+	profile, _ := response.GetProfile()
+	b, _ := json.Marshal(mappers.ToUserProfile(profile))
 	res.Write(b)
 }
