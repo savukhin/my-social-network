@@ -8,7 +8,6 @@ import (
 	"api/middleware"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 )
 
@@ -45,7 +44,6 @@ func ChangeProfile(res http.ResponseWriter, req *http.Request) {
 	err := json.NewDecoder(req.Body).Decode(changes)
 
 	res.Header().Set("Content-Type", "application/json")
-	fmt.Println("Change profile")
 
 	if err != nil {
 		var data = struct {
@@ -83,7 +81,6 @@ func ChangeProfile(res http.ResponseWriter, req *http.Request) {
 
 func GetProfile(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
-	// var response interface{}
 	response, err := ExtractProfile(req)
 
 	if err != nil {
