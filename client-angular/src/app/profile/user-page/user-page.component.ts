@@ -45,15 +45,12 @@ export class UserPageComponent implements AfterViewInit {
             return
         }
 
-        console.log("subscription", id);
         const subscription = this.auth.getProfile(+id)
         if (subscription == false)
             return
 
         subscription.subscribe(
             response => {
-                console.log(response);
-                
                 if (response != false) {
                     this.profile = response;
                 }
