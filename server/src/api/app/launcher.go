@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"api/app/auth"
+	"api/app/chat"
 	"api/app/users"
 	"log"
 	"net/http"
@@ -17,6 +18,7 @@ func Launch() {
 	router := r.PathPrefix("/api").Subrouter()
 	auth.Routes(router.PathPrefix("/auth").Subrouter())
 	users.Routes(router.PathPrefix("/users").Subrouter())
+	chat.Routes(router.PathPrefix("/chats").Subrouter())
 
 	credentials := handlers.AllowCredentials()
 	methods := handlers.AllowedMethods([]string{"POST"})
