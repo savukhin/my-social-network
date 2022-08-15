@@ -4,6 +4,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ChatComponent } from './chat/chat.component';
 import { FriendsComponent } from './friends/friends.component';
+import { AuthOptionalGuard } from './guard/auth-optional.guard';
 import { AuthGuard } from './guard/auth.guard';
 import { MessagesComponent } from './messages/messages.component';
 import { ChangePasswordComponent } from './profile/change-password/change-password.component';
@@ -23,8 +24,9 @@ const routes: Routes = [
     },
     {
         path: 'user/:id',
-        component: UserPageComponent
-    },
+        component: UserPageComponent,
+        canActivate: [AuthOptionalGuard]
+      },
     {
       path: 'messages',
       component: MessagesComponent,

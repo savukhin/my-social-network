@@ -41,18 +41,15 @@
                 <tbody>
                     <tr>
                         <td>Date of birth:</td>
-                        <td>{{ profile.birthDate }}</td>
+                        <td>{{ profile.birthDate == "" ? "Not stated" : profile.birthDate }}</td>
                     </tr>
                     <tr>
                         <td>City:</td>
-                        <td>{{ profile.city }}</td>
+                        <td>{{ profile.city == "" ? "Not stated" : profile.city }}</td>
                     </tr>
                 </tbody>
             </table>
             <a class="button" *ngIf="profile.id == user?.id" routerLink="/edit-profile" routerLinkActive="active" ariaCurrentWhenActive="page">Change information</a>
-            {{profile.id == user?.id}}
-            profi {{profile.id}}
-            user {{user?.id}}
         </div>
         <div class="block">
             <div class="write-post-wrapper">

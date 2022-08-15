@@ -28,20 +28,37 @@ export class UserPageComponent implements AfterViewInit {
     }
 
     constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService, private cdref: ChangeDetectorRef) {
+        console.log("afterinit userpage");
+
+        console.log(this.auth.userSubscription);
+        console.log(this.auth.user);
+
+        if (this.auth.userSubscription == undefined) 
+            return
+        
+        this.auth.userSubscription.subscribe((response) => {
+            if (response == false)
+                return;
+            this.user = response
+            this.cdref.detectChanges()
+            console.log(this.user);
+            console.log(this.profile.id);
+            console.log(this.user.id);
+        })
+            
     }
 
     editStatusClick(): void {
         const newStatus = this.input.nativeElement.value
         const subscription = this.auth.changeProfileStatus(newStatus)
-        if (subscription == false)
-            return
-
-        subscription.subscribe((response) => {
-            if (response != false) {
-                this.profile.status = newStatus
-                this.hideEditStatus()
-            }
-        })
+        if (subscription != false) {
+            subscription.subscribe((response) => {
+                if (response != false) {
+                    this.profile.status = newStatus
+                    this.hideEditStatus()
+                }
+            })
+        }
     }
 
     ngAfterViewInit(): void {
@@ -58,16 +75,17 @@ export class UserPageComponent implements AfterViewInit {
         }
 
         const subscription = this.auth.getProfile(+id)
-        if (subscription == false)
-            return
-
-        subscription.subscribe(
-            response => {
-                if (response != false) {
-                    this.profile = response;
+        if (subscription != false) {
+            subscription.subscribe(
+                response => {
+                    if (response != false) {
+                        this.profile = response;
+                    }
+                    this.cdref.detectChanges();
                 }
-                this.cdref.detectChanges();
-            }
-        )
+            )
+        }
+        
+        // })
     }
 }

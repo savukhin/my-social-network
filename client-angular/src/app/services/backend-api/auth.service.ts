@@ -22,6 +22,8 @@ export class AuthService {
 
 
   authWithToken(token: string) {
+    console.log("authWithToken");
+    
     let headers = new HttpHeaders().set("Authorization", token)
     
     console.log("authWithToken");
