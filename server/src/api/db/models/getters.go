@@ -17,3 +17,22 @@ func GetUserByID(id int) (*User, error) {
 
 	return temp, err
 }
+
+func GetChatsByUserID(id int) (*Chat, error) {
+
+	sql := fmt.Sprintf(`
+		SELECT id, title, photo_id, created_at, updated_at 
+		JOIN user_to_chat AS u ON c.id == u.chat_id
+		WHERE u.user_id = %d AND deleted_at == NULL 
+	`, id)
+
+	row := db.DB.QueryRow(sql)
+
+	temp := &Chat{}
+	err := row.Scan(&temp.id, &temp.title, &temp.photo_id, &temp.created_at, &temp.updated_at)
+	if err != nil {
+		return nil, err
+	}
+
+	return temp, nil
+}
