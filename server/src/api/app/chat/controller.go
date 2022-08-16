@@ -1,7 +1,6 @@
 package chat
 
 import (
-	"api/app/utils"
 	"api/db/models"
 	"api/middleware"
 	"encoding/json"
@@ -27,13 +26,9 @@ func GetChats(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	response, err := utils.StructToJSON(chats)
-	if err != nil {
-		res.WriteHeader(400)
-		return
-	}
-
-	json.NewEncoder(res).Encode(response)
+	res.Header().Set("Content-Type", "application/json")
+	b, _ := json.Marshal(chats)
+	res.Write(b)
 }
 
 func GetPersonalChat(res http.ResponseWriter, req *http.Request) {

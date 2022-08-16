@@ -53,12 +53,37 @@ func CreatePersonalChat(user1_id int, user2_id int) (*Chat, error) {
 	return chat, nil
 }
 
+func GetChatParticipants(chat_id int) ([]int, error) {
+	sql := fmt.Sprintf(`
+		SELECT user_id FROM user_to_chat WHERE chat_id = %d
+	`, chat_id)
+
+	rows, err := db.DB.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]int, 0)
+
+	for rows.Next() {
+		var user_id int
+		err = rows.Scan(&user_id)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, user_id)
+	}
+
+	return result, nil
+}
+
 func GetChatsByUserID(id int) ([]*Chat, error) {
 	sql := fmt.Sprintf(`
-		SELECT id, title, photo_id, created_at, updated_at 
+		SELECT c.id, c.title, c.photo_id, c.is_personal, c.created_at, c.updated_at 
 		FROM chats as c
-		JOIN user_to_chat AS u ON c.id = u.chat_id
-		WHERE u.user_id = %d AND deleted_at = NULL 
+		JOIN user_to_chat AS u ON c.id = u.chat_id 
+		AND u.user_id = %d AND c.deleted_at IS NULL 
 	`, id)
 
 	rows, err := db.DB.Query(sql)
@@ -71,9 +96,31 @@ func GetChatsByUserID(id int) ([]*Chat, error) {
 
 	if rows.Next() {
 		chat := &Chat{}
-		err := rows.Scan(&chat.ID, &chat.Title, &chat.PhotoID, &chat.CreatedAt, &chat.UpdatedAt)
+		err := rows.Scan(&chat.ID, &chat.Title, &chat.PhotoID, &chat.IsPersonal, &chat.CreatedAt, &chat.UpdatedAt)
 		if err != nil {
 			return nil, err
+		}
+
+		if chat.IsPersonal {
+			participants, err := GetChatParticipants(chat.ID)
+			if err != nil || len(participants) != 2 {
+				fmt.Println("is pers 1 ", err, " len = ", len(participants))
+				return nil, err
+			}
+
+			processing_id := 0
+			if participants[0] == id {
+				processing_id = 1
+			}
+
+			other, err := GetUserByID(processing_id)
+
+			if err != nil {
+				fmt.Println("is pers 2 ", err)
+				return nil, err
+			}
+
+			chat.Title = other.Name
 		}
 
 		chats = append(chats, chat)
@@ -88,6 +135,7 @@ func GetPersonalChat(user1_id int, user2_id int) (*Chat, error) {
 		FROM chats as c
 		JOIN user_to_chat AS u1 ON c.id = u1.chat_id AND u1.user_id = %d
 		JOIN user_to_chat AS u2 ON c.id = u2.chat_id AND u2.user_id = %d
+		AND c.deleted_at IS NULL
 	`, user1_id, user2_id)
 
 	chat := &Chat{}
@@ -102,6 +150,9 @@ func GetPersonalChat(user1_id int, user2_id int) (*Chat, error) {
 			return nil, err
 		}
 	}
+
+	user2, _ := GetUserByID(user2_id)
+	chat.Title = user2.Name
 
 	return chat, nil
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Message } from 'src/models/message';
 import { User } from 'src/models/user';
+import { ContentService } from '../services/backend-api/content.service';
 
 class Item {
   message: Message = new Message();
@@ -25,9 +26,13 @@ export class MessagesComponent implements OnInit {
     )
   ];
 
-  constructor() { }
+  constructor(private content: ContentService) { }
 
   ngOnInit(): void {
+    this.content.getChats()?.subscribe(response => {
+      console.log(response);
+      
+    })
   }
 
 }

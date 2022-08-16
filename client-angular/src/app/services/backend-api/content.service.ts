@@ -19,7 +19,7 @@ export class ContentService {
       return
 
     let observer = this.http.get<Chat>(
-      `${environment.serverUrl}/api/chats/${this.auth.user.id}`, 
+      `${environment.serverUrl}/api/chats`, 
       {headers: token, observe: 'response'}
     )
 
