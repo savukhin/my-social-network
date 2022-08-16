@@ -28,11 +28,6 @@ export class UserPageComponent implements AfterViewInit {
     }
 
     constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService, private cdref: ChangeDetectorRef) {
-        console.log("afterinit userpage");
-
-        console.log(this.auth.userSubscription);
-        console.log(this.auth.user);
-
         if (this.auth.userSubscription == undefined) 
             return
         
@@ -41,9 +36,6 @@ export class UserPageComponent implements AfterViewInit {
                 return;
             this.user = response
             this.cdref.detectChanges()
-            console.log(this.user);
-            console.log(this.profile.id);
-            console.log(this.user.id);
         })
             
     }

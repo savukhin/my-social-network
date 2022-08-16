@@ -12,6 +12,14 @@ export class AuthService {
     return localStorage.getItem("id_token")
   }
 
+  getTokenHeader() {
+    const token = this.getToken()
+    if (!token)
+      return false
+    
+    return new HttpHeaders().set("Authorization", token)
+  }
+
   private headers = new HttpHeaders().set('Content-Type', 'application/json')
   
   userSubscription?: Observable<User | false>;
@@ -22,11 +30,8 @@ export class AuthService {
 
 
   authWithToken(token: string) {
-    console.log("authWithToken");
-    
     let headers = new HttpHeaders().set("Authorization", token)
     
-    console.log("authWithToken");
     let observer = this.http.post<User>(
       `${environment.serverUrl}/api/auth/check_token`, 
       {},
@@ -35,10 +40,8 @@ export class AuthService {
       map((response) => {
         if (response.status == 200 && response.body && response.body.id_token) {
           this.isAuthenticated = true
-          // const json = JSON.parse(response.body)
   
           this.user = response.body
-          // console.log(typeof this.user, "user is ", this.user);
           
           this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
           return response.body
@@ -50,9 +53,7 @@ export class AuthService {
       })
     )
 
-    console.log("this.user = observer");
     this.userSubscription = observer
-    console.log(this.user);
 
     return observer
   }

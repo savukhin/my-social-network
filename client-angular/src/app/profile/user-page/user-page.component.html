@@ -9,8 +9,8 @@
             <div *ngIf="!user || profile.id != user.id">
                 <button class="button">Add friend</button>
                 <br/>
-                <button class="button">Write message</button>
-            </div>
+                <a class="button" routerLink="/chat" [queryParams]="{user: profile.id}" routerLinkActive="active" ariaCurrentWhenActive="page">Write message</a>
+        </div>
         </div>
         <div class="block">
             <div class="block-header">

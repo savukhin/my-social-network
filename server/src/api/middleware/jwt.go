@@ -17,15 +17,6 @@ const ContextUserIDKey ContextKey = "user_id"
 // JwtAuthentication for JWT
 var JwtAuthentication = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		noAuthPath := []string{"/api/user/register", "/api/user/login"}
-		requestPath := req.URL.Path
-		// looping for check pathnya
-		for _, path := range noAuthPath {
-			if path == requestPath {
-				next.ServeHTTP(res, req)
-				return
-			}
-		}
 		tokenHeader := req.Header.Get("Authorization")
 
 		if tokenHeader == "" {

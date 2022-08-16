@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Chat } from 'src/models/chat';
 import { Message } from 'src/models/message';
 import { User } from 'src/models/user';
+import { ContentService } from '../services/backend-api/content.service';
 
 @Component({
   selector: 'app-chat',
@@ -15,9 +16,9 @@ export class ChatComponent implements AfterViewInit {
   @ViewChild('chatContent') myScrollContainer: any;
   @ViewChild('targetView') targetView: ElementRef<HTMLDivElement> = {} as ElementRef;
   contentWidth = 0;
- 
+
   chat: Chat = new Chat(0, "Kirill Klimonov",
-     {
+    {
         1: new User(1, "Saveliy Karpukhin", true),
         2: new User(2, "Kirill Klimonov", false),
     },
@@ -35,12 +36,16 @@ export class ChatComponent implements AfterViewInit {
     ]
   )
 
-  constructor(private route: ActivatedRoute, private router: Router, private renderer: Renderer2, private cdref: ChangeDetectorRef) {
-    let id = this.route.snapshot.paramMap.get("id");
-    if (id == null)
-      this.router.navigateByUrl('404', {skipLocationChange: true})
-
-    // this.chatId = +(id as string);
+  constructor(private route: ActivatedRoute, private router: Router, private renderer: Renderer2, private cdref: ChangeDetectorRef, private content: ContentService) {
+    this.route.queryParams.subscribe(params => {
+      const userId = params['user'];
+      if (userId == undefined)
+        this.router.navigateByUrl('404', {skipLocationChange: true})
+      
+      this.content.getPersonalChat(userId)?.subscribe(response => {
+        console.log("Reponse is", response);
+      })
+    });
   }
   ngOnInit(): void {
   }
@@ -51,21 +56,14 @@ export class ChatComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log("chat init");
-    
     this.contentWidth = this.block.nativeElement.scrollWidth;
     this.cdref.detectChanges();
     // this.scrollToBottom();
     let x = this.targetView.nativeElement as HTMLElement;
     setTimeout(() => {
-      console.log("Before Scroll");
       this.scroll(x);
-      console.log("Scrolled");
-      
     }, 20);
     this.targetView.nativeElement.scrollIntoView();
-    console.log(this.targetView.nativeElement.offsetTop);
-    
   }
 
   scroll(el: HTMLElement) {

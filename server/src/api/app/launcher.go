@@ -18,10 +18,10 @@ func Launch() {
 	router := r.PathPrefix("/api").Subrouter()
 	auth.Routes(router.PathPrefix("/auth").Subrouter())
 	users.Routes(router.PathPrefix("/users").Subrouter())
-	chat.Routes(router.PathPrefix("/chats").Subrouter())
+	chat.Routes(router.PathPrefix("").Subrouter())
 
 	credentials := handlers.AllowCredentials()
-	methods := handlers.AllowedMethods([]string{"POST"})
+	methods := handlers.AllowedMethods([]string{"POST", "GET"})
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With", "Authorization"})
 	ttl := handlers.MaxAge(3600)
 	origins := handlers.AllowedOrigins([]string{"*"})

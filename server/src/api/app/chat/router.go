@@ -10,5 +10,6 @@ import (
 func Routes(router *mux.Router) *mux.Router {
 	router.Use(middleware.JwtAuthentication)
 	router.HandleFunc("/chats", GetChats).Methods(http.MethodGet)
+	router.HandleFunc("/chat/by_user/{user_id:[0-9]+}", GetPersonalChat).Methods(http.MethodPost)
 	return router
 }
