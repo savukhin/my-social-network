@@ -1,7 +1,10 @@
 package chat
 
 import (
+	"api/app/utils"
 	"api/db/models"
+	"api/dto"
+	"api/mappers"
 	"api/middleware"
 	"encoding/json"
 	"net/http"
@@ -53,5 +56,29 @@ func GetPersonalChat(res http.ResponseWriter, req *http.Request) {
 
 	res.Header().Set("Content-Type", "application/json")
 	b, _ := json.Marshal(chat)
+	res.Write(b)
+}
+
+func GetPersonalChatMessages(res http.ResponseWriter, req *http.Request) {
+	extraction := &dto.MessageRangeInput{}
+	err := json.NewDecoder(req.Body).Decode(extraction)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	messages, err := models.GetMessages(extraction.Offset, extraction.Count, extraction.ChatID)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	messageRange, err := mappers.ToMessageRange(messages)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	b, _ := json.Marshal(messageRange)
 	res.Write(b)
 }

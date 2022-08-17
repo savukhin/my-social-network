@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"net/http"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -46,4 +47,16 @@ func UnpackJWT(tokenHeader string) (*models.Token, error) {
 	}
 
 	return tk, nil
+}
+
+func ResponseError(res http.ResponseWriter, message error, status int) error {
+	b, err := json.Marshal(map[string]interface{}{"error": message.Error()})
+	if err != nil {
+		return err
+	}
+
+	res.Header().Set("Content-Type", "application/json")
+	res.WriteHeader(status)
+	res.Write(b)
+	return nil
 }

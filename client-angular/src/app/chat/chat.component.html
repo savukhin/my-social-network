@@ -1,7 +1,7 @@
 <div class="block chat-block" #block (window:resize)="onResize()">
     <div class="chat-header-wrapper" [ngStyle]="{ 'width' : contentWidth + 'px'}" (click)="scroll(targetView)">
         <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
-        <h4>Kirill Klimonov</h4>
+        <h4>{{ chat.title }}</h4>
     </div>
         <div class="chat-content" [ngStyle]="{ 'width' : contentWidth + 'px'}">
             <div class="chat-message-wrapper" *ngFor="let message of chat.messages">

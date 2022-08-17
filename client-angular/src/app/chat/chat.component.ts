@@ -43,7 +43,22 @@ export class ChatComponent implements AfterViewInit {
         this.router.navigateByUrl('404', {skipLocationChange: true})
       
       this.content.getPersonalChat(userId)?.subscribe(response => {
-        console.log("Reponse is", response);
+        if (response == false) {
+          // this.router.navigateByUrl('/login')
+          console.log("Can't get chat");
+          return 
+        }
+
+        this.chat = response
+        cdref.detectChanges()
+        this.content.getPersonalChatMessages(0, 10, this.chat.id)?.subscribe(response => {
+          // console.log(response);
+          if (response == false)
+            return
+
+          this.chat.messages = response.messages
+        })
+
       })
     });
   }
