@@ -14,7 +14,12 @@ import (
 func ToMessage(content *models.Content) (*dto.Message, error) {
 	result := &dto.Message{}
 
-	result.Text = content.Filepath
+	b, err := ioutil.ReadFile(content.Filepath)
+	if err != nil {
+		return nil, err
+	}
+
+	result.Text = string(b)
 	result.AuthorID = content.UserID
 	result.CreatedAt = content.CreatedAt
 
@@ -67,4 +72,21 @@ func MessageToContent(message *dto.MessageInput) (*models.Content, error) {
 	content.Filepath = filename
 
 	return content, nil
+}
+
+func ToChatDTO(chat_model *models.Chat, participants []models.User) (*dto.Chat, error) {
+	chat := &dto.Chat{
+		ID:         chat_model.ID,
+		Title:      chat_model.Title,
+		IsPersonal: chat_model.IsPersonal,
+	}
+
+	chat.PhotoURL = ""
+	chat.Participants = make([]dto.UserCompressed, 0)
+	for _, participant := range participants {
+		user := ToUserCompressed(&participant)
+		chat.Participants = append(chat.Participants, *user)
+	}
+
+	return chat, nil
 }

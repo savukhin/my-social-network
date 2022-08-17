@@ -18,9 +18,9 @@ type User struct {
 	Email     string         `json:"email,omitempty"`
 	Password  string         `json:"password,omitempty"`
 	Password2 string         `json:"password2,omitempty"`
-	IsOnline  bool           `json:"isOnline,omitempty"`
+	IsOnline  bool           `json:"is_online,omitempty"`
 	Status    sql.NullString `json:"status,omitempty"`
-	BirthDate sql.NullTime   `json:"birthDate,omitempty"`
+	BirthDate sql.NullTime   `json:"birth_date,omitempty"`
 	City      sql.NullString `json:"city,omitempty"`
 	Avatar_ID sql.NullInt64  `json:"avatar_id,omitempty"`
 	CreatedAt time.Time      `json:"user_created_at,omitempty"`

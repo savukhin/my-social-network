@@ -3,14 +3,14 @@
         <ul>
             <div class="friend-picture-wrapper">
                 <img class="avatar-mini"
-                    [src]="friend.avatarURL 
-                        ? friend.avatarURL
+                    [src]="friend.avatar_url 
+                        ? friend.avatar_url
                         : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
             </div>
             <div class="friend-info-wrapper">
                 <div>
                     <b>{{ friend.name }}  </b>
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" [attr.fill]="friend.isOnline ? 'lime' : 'red'">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" [attr.fill]="friend.is_online ? 'lime' : 'red'">
                         <circle cx="50" cy="50" r="50"/>
                     </svg>
                 </div>

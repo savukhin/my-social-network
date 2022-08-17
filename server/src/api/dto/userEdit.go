@@ -11,7 +11,7 @@ import (
 type UserEdit struct {
 	Status    string `json:"status,omitempty"`
 	Name      string `json:"name,omitempty"`
-	BirthDate string `json:"birthDate,omitempty"`
+	BirthDate string `json:"birth_date,omitempty"`
 	City      string `json:"city,omitempty"`
 }
 

@@ -45,7 +45,7 @@ export class ChatComponent implements AfterViewInit {
       
       this.content.getPersonalChat(userId)?.subscribe(response => {
         if (response == false) {
-          // this.router.navigateByUrl('/login')
+          this.router.navigateByUrl('/login')
           console.log("Can't get chat");
           return 
         }
@@ -53,12 +53,15 @@ export class ChatComponent implements AfterViewInit {
         this.chat = response
         cdref.detectChanges()
         this.content.getPersonalChatMessages(0, 10, this.chat.id)?.subscribe(response => {
-          // console.log(response);
           if (response == false)
             return
 
           this.chat.messages = response.messages
-        })
+
+          for (let i = 0; i < this.chat.messages.length; i++)
+            this.chat.messages[i].time = new Date(this.chat.messages[i].time)
+          })
+          cdref.detectChanges()
 
       })
     });

@@ -24,10 +24,23 @@ func ToUserProfile(user *models.User) *dto.UserProfile {
 		response.City = user.City.String
 	}
 	if user.Avatar_ID.Valid {
-		response.Avatar_URL = strconv.Itoa(int(user.Avatar_ID.Int64))
+		response.AvatarURL = strconv.Itoa(int(user.Avatar_ID.Int64))
 	}
 
 	return response
+}
+
+func ToUserCompressed(user *models.User) *dto.UserCompressed {
+	result := &dto.UserCompressed{
+		ID:        user.ID,
+		Username:  user.Username,
+		Name:      user.Name,
+		IsOnline:  user.IsOnline,
+		Status:    user.Status.String,
+		AvatarURL: "",
+	}
+
+	return result
 }
 
 func ToTokenCheckStruct(user *models.User, id_token string, expires_at time.Time) *dto.TokenCheckStruct {

@@ -47,10 +47,29 @@ func GetPersonalChat(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	chat, err := models.GetPersonalChat(user1_id.(int), user2_id)
+	chat_model, err := models.GetPersonalChat(user1_id.(int), user2_id)
+
+	participants_id, err := models.GetChatParticipants(chat_model.ID)
 
 	if err != nil {
 		res.WriteHeader(400)
+		return
+	}
+
+	participant_models := make([]models.User, 0)
+	for _, id := range participants_id {
+		participant, err := models.GetUserByID(id)
+		if err != nil {
+			utils.ResponseError(res, err, http.StatusBadRequest)
+			return
+		}
+
+		participant_models = append(participant_models, *participant)
+	}
+
+	chat, err := mappers.ToChatDTO(chat_model, participant_models)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
 		return
 	}
 
