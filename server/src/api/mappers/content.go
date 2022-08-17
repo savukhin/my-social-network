@@ -3,7 +3,11 @@ package mappers
 import (
 	"api/db/models"
 	"api/dto"
+	"database/sql"
 	"errors"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -33,4 +37,34 @@ func ToMessageRange(contents []models.Content) (*dto.MessageRangeOutput, error) 
 	}
 
 	return result, nil
+}
+
+func MessageToContent(message *dto.MessageInput) (*models.Content, error) {
+	content := &models.Content{
+		Type:        models.Message,
+		ParentID:    sql.NullInt32{Int32: int32(message.ChatID), Valid: true},
+		UserID:      message.AuthorID,
+		AttachOrder: 1,
+	}
+
+	path := filepath.Join("uploads", "messages", strconv.Itoa(message.ChatID))
+	err := os.MkdirAll(path, os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		return nil, err
+	}
+	filename := filepath.Join(path, strconv.Itoa(len(files)))
+
+	err = ioutil.WriteFile(filename, []byte(message.Text), os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+
+	content.Filepath = filename
+
+	return content, nil
 }

@@ -15,6 +15,7 @@ export class ChatComponent implements AfterViewInit {
   // @ViewChild('chatContent') myScrollContainer: ElementRef<HTMLDivElement> = {} as ElementRef;
   @ViewChild('chatContent') myScrollContainer: any;
   @ViewChild('targetView') targetView: ElementRef<HTMLDivElement> = {} as ElementRef;
+  @ViewChild('messageArea') messageArea: ElementRef<HTMLTextAreaElement> = {} as ElementRef;
   contentWidth = 0;
 
   chat: Chat = new Chat(0, "Kirill Klimonov",
@@ -63,6 +64,13 @@ export class ChatComponent implements AfterViewInit {
     });
   }
   ngOnInit(): void {
+  }
+
+  sendMessageClick() {
+    this.content.sendMessage(this.chat.id, this.messageArea.nativeElement.value)?.subscribe(response => {
+      console.log(response);
+    })
+    
   }
 
   onResize(): void {

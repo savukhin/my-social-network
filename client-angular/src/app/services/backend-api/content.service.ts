@@ -81,4 +81,28 @@ export class ContentService {
       })
     )
   }
+
+  sendMessage (chat_id: number, text: string) {
+    if (this.auth.user == undefined)
+      return
+      
+    const token = this.auth.getTokenHeader()
+    if (token == false)
+      return
+
+    let observer = this.http.post<{message: string}>(
+      `${environment.serverUrl}/api/chat/sendMessage`, 
+      {chat_id, text},
+      {headers: token, observe: 'response'}
+    )
+
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body) {
+          return response.body as {message: string}
+        }
+        return false;
+      })
+    )
+  }
 }

@@ -59,6 +59,29 @@ func GetPersonalChat(res http.ResponseWriter, req *http.Request) {
 	res.Write(b)
 }
 
+func SendMessage(res http.ResponseWriter, req *http.Request) {
+	message := &dto.MessageInput{}
+	err := json.NewDecoder(req.Body).Decode(message)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	content, err := mappers.MessageToContent(message)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	_, err = content.Save()
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	utils.ResponseEmptySucess(res)
+}
+
 func GetPersonalChatMessages(res http.ResponseWriter, req *http.Request) {
 	extraction := &dto.MessageRangeInput{}
 	err := json.NewDecoder(req.Body).Decode(extraction)

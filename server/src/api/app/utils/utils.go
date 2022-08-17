@@ -49,6 +49,13 @@ func UnpackJWT(tokenHeader string) (*models.Token, error) {
 	return tk, nil
 }
 
+func ResponseEmptySucess(res http.ResponseWriter) {
+	b, _ := json.Marshal(map[string]interface{}{"success": "success"})
+
+	res.Header().Set("Content-Type", "application/json")
+	res.Write(b)
+}
+
 func ResponseError(res http.ResponseWriter, message error, status int) error {
 	b, err := json.Marshal(map[string]interface{}{"error": message.Error()})
 	if err != nil {

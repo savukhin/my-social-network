@@ -22,8 +22,8 @@
         </div>
     <div class="chat-footer-wrapper" [ngStyle]="{ 'width' : contentWidth + 'px'}">
         <div class="chat-footer">
-            <textarea placeholder="Start typing..."></textarea>
-            <button class="button">Send</button>
+            <textarea placeholder="Start typing..." #messageArea></textarea>
+            <button class="button" (click)="sendMessageClick()">Send</button>
         </div>
     </div>
 </div>
