@@ -13,5 +13,12 @@ func Routes(router *mux.Router) *mux.Router {
 	router.HandleFunc("/chat/by_user/{user_id:[0-9]+}", GetPersonalChat).Methods(http.MethodPost)
 	router.HandleFunc("/chat/getMessages", GetPersonalChatMessages).Methods(http.MethodPost)
 	router.HandleFunc("/chat/sendMessage", SendMessage).Methods(http.MethodPost)
+
+	hub := CreateHub()
+	go hub.Run()
+
+	router.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		ServeWs(hub, w, r)
+	})
 	return router
 }

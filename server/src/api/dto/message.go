@@ -3,6 +3,7 @@ package dto
 import "time"
 
 type MessageInput struct {
+	Token        string        `json:"token"`
 	AuthorID     int           `json:"author_id"`
 	Text         string        `json:"text"`
 	Attachements []Attachement `json:"attachements"`

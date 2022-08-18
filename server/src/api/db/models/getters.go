@@ -156,3 +156,22 @@ func GetPersonalChat(user1_id int, user2_id int) (*Chat, error) {
 
 	return chat, nil
 }
+
+func GetChatByID(chat_id int) (*Chat, error) {
+	sql := fmt.Sprintf(`
+		SELECT id, title, is_personal, photo_id, created_at, updated_at, deleted_at 
+		FROM chats
+		WHERE id = %d
+	`, chat_id)
+
+	chat := &Chat{}
+	err :=
+		db.DB.QueryRow(sql).
+			Scan(&chat.ID, &chat.Title, &chat.IsPersonal, &chat.PhotoID, &chat.CreatedAt, &chat.UpdatedAt, &chat.DeletedAt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return chat, nil
+}
