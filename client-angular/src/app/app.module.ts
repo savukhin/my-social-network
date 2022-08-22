@@ -17,6 +17,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { ChangePasswordComponent } from './profile/change-password/change-password.component';
 import { AuthService } from './services/backend-api/auth.service';
 import { ContentService } from './services/backend-api/content.service';
+import { WebsocketService } from './services/backend-api/websocket/websocket.service';
 
 @NgModule({
   declarations: [

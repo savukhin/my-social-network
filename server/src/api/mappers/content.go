@@ -22,12 +22,15 @@ func ToMessage(content *models.Content) (*dto.Message, error) {
 	result.Text = string(b)
 	result.AuthorID = content.UserID
 	result.CreatedAt = content.CreatedAt
+	result.ChatID = int(content.ParentID.Int32)
 
 	return result, nil
 }
 
 func ToMessageRange(contents []models.Content) (*dto.MessageRangeOutput, error) {
-	result := &dto.MessageRangeOutput{}
+	result := &dto.MessageRangeOutput{
+		Messages: make([]dto.Message, 0),
+	}
 
 	for i, content := range contents {
 		if content.Type != "message" {

@@ -5,7 +5,7 @@
     </div>
         <div class="chat-content" [ngStyle]="{ 'width' : contentWidth + 'px'}">
             <div class="chat-message-wrapper" *ngFor="let message of chat.messages">
-                <div class="chat-message">
+                <div class="chat-message" *ngIf="chat.participants[message.author_id] != undefined">
                     <div class="folder-picture-wrapper">
                         <img class="avatar-mini"
                             [src]="chat.participants[message.author_id].avatar_url 

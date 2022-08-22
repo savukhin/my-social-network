@@ -20,6 +20,15 @@ func Launch() {
 	users.Routes(router.PathPrefix("/users").Subrouter())
 	chat.Routes(router.PathPrefix("").Subrouter())
 
+	hub := chat.CreateHub()
+	go hub.Run()
+
+	r.HandleFunc("/ws/chat_id={chat_id:[0-9]+}", func(w http.ResponseWriter, r *http.Request) {
+		chat.ServeWs(hub, w, r)
+	})
+
+	// router.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+
 	credentials := handlers.AllowCredentials()
 	methods := handlers.AllowedMethods([]string{"POST", "GET"})
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With", "Authorization"})
@@ -29,7 +38,7 @@ func Launch() {
 	fmt.Println("Starting...")
 	log.Fatal(http.ListenAndServe(
 		":4201",
-		handlers.CORS(credentials, methods, origins, ttl, headers)(router),
+		handlers.CORS(credentials, methods, origins, ttl, headers)(r),
 		// router,
 	))
 	fmt.Println("Server started")

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Chat } from 'src/models/chat';
+import { Chat, ChatDTO } from 'src/models/chat';
 import { Message } from 'src/models/message';
 import { AuthService } from './auth.service';
 
@@ -42,7 +42,7 @@ export class ContentService {
     if (token == false)
       return
 
-    let observer = this.http.post<Chat>(
+    let observer = this.http.post<ChatDTO>(
       `${environment.serverUrl}/api/chat/by_user/${user_id}`, 
       {},
       {headers: token, observe: 'response'}
@@ -51,7 +51,7 @@ export class ContentService {
     return observer.pipe(
       map((response) => {
         if (response.status == 200 && response.body) {
-          return response.body as Chat
+          return response.body as ChatDTO
         }
         return false;
       })

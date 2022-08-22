@@ -7,6 +7,7 @@ import (
 	"api/mappers"
 	"api/middleware"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -48,6 +49,10 @@ func GetPersonalChat(res http.ResponseWriter, req *http.Request) {
 	}
 
 	chat_model, err := models.GetPersonalChat(user1_id.(int), user2_id)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
 
 	participants_id, err := models.GetChatParticipants(chat_model.ID)
 
@@ -114,12 +119,14 @@ func GetPersonalChatMessages(res http.ResponseWriter, req *http.Request) {
 		utils.ResponseError(res, err, http.StatusBadRequest)
 		return
 	}
+	fmt.Println(messages)
 
 	messageRange, err := mappers.ToMessageRange(messages)
 	if err != nil {
 		utils.ResponseError(res, err, http.StatusBadRequest)
 		return
 	}
+	fmt.Println(messages)
 
 	b, _ := json.Marshal(messageRange)
 	res.Write(b)

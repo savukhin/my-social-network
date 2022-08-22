@@ -34,7 +34,7 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		return true // Пропускаем любой запрос
+		return true
 	},
 }
 
@@ -51,10 +51,6 @@ func (client Client) Write() {
 	for {
 		select {
 		case message, ok := <-client.send:
-			err := client.ws.SetWriteDeadline(time.Now().Add(writeWait))
-			if err != nil {
-				panic(err)
-			}
 			if !ok {
 				err := client.ws.WriteMessage(websocket.CloseMessage, []byte{})
 				if err != nil {
@@ -63,23 +59,25 @@ func (client Client) Write() {
 				return
 			}
 
+			err := client.ws.SetWriteDeadline(time.Now().Add(writeWait))
+			if err != nil {
+				panic(err)
+			}
+
 			writer, err := client.ws.NextWriter(websocket.TextMessage)
 			if err != nil {
-				fmt.Println(err)
 				writer.Close()
 				return
 			}
 
 			b, err := json.Marshal(message)
 			if err != nil {
-				fmt.Println(err)
 				writer.Close()
 				continue
 			}
 
 			_, err = writer.Write(b)
 			if err != nil {
-				fmt.Println(err)
 				writer.Close()
 				continue
 			}
@@ -126,7 +124,7 @@ func (client *Client) Read() {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				fmt.Println("Error reading message: ", err)
 			}
-			continue
+			break
 		}
 
 		message_b = bytes.TrimSpace(bytes.Replace(message_b, []byte{'\n'}, []byte{' '}, -1))
@@ -134,13 +132,13 @@ func (client *Client) Read() {
 		message_input := &dto.MessageInput{}
 		if err = json.Unmarshal(message_b, &message_input); err != nil {
 			fmt.Println(err)
-			continue
+			break
 		}
 
 		_, err = utils.UnpackJWT(message_input.Token)
 		if err != nil {
 			fmt.Println(err)
-			continue
+			break
 		}
 
 		content, err := mappers.MessageToContent(message_input)

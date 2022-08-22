@@ -14,11 +14,21 @@ func Routes(router *mux.Router) *mux.Router {
 	router.HandleFunc("/chat/getMessages", GetPersonalChatMessages).Methods(http.MethodPost)
 	router.HandleFunc("/chat/sendMessage", SendMessage).Methods(http.MethodPost)
 
-	hub := CreateHub()
-	go hub.Run()
+	// hub := CreateHub()
+	// go hub.Run()
 
-	router.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		ServeWs(hub, w, r)
-	})
+	// router.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+	// 	// router.HandleFunc("/websocket", func(w http.ResponseWriter, r *http.Request) {
+	// 	fmt.Println("Got websocked")
+	// 	ServeWs(hub, w, r)
+	// })
+
+	// router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	// 	// an example API handler
+	// 	err := json.NewEncoder(w).Encode(map[string]bool{"ok": true})
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// })
 	return router
 }
