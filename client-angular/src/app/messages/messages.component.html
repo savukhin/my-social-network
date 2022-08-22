@@ -1,5 +1,5 @@
 <div class="block" *ngFor="let item of items">
-    <a [routerLink]="'/chat/' + item.author.id" routerLinkActive="active" ariaCurrentWhenActive="page">
+    <a [routerLink]="'/chat'" [queryParams]="{user: item.author.id}" routerLinkActive="active" ariaCurrentWhenActive="page">
         
         <div class="chat-folder">
             <div class="folder-picture-wrapper">
