@@ -14,6 +14,24 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func getLastChatMessage(chat_id int) (*dto.Message, error) {
+	messages, err := models.GetMessages(0, 1, chat_id)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(messages) == 0 {
+		return nil, nil
+	}
+
+	message_dto, err := mappers.ToMessage(&messages[0])
+	if err != nil {
+		return nil, err
+	}
+
+	return message_dto, nil
+}
+
 func GetChats(res http.ResponseWriter, req *http.Request) {
 	user_id := req.Context().Value(middleware.ContextUserIDKey)
 	res.Header().Set("Content-Type", "application/json")
@@ -23,11 +41,36 @@ func GetChats(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	chats, err := models.GetChatsByUserID(user_id.(int))
+	chat_models, err := models.GetChatsByUserID(user_id.(int))
 
 	if err != nil {
 		res.WriteHeader(400)
 		return
+	}
+
+	chats := make([]*dto.Chat, 0)
+	for _, model := range chat_models {
+		participants_ids, err := models.GetChatParticipants(model.ID)
+		if err != nil {
+			continue
+		}
+
+		participants, err := models.UserIDsToUsers(participants_ids)
+		if err != nil {
+			continue
+		}
+
+		lastMessages, err := getLastChatMessage(model.ID)
+		if err != nil || lastMessages == nil {
+			continue
+		}
+
+		chat, err := mappers.ToChatDTO(model, participants, lastMessages)
+		if err != nil {
+			continue
+		}
+
+		chats = append(chats, chat)
 	}
 
 	res.Header().Set("Content-Type", "application/json")
@@ -61,7 +104,7 @@ func GetPersonalChat(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	participant_models := make([]models.User, 0)
+	participant_models := make([]*models.User, 0)
 	for _, id := range participants_id {
 		participant, err := models.GetUserByID(id)
 		if err != nil {
@@ -69,10 +112,10 @@ func GetPersonalChat(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		participant_models = append(participant_models, *participant)
+		participant_models = append(participant_models, participant)
 	}
 
-	chat, err := mappers.ToChatDTO(chat_model, participant_models)
+	chat, err := mappers.ToChatDTO(chat_model, participant_models, nil)
 	if err != nil {
 		utils.ResponseError(res, err, http.StatusBadRequest)
 		return

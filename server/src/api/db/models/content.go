@@ -33,6 +33,7 @@ func GetMessages(offset int, count int, chat_id int) ([]Content, error) {
 		SELECT id, filepath, content_type, user_id, created_at 
 		FROM contents
 		WHERE content_type = 'message' AND parent_id = %d
+		ORDER BY created_at DESC
 	`, chat_id)
 
 	rows, err := db.DB.Query(sql)

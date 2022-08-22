@@ -36,6 +36,8 @@ $chat-footer-height: 60px;
     position: absolute;
     padding-bottom: $chat-footer-bottom + $chat-footer-height;
     padding-top: 80px;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .chat-message-wrapper {

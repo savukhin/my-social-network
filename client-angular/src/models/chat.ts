@@ -16,6 +16,7 @@ export class Chat {
     is_persional: boolean = false
     participants: { [id:number] : User; } = {}
     messages: Message[] = [];
+    last_message?: Message;
 
     constructor(id=0, title="", participants={}, messages:Message[]=[]) {
         this.id = id;
@@ -26,7 +27,7 @@ export class Chat {
 
     static fromDTO(dto: ChatDTO) {
         let chat = new Chat()
-        
+
         chat.id = dto.id
         chat.title = dto.title;
         dto.participants.forEach(val => {

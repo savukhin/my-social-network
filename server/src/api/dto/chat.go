@@ -6,4 +6,5 @@ type Chat struct {
 	IsPersonal   bool             `json:"is_personal"`
 	PhotoURL     string           `json:"photo_url"`
 	Participants []UserCompressed `json:"participants"`
+	LastMessage  *Message         `json:"last_message"`
 }

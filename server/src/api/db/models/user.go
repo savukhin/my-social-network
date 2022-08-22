@@ -27,6 +27,21 @@ type User struct {
 	DeletedAt time.Time      `json:"user_deleted_at,omitempty"`
 }
 
+func UserIDsToUsers(ids []int) ([]*User, error) {
+	result := make([]*User, 0)
+
+	for _, id := range ids {
+		user, err := GetUserByID(id)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, user)
+	}
+
+	return result, nil
+}
+
 func (user *User) Validate() (map[string]interface{}, bool) {
 	if !strings.Contains(user.Email, "@") && !strings.Contains(user.Email, ".") {
 		return map[string]interface{}{"status": "error", "message": "Email address format is incorrect"}, false

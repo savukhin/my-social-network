@@ -84,7 +84,7 @@ export class ChatComponent implements AfterViewInit {
 
         this.websocket.message.subscribe(value => {
             value.time = new Date(value.time)
-            this.chat.messages.push(value)
+            this.chat.messages.unshift(value)
         })
       })
     });

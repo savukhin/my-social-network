@@ -19,7 +19,7 @@ export class ContentService {
     if (token == false)
       return
 
-    let observer = this.http.get<Chat>(
+    let observer = this.http.get<Chat[]>(
       `${environment.serverUrl}/api/chats`, 
       {headers: token, observe: 'response'}
     )
@@ -27,7 +27,7 @@ export class ContentService {
     return observer.pipe(
       map((response) => {
         if (response.status == 200 && response.body) {
-          return response.body as Chat
+          return response.body as Chat[]
         }
         return false;
       })

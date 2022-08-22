@@ -77,17 +77,18 @@ func MessageToContent(message *dto.MessageInput) (*models.Content, error) {
 	return content, nil
 }
 
-func ToChatDTO(chat_model *models.Chat, participants []models.User) (*dto.Chat, error) {
+func ToChatDTO(chat_model *models.Chat, participants []*models.User, lastMessage *dto.Message) (*dto.Chat, error) {
 	chat := &dto.Chat{
-		ID:         chat_model.ID,
-		Title:      chat_model.Title,
-		IsPersonal: chat_model.IsPersonal,
+		ID:          chat_model.ID,
+		Title:       chat_model.Title,
+		IsPersonal:  chat_model.IsPersonal,
+		LastMessage: lastMessage,
 	}
 
 	chat.PhotoURL = ""
 	chat.Participants = make([]dto.UserCompressed, 0)
 	for _, participant := range participants {
-		user := ToUserCompressed(&participant)
+		user := ToUserCompressed(participant)
 		chat.Participants = append(chat.Participants, *user)
 	}
 
