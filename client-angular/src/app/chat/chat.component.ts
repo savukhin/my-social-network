@@ -52,10 +52,19 @@ export class ChatComponent implements AfterViewInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const userId = params['user'];
-      if (userId == undefined)
+      const chatId = params['chat'];
+      if (userId == undefined &&  chatId == undefined)
         this.router.navigateByUrl('404', {skipLocationChange: true})
       
-      this.content.getPersonalChat(userId)?.subscribe(response => {
+      let subscription
+
+      if (userId != undefined)
+        subscription = this.content.getPersonalChat(userId)
+      else
+        subscription = this.content.getChat(chatId)
+
+      
+      subscription?.subscribe(response => {
         if (response == false) {
           this.router.navigateByUrl('/login')
           console.log("Can't get chat");

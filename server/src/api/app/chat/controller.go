@@ -78,6 +78,48 @@ func GetChats(res http.ResponseWriter, req *http.Request) {
 	res.Write(b)
 }
 
+func GetChat(res http.ResponseWriter, req *http.Request) {
+	chat_id, err := strconv.Atoi(mux.Vars(req)["chat_id"])
+	if err != nil {
+		res.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	chat_model, err := models.GetChatByID(chat_id)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	participants_id, err := models.GetChatParticipants(chat_model.ID)
+
+	if err != nil {
+		res.WriteHeader(400)
+		return
+	}
+
+	participant_models := make([]*models.User, 0)
+	for _, id := range participants_id {
+		participant, err := models.GetUserByID(id)
+		if err != nil {
+			utils.ResponseError(res, err, http.StatusBadRequest)
+			return
+		}
+
+		participant_models = append(participant_models, participant)
+	}
+
+	chat, err := mappers.ToChatDTO(chat_model, participant_models, nil)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	res.Header().Set("Content-Type", "application/json")
+	b, _ := json.Marshal(chat)
+	res.Write(b)
+}
+
 func GetPersonalChat(res http.ResponseWriter, req *http.Request) {
 	user1_id := req.Context().Value(middleware.ContextUserIDKey)
 	if user1_id == nil {

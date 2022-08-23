@@ -34,6 +34,30 @@ export class ContentService {
     )
   }
 
+  getChat (chat_id: number) {
+    if (this.auth.user == undefined)
+      return
+      
+    const token = this.auth.getTokenHeader()
+    if (token == false)
+      return
+
+    let observer = this.http.post<ChatDTO>(
+      `${environment.serverUrl}/api/chat/by_id/${chat_id}`, 
+      {},
+      {headers: token, observe: 'response'}
+    )
+
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body) {
+          return response.body as ChatDTO
+        }
+        return false;
+      })
+    )
+  }
+
   getPersonalChat (user_id: number) {
     if (this.auth.user == undefined)
       return
