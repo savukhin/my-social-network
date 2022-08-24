@@ -112,8 +112,7 @@ func (content *Content) Save() (int, error) {
 	RETURNING id
 	`, content.Filepath, content.Type, content.ParentID.Int32, content.UserID, content.AttachOrder)
 
-	content_id := 0
-	err := db.DB.QueryRow(sql).Scan(&content_id)
+	err := db.DB.QueryRow(sql).Scan(&content.ID)
 
-	return content_id, err
+	return content.ID, err
 }

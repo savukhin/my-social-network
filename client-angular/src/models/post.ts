@@ -5,7 +5,7 @@ export class Post {
     text = "";
     author_id = 0;
     chat_id = 0;
-    create_at = new Date();
-    update_at = new Date();
+    created_at = new Date();
+    updated_at = new Date();
 	photos: PhotoAttachement[] = []
 }

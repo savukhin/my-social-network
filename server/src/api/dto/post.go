@@ -4,6 +4,10 @@ import (
 	"time"
 )
 
+type PostCreate struct {
+	Text string `json:"text"`
+}
+
 type Post struct {
 	ID        int                 `json:"id"`
 	Text      string              `json:"text"`

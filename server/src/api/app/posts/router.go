@@ -8,9 +8,10 @@ import (
 )
 
 func Routes(router *mux.Router) *mux.Router {
-	router.Use(middleware.JwtAuthentication)
-
 	router.HandleFunc("/user_posts/{user_id:[0-9]+}", GetUserPosts).Methods(http.MethodGet)
+
+	createPostHandler := http.HandlerFunc(CreateUserPosts)
+	router.Handle("/create_post", middleware.JwtAuthentication(createPostHandler)).Methods(http.MethodPost)
 
 	return router
 }

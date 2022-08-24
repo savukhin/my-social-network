@@ -16,6 +16,7 @@ export class UserPageComponent implements AfterViewInit {
     editStatus = false
     
     @ViewChild('pleaseDoIt') input: ElementRef<HTMLInputElement> = {} as ElementRef;
+    @ViewChild('postText') postText: ElementRef<HTMLTextAreaElement> = {} as ElementRef;
 
     showEditStatus() {
         setTimeout(() => {
@@ -54,6 +55,19 @@ export class UserPageComponent implements AfterViewInit {
         }
     }
 
+    createPostClick(): void {
+        const text = this.postText.nativeElement.value
+        const subscription = this.content.createPosts(text)
+        if (subscription == false) {
+            location.reload()
+            return
+        }
+
+        subscription.subscribe(() => {
+            location.reload()
+        })
+    }
+
     ngAfterViewInit(): void {
         let id = this.route.snapshot.paramMap.get("id");
         if (id == null) {
@@ -71,19 +85,22 @@ export class UserPageComponent implements AfterViewInit {
         if (subscription != false) {
             subscription.subscribe(
                 response => {
-                    if (response != false) {
-                        this.profile = UserPage.FromUser(response);
+                    if (response == false)
+                        return 
 
-                        this.content.getUserPosts(this.profile.id).subscribe((response) => {
-                            if (response == false)
-                                return;
-                            
-                            this.profile.posts = response
-            
-                            this.cdref.detectChanges()
-                        })
-                    }
+                    this.profile = UserPage.FromUser(response);
+                    console.log(this.profile);
+                    
                     this.cdref.detectChanges();
+
+                    this.content.getUserPosts(this.profile.id).subscribe((response) => {
+                        if (response == false)
+                            return;
+                        
+                        this.profile.posts = response
+        
+                        this.cdref.detectChanges()
+                    })
                 }
             )
         }

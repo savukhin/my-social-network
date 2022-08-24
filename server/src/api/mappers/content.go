@@ -47,6 +47,27 @@ func ToMessageRange(contents []*models.Content) (*dto.MessageRangeOutput, error)
 	return result, nil
 }
 
+func saveText(text string, folder string) (string, error) {
+	path := filepath.Join("uploads", folder)
+	err := os.MkdirAll(path, os.ModePerm)
+	if err != nil {
+		return "", err
+	}
+
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		return "", err
+	}
+	filename := filepath.Join(path, strconv.Itoa(len(files)))
+
+	err = ioutil.WriteFile(filename, []byte(text), os.ModePerm)
+	if err != nil {
+		return "", err
+	}
+
+	return filename, nil
+}
+
 func MessageToContent(message *dto.MessageInput) (*models.Content, error) {
 	content := &models.Content{
 		Type:        models.MessageType,
@@ -55,19 +76,7 @@ func MessageToContent(message *dto.MessageInput) (*models.Content, error) {
 		AttachOrder: 1,
 	}
 
-	path := filepath.Join("uploads", "messages", strconv.Itoa(message.ChatID))
-	err := os.MkdirAll(path, os.ModePerm)
-	if err != nil {
-		return nil, err
-	}
-
-	files, err := ioutil.ReadDir(path)
-	if err != nil {
-		return nil, err
-	}
-	filename := filepath.Join(path, strconv.Itoa(len(files)))
-
-	err = ioutil.WriteFile(filename, []byte(message.Text), os.ModePerm)
+	filename, err := saveText(message.Text, filepath.Join("messages", strconv.Itoa(message.ChatID)))
 	if err != nil {
 		return nil, err
 	}
@@ -112,8 +121,8 @@ func ContentToPhotoAttachement(content *models.Content) (*dto.PhotoAttachement, 
 }
 
 func ContentToPost(content *models.Content) (*dto.Post, error) {
-	if content.Type != models.MessageType {
-		return nil, errors.New("content type is not message")
+	if content.Type != models.PostType {
+		return nil, errors.New("content type is not post")
 	}
 
 	post := &dto.Post{
@@ -144,4 +153,23 @@ func ContentToPost(content *models.Content) (*dto.Post, error) {
 	}
 
 	return post, nil
+}
+
+func PostCreateToContent(post *dto.PostCreate, user_id int) (*models.Content, error) {
+	content := &models.Content{
+		ID:          0,
+		Type:        models.PostType,
+		ParentID:    sql.NullInt32{Valid: false},
+		UserID:      user_id,
+		AttachOrder: 1,
+	}
+
+	filename, err := saveText(post.Text, filepath.Join("posts", strconv.Itoa(user_id)))
+	if err != nil {
+		return nil, err
+	}
+
+	content.Filepath = filename
+
+	return content, nil
 }

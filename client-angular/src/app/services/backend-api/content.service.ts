@@ -21,7 +21,36 @@ export class ContentService {
     return observer.pipe(
       map((response) => {
         if (response.status == 200 && response.body) {
-          return response.body as Post[]
+          let posts = response.body as Post[]
+          for (let i = 0; i < posts.length; i++) {
+            posts[i].created_at = new Date(posts[i].created_at)
+            posts[i].updated_at = new Date(posts[i].updated_at)
+          }
+          return posts
+        }
+        return false;
+      })
+    )
+  }
+
+  createPosts (text: string) {
+    if (this.auth.user == undefined)
+      return false
+      
+    const token = this.auth.getTokenHeader()
+    if (token == false)
+      return false
+      
+    let observer = this.http.post<Post>(
+      `${environment.serverUrl}/api/posts/create_post`, 
+      { text },
+      {headers: token, observe: 'response'}
+    )
+
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body) {
+          return response.body as Post
         }
         return false;
       })

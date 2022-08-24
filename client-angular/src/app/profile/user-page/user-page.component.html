@@ -53,8 +53,8 @@
         </div>
         <div class="block">
             <div class="write-post-wrapper">
-                <textarea placeholder="Don't you want to tell something about?"></textarea>
-                <button class="button">Post</button>
+                <textarea placeholder="Don't you want to tell something about?" #postText></textarea>
+                <button class="button" (click)="createPostClick()">Post</button>
             </div>
         </div>
         <div class="blocks-header">
@@ -63,6 +63,8 @@
         <div *ngFor="let post of profile.posts">
             <div class="block post">
                 <p>{{ post.text }}</p>
+                <hr/>
+                <span>{{ post.created_at.toLocaleDateString("ru-RU", {hour: '2-digit', minute:'2-digit'}) }}</span>
             </div>
         </div>
     </div>
