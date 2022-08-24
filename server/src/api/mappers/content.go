@@ -14,12 +14,12 @@ import (
 func ToMessage(content *models.Content) (*dto.Message, error) {
 	result := &dto.Message{}
 
-	b, err := ioutil.ReadFile(content.Filepath)
+	text, err := content.GetText()
 	if err != nil {
 		return nil, err
 	}
 
-	result.Text = string(b)
+	result.Text = text
 	result.AuthorID = content.UserID
 	result.CreatedAt = content.CreatedAt
 	result.ChatID = int(content.ParentID.Int32)
@@ -27,7 +27,7 @@ func ToMessage(content *models.Content) (*dto.Message, error) {
 	return result, nil
 }
 
-func ToMessageRange(contents []models.Content) (*dto.MessageRangeOutput, error) {
+func ToMessageRange(contents []*models.Content) (*dto.MessageRangeOutput, error) {
 	result := &dto.MessageRangeOutput{
 		Messages: make([]dto.Message, 0),
 	}
@@ -36,7 +36,7 @@ func ToMessageRange(contents []models.Content) (*dto.MessageRangeOutput, error) 
 		if content.Type != "message" {
 			return nil, errors.New("content [" + strconv.Itoa(i) + "] is not a message")
 		}
-		message, err := ToMessage(&content)
+		message, err := ToMessage(content)
 		if err != nil {
 			return nil, err
 		}
@@ -49,7 +49,7 @@ func ToMessageRange(contents []models.Content) (*dto.MessageRangeOutput, error) 
 
 func MessageToContent(message *dto.MessageInput) (*models.Content, error) {
 	content := &models.Content{
-		Type:        models.Message,
+		Type:        models.MessageType,
 		ParentID:    sql.NullInt32{Int32: int32(message.ChatID), Valid: true},
 		UserID:      message.AuthorID,
 		AttachOrder: 1,
@@ -93,4 +93,55 @@ func ToChatDTO(chat_model *models.Chat, participants []*models.User, lastMessage
 	}
 
 	return chat, nil
+}
+
+func ContentToPhotoAttachement(content *models.Content) (*dto.PhotoAttachement, error) {
+	if content.Type != models.PhotoType {
+		return nil, errors.New("content type is not photo")
+	}
+
+	photo := &dto.PhotoAttachement{
+		ID:        content.ID,
+		AuthorID:  content.UserID,
+		CreatedAt: content.CreatedAt,
+		UpdatedAt: content.UpdatedAt,
+		URL:       content.Filepath,
+	}
+
+	return photo, nil
+}
+
+func ContentToPost(content *models.Content) (*dto.Post, error) {
+	if content.Type != models.MessageType {
+		return nil, errors.New("content type is not message")
+	}
+
+	post := &dto.Post{
+		ID:        content.ID,
+		AuthodID:  content.UserID,
+		CreatedAt: content.CreatedAt,
+		UpdatedAt: content.UpdatedAt,
+		Photos:    make([]*dto.PhotoAttachement, 0),
+	}
+
+	text, err := content.GetText()
+	if err != nil {
+		return nil, err
+	}
+	post.Text = text
+
+	attachements, err := content.GetAttachements()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, attach := range attachements {
+		photo, err := ContentToPhotoAttachement(attach)
+		if err == nil {
+			post.Photos = append(post.Photos, photo)
+			continue
+		}
+	}
+
+	return post, nil
 }

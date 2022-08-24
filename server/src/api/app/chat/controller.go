@@ -24,7 +24,7 @@ func getLastChatMessage(chat_id int) (*dto.Message, error) {
 		return nil, nil
 	}
 
-	message_dto, err := mappers.ToMessage(&messages[0])
+	message_dto, err := mappers.ToMessage(messages[0])
 	if err != nil {
 		return nil, err
 	}

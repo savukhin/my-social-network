@@ -18,6 +18,7 @@ import { ChangePasswordComponent } from './profile/change-password/change-passwo
 import { AuthService } from './services/backend-api/auth.service';
 import { ContentService } from './services/backend-api/content.service';
 import { WebsocketService } from './services/backend-api/websocket/websocket.service';
+import { ChatService } from './services/backend-api/chat.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { WebsocketService } from './services/backend-api/websocket/websocket.ser
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [AuthService, ContentService],
+  providers: [AuthService, ContentService, ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -8,6 +8,7 @@ import (
 
 	"api/app/auth"
 	"api/app/chat"
+	"api/app/posts"
 	"api/app/users"
 	"log"
 	"net/http"
@@ -19,6 +20,7 @@ func Launch() {
 	auth.Routes(router.PathPrefix("/auth").Subrouter())
 	users.Routes(router.PathPrefix("/users").Subrouter())
 	chat.Routes(router.PathPrefix("").Subrouter())
+	posts.Routes(router.PathPrefix("/posts/").Subrouter())
 
 	hub := chat.CreateHub()
 	go hub.Run()

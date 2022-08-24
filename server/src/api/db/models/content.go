@@ -4,16 +4,17 @@ import (
 	"api/db"
 	"database/sql"
 	"fmt"
+	"io/ioutil"
 	"time"
 )
 
 type ContentType string
 
 const (
-	Post    ContentType = "post"
-	Message ContentType = "message"
-	Comment ContentType = "comment"
-	Photo   ContentType = "photo"
+	PostType    ContentType = "post"
+	MessageType ContentType = "message"
+	CommentType ContentType = "comment"
+	PhotoType   ContentType = "photo"
 )
 
 type Content struct {
@@ -28,7 +29,49 @@ type Content struct {
 	DeletedAt   sql.NullTime  `json:"deleted_at"`
 }
 
-func GetMessages(offset int, count int, chat_id int) ([]Content, error) {
+func (content *Content) GetText() (string, error) {
+	b, err := ioutil.ReadFile(content.Filepath)
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
+}
+
+func getContentsFromQuery(rows *sql.Rows) ([]*Content, error) {
+	result := make([]*Content, 0)
+	for rows.Next() {
+		content := &Content{}
+		err := rows.Scan(&content.ID, &content.Filepath, &content.Type, &content.UserID, &content.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, content)
+	}
+
+	return result, nil
+}
+
+func (content *Content) GetAttachements() ([]*Content, error) {
+	sql := fmt.Sprintf(`
+		SELECT id, filepath, content_type, user_id, created_at 
+		FROM contents
+		WHERE content_type = 'photo' AND parent_id = %d
+		ORDER BY created_at DESC
+	`, content.ID)
+
+	rows, err := db.DB.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+
+	result, err := getContentsFromQuery(rows)
+
+	return result, err
+}
+
+func GetMessages(offset int, count int, chat_id int) ([]*Content, error) {
 	sql := fmt.Sprintf(`
 		SELECT id, filepath, content_type, user_id, created_at 
 		FROM contents
@@ -41,17 +84,25 @@ func GetMessages(offset int, count int, chat_id int) ([]Content, error) {
 		return nil, err
 	}
 
-	result := make([]Content, 0)
-	for rows.Next() {
-		message := &Content{}
-		err := rows.Scan(&message.ID, &message.Filepath, &message.Type, &message.UserID, &message.CreatedAt)
-		if err != nil {
-			return nil, err
-		}
+	result, err := getContentsFromQuery(rows)
+	return result, err
+}
 
-		result = append(result, *message)
+func GetPostsByUserID(user_id int) ([]*Content, error) {
+	sql := fmt.Sprintf(`
+		SELECT id, filepath, content_type, user_id, created_at 
+		FROM contents
+		WHERE content_type = 'post' AND user_id = %d
+		ORDER BY created_at DESC
+	`, user_id)
+
+	rows, err := db.DB.Query(sql)
+	if err != nil {
+		return nil, err
 	}
-	return result, nil
+
+	result, err := getContentsFromQuery(rows)
+	return result, err
 }
 
 func (content *Content) Save() (int, error) {

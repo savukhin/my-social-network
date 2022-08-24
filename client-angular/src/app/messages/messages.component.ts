@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Chat } from 'src/models/chat';
 import { Message } from 'src/models/message';
 import { User } from 'src/models/user';
+import { ChatService } from '../services/backend-api/chat.service';
 import { ContentService } from '../services/backend-api/content.service';
 
 class Item {
@@ -31,10 +32,10 @@ export class MessagesComponent implements OnInit {
     )
   ];
 
-  constructor(private content: ContentService) { }
+  constructor(private chat: ChatService) { }
 
   ngOnInit(): void {
-    this.content.getChats()?.subscribe(response => {
+    this.chat.getChats()?.subscribe(response => {
       console.log(response);
       if (response != false) {
         for (let i = 0; i < response.length; i++) {

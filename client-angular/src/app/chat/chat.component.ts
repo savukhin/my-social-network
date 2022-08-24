@@ -4,6 +4,7 @@ import { Chat } from 'src/models/chat';
 import { Message, SendedMessage } from 'src/models/message';
 import { User } from 'src/models/user';
 import { AuthService } from '../services/backend-api/auth.service';
+import { ChatService } from '../services/backend-api/chat.service';
 import { ContentService } from '../services/backend-api/content.service';
 import { WebsocketService } from '../services/backend-api/websocket/websocket.service';
 
@@ -43,7 +44,7 @@ export class ChatComponent implements AfterViewInit {
       private route: ActivatedRoute, 
       private router: Router, 
       private cdref: ChangeDetectorRef, 
-      private content: ContentService, private websocket: WebsocketService, private auth: AuthService) {
+      private chatService: ChatService, private websocket: WebsocketService, private auth: AuthService) {
 
 
   }
@@ -59,9 +60,9 @@ export class ChatComponent implements AfterViewInit {
       let subscription
 
       if (userId != undefined)
-        subscription = this.content.getPersonalChat(userId)
+        subscription = this.chatService.getPersonalChat(userId)
       else
-        subscription = this.content.getChat(chatId)
+        subscription = this.chatService.getChat(chatId)
 
       
       subscription?.subscribe(response => {
@@ -78,7 +79,7 @@ export class ChatComponent implements AfterViewInit {
 
         this.websocket.conect("ws://127.0.0.1:4201/ws/chat_id=" + this.chat.id)
 
-        this.content.getPersonalChatMessages(0, 10, this.chat.id)?.subscribe(response => {
+        this.chatService.getPersonalChatMessages(0, 10, this.chat.id)?.subscribe(response => {
           if (response == false)
             return
 
