@@ -8,7 +8,6 @@ import (
 	"api/middleware"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -31,9 +30,27 @@ func GetUserPosts(res http.ResponseWriter, req *http.Request) {
 	posts := make([]*dto.Post, 0)
 	for _, content := range contents {
 		post, err := mappers.ContentToPost(content)
-		if err == nil {
-			posts = append(posts, post)
+		if err != nil {
+			continue
 		}
+
+		likes, err := models.GetLikesByContent(post.ID)
+		if err != nil {
+			posts = append(posts, post)
+			continue
+		}
+
+		for _, model := range likes {
+			if like, err := mappers.ToLikePost(model); err == nil {
+				post.Likes = append(post.Likes, like)
+
+				if like.UserID == user_id {
+					post.HasCurrentUserLike = true
+				}
+			}
+		}
+
+		posts = append(posts, post)
 	}
 
 	res.Header().Set("Content-Type", "application/json")
@@ -41,8 +58,7 @@ func GetUserPosts(res http.ResponseWriter, req *http.Request) {
 	res.Write(b)
 }
 
-func CreateUserPosts(res http.ResponseWriter, req *http.Request) {
-	fmt.Println(req)
+func CreateUserPost(res http.ResponseWriter, req *http.Request) {
 	form := &dto.PostCreate{}
 
 	err := json.NewDecoder(req.Body).Decode(form)
@@ -53,7 +69,7 @@ func CreateUserPosts(res http.ResponseWriter, req *http.Request) {
 
 	user_id := req.Context().Value(middleware.ContextUserIDKey)
 	if user_id == nil {
-		utils.ResponseError(res, errors.New(""), http.StatusUnauthorized)
+		utils.ResponseError(res, errors.New("no jwt provided"), http.StatusUnauthorized)
 		return
 	}
 
@@ -77,5 +93,46 @@ func CreateUserPosts(res http.ResponseWriter, req *http.Request) {
 
 	res.Header().Set("Content-Type", "application/json")
 	b, _ := json.Marshal(post)
+	res.Write(b)
+}
+
+func ToggleLikePost(res http.ResponseWriter, req *http.Request) {
+	form := &dto.LikePost{}
+
+	err := json.NewDecoder(req.Body).Decode(form)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	user_id := req.Context().Value(middleware.ContextUserIDKey)
+	if user_id == nil {
+		utils.ResponseError(res, errors.New("no jwt provided"), http.StatusUnauthorized)
+		return
+	}
+
+	model, err := models.GetLike(form.PostID, user_id.(int))
+	if err == nil {
+		models.DeleteLike(model.ID)
+		utils.ResponseEmptySucess(res)
+		return
+	}
+
+	model = mappers.LikePostToLike(form, user_id.(int))
+
+	_, err = model.Save()
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	like, err := mappers.ToLikePost(model)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	res.Header().Set("Content-Type", "application/json")
+	b, _ := json.Marshal(like)
 	res.Write(b)
 }

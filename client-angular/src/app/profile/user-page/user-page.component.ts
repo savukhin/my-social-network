@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetector
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/backend-api/auth.service';
 import { ContentService } from 'src/app/services/backend-api/content.service';
+import { Post } from 'src/models/post';
 import { User } from 'src/models/user';
 import { UserPage } from 'src/models/UserPage';
 
@@ -68,6 +69,21 @@ export class UserPageComponent implements AfterViewInit {
         })
     }
 
+    
+
+    likePostClick(post: Post): void {
+        const subscription = this.content.toggleLikePost(post.id)
+        if (subscription == false) {
+            location.reload()
+            return
+        }
+
+        subscription.subscribe(() => {
+            post.has_current_user_like = !post.has_current_user_like;
+            post.current_likes += (post.has_current_user_like? 1 : -1)
+        })
+    }
+
     ngAfterViewInit(): void {
         let id = this.route.snapshot.paramMap.get("id");
         if (id == null) {
@@ -89,7 +105,6 @@ export class UserPageComponent implements AfterViewInit {
                         return 
 
                     this.profile = UserPage.FromUser(response);
-                    console.log(this.profile);
                     
                     this.cdref.detectChanges();
 

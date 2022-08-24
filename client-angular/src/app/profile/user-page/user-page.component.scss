@@ -20,7 +20,36 @@
         max-width: 100px;
         margin-left: 0px;
     }
+
+    .post-footer {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .action {
+        margin-right: 5px;
+
+        span {
+            top: -4px;
+            position: relative;
+            margin-left: 3px;
+        }
+    }
+
+    .heart {
+        fill: $main-text-color;
+        position: relative;
+        top: 2px;
+        width: 21px;
+    }
 }
+
+.liked {
+    .heart {
+        fill: red;
+    }
+}
+
 
 .hidden-input {
 

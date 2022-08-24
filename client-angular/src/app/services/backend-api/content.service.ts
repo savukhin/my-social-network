@@ -25,6 +25,7 @@ export class ContentService {
           for (let i = 0; i < posts.length; i++) {
             posts[i].created_at = new Date(posts[i].created_at)
             posts[i].updated_at = new Date(posts[i].updated_at)
+            posts[i].current_likes = posts[i].likes.length
           }
           return posts
         }
@@ -57,5 +58,27 @@ export class ContentService {
     )
   }
 
-  
+  toggleLikePost (post_id: number) {
+    if (this.auth.user == undefined)
+      return false
+      
+    const token = this.auth.getTokenHeader()
+    if (token == false)
+      return false
+      
+    let observer = this.http.post<Post>(
+      `${environment.serverUrl}/api/posts/toggle_like`, 
+      { post_id },
+      {headers: token, observe: 'response'}
+    )
+
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body) {
+          return response.body as Post
+        }
+        return false;
+      })
+    )
+  }
 }

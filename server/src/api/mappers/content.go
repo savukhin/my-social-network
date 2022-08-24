@@ -126,11 +126,13 @@ func ContentToPost(content *models.Content) (*dto.Post, error) {
 	}
 
 	post := &dto.Post{
-		ID:        content.ID,
-		AuthodID:  content.UserID,
-		CreatedAt: content.CreatedAt,
-		UpdatedAt: content.UpdatedAt,
-		Photos:    make([]*dto.PhotoAttachement, 0),
+		ID:                 content.ID,
+		AuthodID:           content.UserID,
+		CreatedAt:          content.CreatedAt,
+		UpdatedAt:          content.UpdatedAt,
+		Photos:             make([]*dto.PhotoAttachement, 0),
+		Likes:              make([]*dto.LikePostSend, 0),
+		HasCurrentUserLike: false,
 	}
 
 	text, err := content.GetText()

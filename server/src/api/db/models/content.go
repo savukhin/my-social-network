@@ -105,6 +105,27 @@ func GetPostsByUserID(user_id int) ([]*Content, error) {
 	return result, err
 }
 
+func GetPostByID(post_id int) (*Content, error) {
+	sql := fmt.Sprintf(`
+		SELECT id, filepath, content_type, user_id, created_at 
+		FROM contents
+		WHERE content_type = 'post' AND id = %d
+		ORDER BY created_at DESC
+	`, post_id)
+
+	content := &Content{}
+
+	err := db.DB.
+		QueryRow(sql).
+		Scan(&content.ID, &content.Filepath, &content.Type, &content.UserID, &content.CreatedAt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return content, err
+}
+
 func (content *Content) Save() (int, error) {
 	sql := fmt.Sprintf(`
 	INSERT INTO contents (filepath, content_type, parent_id, user_id, attach_order)
