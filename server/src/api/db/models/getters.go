@@ -115,28 +115,6 @@ func GetChatsByUserID(id int) ([]*Chat, error) {
 			return nil, err
 		}
 
-		if chat.IsPersonal {
-			participants, err := GetChatParticipants(chat.ID)
-			if err != nil || len(participants) != 2 {
-				fmt.Println("is pers 1 ", err, " len = ", len(participants))
-				return nil, err
-			}
-
-			processing_id := 0
-			if participants[0] == id {
-				processing_id = 1
-			}
-
-			other, err := GetUserByID(processing_id)
-
-			if err != nil {
-				fmt.Println("is pers 2 ", err)
-				return nil, err
-			}
-
-			chat.Title = other.Name
-		}
-
 		chats = append(chats, chat)
 	}
 

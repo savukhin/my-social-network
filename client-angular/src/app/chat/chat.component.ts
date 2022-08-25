@@ -21,24 +21,7 @@ export class ChatComponent implements AfterViewInit {
   @ViewChild('messageArea') messageArea: ElementRef<HTMLTextAreaElement> = {} as ElementRef;
   contentWidth = 0;
 
-  chat: Chat = new Chat(0, "Kirill Klimonov",
-    {
-        1: new User(1, "Saveliy Karpukhin", true),
-        2: new User(2, "Kirill Klimonov", false),
-    },
-    [
-        new Message("I was really cool party, thanks!", new Date(new Date().getSeconds() - 24 * 60 * 60), 1),
-        new Message("I glad you've enjoyed :)", new Date(new Date().getSeconds() - 24 * 60 * 60 + 14), 2),
-        new Message("Hi! How are you doing?", new Date(), 2),
-        new Message("Hi! How are you doing?", new Date(), 2),
-        new Message("Hi! How are you doing?", new Date(), 2),
-        new Message("Hi! How are you doing?", new Date(), 2),
-        new Message("Hi! How are you doing?", new Date(), 2),
-        new Message("Hi! How are you doing?", new Date(), 2),
-        new Message("Hi! How are you doing?", new Date(), 2),
-        new Message("Hi! How are you doing?", new Date(), 2),
-    ]
-  )
+  chat: Chat = new Chat()
 
   constructor(
       private route: ActivatedRoute, 

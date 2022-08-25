@@ -7,7 +7,6 @@ import (
 	"api/mappers"
 	"api/middleware"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -204,14 +203,12 @@ func GetPersonalChatMessages(res http.ResponseWriter, req *http.Request) {
 		utils.ResponseError(res, err, http.StatusBadRequest)
 		return
 	}
-	fmt.Println(messages)
 
 	messageRange, err := mappers.ToMessageRange(messages)
 	if err != nil {
 		utils.ResponseError(res, err, http.StatusBadRequest)
 		return
 	}
-	fmt.Println(messages)
 
 	b, _ := json.Marshal(messageRange)
 	res.Write(b)

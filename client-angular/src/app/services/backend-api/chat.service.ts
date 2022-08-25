@@ -12,6 +12,20 @@ export class ChatService {
 
   constructor(private auth: AuthService, private http: HttpClient) { }
 
+  private processChat(chat: Chat | ChatDTO) {
+    if (!chat.is_personal || chat.participants.length != 2 || !this.auth.user) 
+      return chat
+
+    let other_user_index = 0
+    if (chat.participants[0].id == this.auth.user.id) {
+      other_user_index = 1
+    }
+
+    chat.photo_url = chat.participants[other_user_index].avatar_url
+    chat.title = chat.participants[other_user_index].name
+    return chat
+  }
+
   getChats () {
     if (this.auth.user == undefined)
       return
@@ -28,7 +42,14 @@ export class ChatService {
     return observer.pipe(
       map((response) => {
         if (response.status == 200 && response.body) {
-          return response.body as Chat[]
+          let chats = response.body as Chat[]
+
+          for (let chat of chats) {
+            this.processChat(chat)
+          }
+          console.log(chats );
+
+          return chats
         }
         return false;
       })
@@ -52,7 +73,7 @@ export class ChatService {
     return observer.pipe(
       map((response) => {
         if (response.status == 200 && response.body) {
-          return response.body as ChatDTO
+            return this.processChat(response.body as ChatDTO)
         }
         return false;
       })
@@ -76,7 +97,7 @@ export class ChatService {
     return observer.pipe(
       map((response) => {
         if (response.status == 200 && response.body) {
-          return response.body as ChatDTO
+          return this.processChat(response.body as ChatDTO)
         }
         return false;
       })

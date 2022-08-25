@@ -4,26 +4,20 @@ import { User } from "./user";
 export class ChatDTO {
     id: number = 0;
     title: string = "";
-    is_persional: boolean = false
+    is_personal: boolean = false
     participants: User[] = []
     messages: Message[] = [];
-    
+    photo_url: string | null = null
 }
 
 export class Chat {
     id: number = 0;
     title: string = "";
-    is_persional: boolean = false
-    participants: { [id:number] : User; } = {}
+    is_personal: boolean = false
+    participants: User[] = []
     messages: Message[] = [];
     last_message?: Message;
-
-    constructor(id=0, title="", participants={}, messages:Message[]=[]) {
-        this.id = id;
-        this.title = title;
-        this.participants = participants;
-        this.messages = messages;
-    }
+    photo_url: string | null = null
 
     static fromDTO(dto: ChatDTO) {
         let chat = new Chat()
@@ -34,6 +28,7 @@ export class Chat {
             chat.participants[val.id] = val
         })
         chat.messages = dto.messages;
+        chat.photo_url = dto.photo_url
 
         return chat
     }

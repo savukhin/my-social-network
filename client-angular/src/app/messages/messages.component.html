@@ -2,7 +2,9 @@
     <a [routerLink]="'/chat'" [queryParams]="{chat: chat.id}" routerLinkActive="active" ariaCurrentWhenActive="page" *ngIf="chat.last_message != undefined">
         <div class="chat-folder">
             <div class="folder-picture-wrapper">
-                <img class="avatar-mini avatar" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+                <img class="avatar-mini avatar" [src]="chat.photo_url 
+                ? chat.photo_url
+                : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
             </div>
             <div>
                 <p>{{ chat.title }}</p>
