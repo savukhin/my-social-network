@@ -2,9 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { Observable, Subject, of, from } from 'rxjs';
 import { tap, shareReplay, filter, map } from 'rxjs/operators';
-import { User } from 'src/models/user';
+import { User, UserCompressed } from 'src/models/user';
 import * as moment from "moment";
 import { environment } from 'src/environments/environment';
+import { UserPage } from 'src/models/UserPage';
 
 @Injectable()
 export class AuthService {
@@ -93,6 +94,22 @@ export class AuthService {
     return observer
   }
 
+  getCompressedProfile(id: number) {
+    let subscription = this.getProfile(id)
+    if (subscription == false)
+      return false
+
+    return subscription.pipe(
+      map((response) => {
+        console.log(response);
+        if (response != false) {
+          return response as UserCompressed
+        }
+        return false;
+      })
+    )
+  }
+
   getProfile(id: number) {
     const token = this.getToken()
     if (!token)
@@ -100,7 +117,7 @@ export class AuthService {
     
     let headers = new HttpHeaders().set("Authorization", token)
 
-    let observer = this.http.post<User>(
+    let observer = this.http.post<UserPage>(
       `${environment.serverUrl}/api/users/profile`, 
       {id}, 
       {headers: headers, observe: 'response'}
@@ -108,8 +125,9 @@ export class AuthService {
 
     return observer.pipe(
       map((response) => {
+        console.log(response);
         if (response.status == 200 && response.body) {
-          return response.body as User
+          return response.body as UserPage
         }
         return false;
       })
@@ -158,6 +176,52 @@ export class AuthService {
       map((response) => {
         if (response.status == 200 && response.body)
           return response.body as User
+        return false;
+      })
+    )
+  }
+
+  addToFriends(user_id: number) {
+    const token = this.getToken()
+    if (!token)
+      return false
+    
+    let headers = new HttpHeaders().set("Authorization", token)
+
+    let observer = this.http.post(
+      `${environment.serverUrl}/api/users/add_to_friend`, 
+      {user_id}, 
+      {headers: headers, observe: 'response'}
+    )
+
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body) {
+          return response.body
+        }
+        return false;
+      })
+    )
+  }
+
+  deleteFriend(user_id: number) {
+    const token = this.getToken()
+    if (!token)
+      return false
+    
+    let headers = new HttpHeaders().set("Authorization", token)
+
+    let observer = this.http.post(
+      `${environment.serverUrl}/api/users/delete_friend`, 
+      {user_id}, 
+      {headers: headers, observe: 'response'}
+    )
+
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body) {
+          return response.body
+        }
         return false;
       })
     )

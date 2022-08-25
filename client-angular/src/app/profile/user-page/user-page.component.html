@@ -7,7 +7,8 @@
                 <br/>
             </div>
             <div *ngIf="!user || profile.id != user.id">
-                <button class="button">Add friend</button>
+                <button class="button" (click)="addFriendClick()" *ngIf="!profile.added_to_friends">Add friend</button>
+                <button class="button" (click)="deleteFriendClick()" *ngIf="profile.added_to_friends">Remove friend</button>
                 <br/>
                 <a class="button" routerLink="/chat" [queryParams]="{user: profile.id}" routerLinkActive="active" ariaCurrentWhenActive="page">Write message</a>
         </div>
@@ -17,9 +18,14 @@
                 <button>Friends</button>
             </div>
             <div class="profile-friends">
-                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
-                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
-                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+                <h4 *ngIf="profile.friends.length == 0"> No friends yet </h4>
+                <div *ngFor="let friend of profile.friends">
+                    <!-- <a class="button" [routerLink]="['/user', friend.id]" routerLinkActive="active" ariaCurrentWhenActive="page"> -->
+                    <!-- <a class="button" [routerLink]="'/messages'" routerLinkActive="active" ariaCurrentWhenActive="page"> -->
+                        <!-- <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/> -->
+                    <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp" (click)="navigateToFriend(friend)"/>
+                    <!-- </a> -->
+                </div>
             </div>
         </div>
     </div>
@@ -51,16 +57,17 @@
             </table>
             <a class="button" *ngIf="profile.id == user?.id" routerLink="/edit-profile" routerLinkActive="active" ariaCurrentWhenActive="page">Change information</a>
         </div>
-        <div class="block">
+        <div class="block" *ngIf="user && profile.id == user.id">
             <div class="write-post-wrapper">
                 <textarea placeholder="Don't you want to tell something about?" #postText></textarea>
                 <button class="button" (click)="createPostClick()">Post</button>
             </div>
         </div>
         <div class="blocks-header">
-            POSTS
+            <h4> POSTS </h4>
         </div>
-        <div *ngFor="let post of profile.posts">
+            <h4 *ngIf="!profile.posts || profile.posts.length == 0" style="text-align: center;"> No posts yet! </h4>
+            <div *ngFor="let post of profile.posts">
             <div [ngClass]="{'block post': true, 'liked' : post.has_current_user_like}">
                 <p>{{ post.text }}</p>
                 <hr/>

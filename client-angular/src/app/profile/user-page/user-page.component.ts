@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/backend-api/auth.service';
 import { ContentService } from 'src/app/services/backend-api/content.service';
 import { Post } from 'src/models/post';
-import { User } from 'src/models/user';
+import { User, UserCompressed } from 'src/models/user';
 import { UserPage } from 'src/models/UserPage';
 
 @Component({
@@ -84,6 +84,48 @@ export class UserPageComponent implements AfterViewInit {
         })
     }
 
+    addFriendClick(): void {
+        if (this.profile.id == this.user?.id)
+            return
+
+        const subscription = this.auth.addToFriends(this.profile.id)
+        if (subscription == false) {
+            return
+        }
+
+        subscription.subscribe((response) => {
+            if (response != false) {
+                this.profile.added_to_friends = true
+                location.reload()
+            }
+        })
+    }
+
+    deleteFriendClick(): void {
+        if (this.profile.id == this.user?.id)
+            return
+
+        const subscription = this.auth.deleteFriend(this.profile.id)
+        if (subscription == false) {
+            return
+        }
+
+        subscription.subscribe((response) => {
+            if (response != false) {
+                this.profile.added_to_friends = true
+                location.reload()
+            }
+        })
+    }
+
+    navigateToFriend(friend: UserCompressed) {
+        console.log(friend.id);
+        
+        this.router.navigate([`/user`, friend.id]).then(() => {
+            location.reload()
+        })
+    }
+
     ngAfterViewInit(): void {
         let id = this.route.snapshot.paramMap.get("id");
         if (id == null) {
@@ -104,7 +146,9 @@ export class UserPageComponent implements AfterViewInit {
                     if (response == false)
                         return 
 
-                    this.profile = UserPage.FromUser(response);
+                    // this.profile = UserPage.FromUser(response);
+                    this.profile = response
+                    console.log(this.profile);
                     
                     this.cdref.detectChanges();
 
@@ -113,6 +157,7 @@ export class UserPageComponent implements AfterViewInit {
                             return;
                         
                         this.profile.posts = response
+                        
         
                         this.cdref.detectChanges()
                     })

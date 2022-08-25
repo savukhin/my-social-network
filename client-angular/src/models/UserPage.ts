@@ -1,5 +1,5 @@
 import { Post } from "./post";
-import { User } from "./user";
+import { User, UserCompressed } from "./user";
 
 export class UserPage {
     id: number = 0;
@@ -11,6 +11,8 @@ export class UserPage {
     city: string = "";
     avatar_url: string | null = null;
     posts: Post[] = [];
+    friends: UserCompressed[] = [];
+    added_to_friends = false
 
     static FromUser(user: User) {
         const page = new UserPage()

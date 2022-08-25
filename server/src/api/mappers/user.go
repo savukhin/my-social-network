@@ -8,7 +8,10 @@ import (
 )
 
 func ToUserProfile(user *models.User) *dto.UserProfile {
-	response := &dto.UserProfile{}
+	response := &dto.UserProfile{
+		Friends:       make([]dto.UserCompressed, 0),
+		AddedToFriend: false,
+	}
 
 	response.ID = user.ID
 	response.Username = user.Username

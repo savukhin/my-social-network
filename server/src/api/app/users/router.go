@@ -11,5 +11,7 @@ func Routes(router *mux.Router) *mux.Router {
 	router.Use(middleware.JwtAuthentication)
 	router.HandleFunc("/profile", GetProfile).Methods(http.MethodPost)
 	router.HandleFunc("/change_profile", ChangeProfile).Methods(http.MethodPost)
+	router.HandleFunc("/add_to_friend", AddToFriends).Methods(http.MethodPost)
+	router.HandleFunc("/delete_friend", DeleteFriend).Methods(http.MethodPost)
 	return router
 }

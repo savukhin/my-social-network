@@ -8,6 +8,7 @@ import (
 	"api/middleware"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 )
 
@@ -81,6 +82,8 @@ func ChangeProfile(res http.ResponseWriter, req *http.Request) {
 
 func GetProfile(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
+	current_user_id := req.Context().Value(middleware.ContextUserIDKey)
+
 	response, err := ExtractProfile(req)
 
 	if err != nil {
@@ -95,7 +98,85 @@ func GetProfile(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	profile, _ := response.GetProfile()
-	b, _ := json.Marshal(mappers.ToUserProfile(profile))
+	model, _ := response.GetProfile()
+	profile := mappers.ToUserProfile(model)
+
+	friendships, err := models.GetFriendships(model.ID)
+	fmt.Println(friendships)
+	fmt.Println(err)
+	if err == nil {
+
+		for _, friendship := range friendships {
+			friend_id := friendship.User1ID
+			if friendship.User1ID == model.ID {
+				friend_id = friendship.User2ID
+			}
+
+			if current_user_id != nil && friend_id == current_user_id {
+				profile.AddedToFriend = true
+			}
+			fmt.Println("friendship = ", friendship)
+			fmt.Println("friend_id = ", friend_id)
+			fmt.Println("current_user_id = ", current_user_id)
+
+			friend_model, err := models.GetUserByID(friend_id)
+			fmt.Println("friend_model = ", friend_model, "err = ", err)
+			if err != nil {
+				continue
+			}
+
+			compressed := mappers.ToUserCompressed(friend_model)
+			profile.Friends = append(profile.Friends, *compressed)
+		}
+
+	}
+
+	fmt.Println("friends = ", profile.Friends)
+	b, _ := json.Marshal(profile)
 	res.Write(b)
+}
+
+func AddToFriends(res http.ResponseWriter, req *http.Request) {
+	form := &dto.AddToFriends{}
+	json.NewDecoder(req.Body).Decode(form)
+
+	user_id := req.Context().Value(middleware.ContextUserIDKey)
+	if user_id == nil {
+		utils.ResponseError(res, errors.New("no jwt provided"), http.StatusUnauthorized)
+		return
+	}
+
+	friendship := mappers.AddToFriendsToFriendship(form, user_id.(int))
+	_, err := friendship.Save()
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusInternalServerError)
+		return
+	}
+
+	utils.ResponseEmptySucess(res)
+}
+
+func DeleteFriend(res http.ResponseWriter, req *http.Request) {
+	form := &dto.AddToFriends{}
+	json.NewDecoder(req.Body).Decode(form)
+
+	user_id := req.Context().Value(middleware.ContextUserIDKey)
+	if user_id == nil {
+		utils.ResponseError(res, errors.New("no jwt provided"), http.StatusUnauthorized)
+		return
+	}
+
+	friendship, err := models.GetFriendship(form.AddingUserID, user_id.(int))
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	err = friendship.Delete()
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusInternalServerError)
+		return
+	}
+
+	utils.ResponseEmptySucess(res)
 }

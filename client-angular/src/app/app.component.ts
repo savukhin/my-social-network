@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { User } from 'src/models/user';
+import { User, UserCompressed } from 'src/models/user';
 import { AuthService } from './services/backend-api/auth.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { AuthService } from './services/backend-api/auth.service';
 export class AppComponent implements AfterViewInit, OnInit {
   private isLoaded = true;
 
-  user?: User;
+  user?: UserCompressed;
   title = 'client-angular';
 
   constructor(private auth: AuthService, 

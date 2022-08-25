@@ -1,3 +1,12 @@
+export class UserCompressed {
+    id: number = 0;
+    name: string = "";
+    username: string = "";
+    is_online: boolean = true;
+    status: string = "";
+    avatar_url: string | null = null;
+}
+
 export class User {
     id: number = 0;
     name: string = "";
