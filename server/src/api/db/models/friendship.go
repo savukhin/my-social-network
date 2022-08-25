@@ -3,6 +3,7 @@ package models
 import (
 	"api/db"
 	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 )
@@ -17,13 +18,18 @@ type Friendship struct {
 }
 
 func (friendship *Friendship) Save() (int, error) {
+	_, err := GetFriendship(friendship.User1ID, friendship.User2ID)
+	if err == nil {
+		return -1, errors.New("this friendship exists")
+	}
+
 	sql := fmt.Sprintf(`
 		INSERT INTO friendships (user1_id, user2_id)
 		VALUES (%d, %d)
 		RETURNING id
 		`, friendship.User1ID, friendship.User2ID)
 
-	err := db.DB.QueryRow(sql).Scan(&friendship.ID)
+	err = db.DB.QueryRow(sql).Scan(&friendship.ID)
 
 	return friendship.ID, err
 }
@@ -74,7 +80,7 @@ func GetFriendship(user1_id int, user2_id int) (*Friendship, error) {
 	sql := fmt.Sprintf(`
 		SELECT id, user1_id, user2_id, created_at, updated_at, deleted_at
 		FROM friendships 
-		WHERE (user1_id = %d AND user2_id = %d) OR (user2_id = %d AND user1_id = %d)
+		WHERE ((user1_id = %d AND user2_id = %d) OR (user2_id = %d AND user1_id = %d)) AND deleted_at IS NULL
 	`, user1_id, user2_id, user1_id, user2_id)
 
 	friendship := &Friendship{}

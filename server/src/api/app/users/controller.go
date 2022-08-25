@@ -8,7 +8,6 @@ import (
 	"api/middleware"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 )
 
@@ -102,8 +101,6 @@ func GetProfile(res http.ResponseWriter, req *http.Request) {
 	profile := mappers.ToUserProfile(model)
 
 	friendships, err := models.GetFriendships(model.ID)
-	fmt.Println(friendships)
-	fmt.Println(err)
 	if err == nil {
 
 		for _, friendship := range friendships {
@@ -115,12 +112,8 @@ func GetProfile(res http.ResponseWriter, req *http.Request) {
 			if current_user_id != nil && friend_id == current_user_id {
 				profile.AddedToFriend = true
 			}
-			fmt.Println("friendship = ", friendship)
-			fmt.Println("friend_id = ", friend_id)
-			fmt.Println("current_user_id = ", current_user_id)
 
 			friend_model, err := models.GetUserByID(friend_id)
-			fmt.Println("friend_model = ", friend_model, "err = ", err)
 			if err != nil {
 				continue
 			}
@@ -131,7 +124,6 @@ func GetProfile(res http.ResponseWriter, req *http.Request) {
 
 	}
 
-	fmt.Println("friends = ", profile.Friends)
 	b, _ := json.Marshal(profile)
 	res.Write(b)
 }
