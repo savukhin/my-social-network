@@ -19,6 +19,7 @@ import { AuthService } from './services/backend-api/auth.service';
 import { ContentService } from './services/backend-api/content.service';
 import { WebsocketService } from './services/backend-api/websocket/websocket.service';
 import { ChatService } from './services/backend-api/chat.service';
+import { AppearanceService } from './services/backend-api/appearance.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { ChatService } from './services/backend-api/chat.service';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [AuthService, ContentService, ChatService],
+  providers: [AuthService, ContentService, ChatService, AppearanceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

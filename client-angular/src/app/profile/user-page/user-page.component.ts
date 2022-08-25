@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AppearanceService } from 'src/app/services/backend-api/appearance.service';
 import { AuthService } from 'src/app/services/backend-api/auth.service';
 import { ContentService } from 'src/app/services/backend-api/content.service';
 import { Post } from 'src/models/post';
@@ -15,9 +16,13 @@ export class UserPageComponent implements AfterViewInit {
     user?: User;
     profile = new UserPage()
     editStatus = false
+    avatarEditing = false
+    photoUploadIsSet = false
+    imageSrc = ""
     
     @ViewChild('pleaseDoIt') input: ElementRef<HTMLInputElement> = {} as ElementRef;
     @ViewChild('postText') postText: ElementRef<HTMLTextAreaElement> = {} as ElementRef;
+    @ViewChild('avatarInput') avatarInput: ElementRef<HTMLInputElement> = {} as ElementRef;
 
     showEditStatus() {
         setTimeout(() => {
@@ -31,7 +36,7 @@ export class UserPageComponent implements AfterViewInit {
         this.editStatus = false;
     }
 
-    constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService, private cdref: ChangeDetectorRef, private content: ContentService) {
+    constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService, private cdref: ChangeDetectorRef, private content: ContentService, private appearance: AppearanceService) {
         if (this.auth.userSubscription == undefined) 
             return
         
@@ -40,6 +45,14 @@ export class UserPageComponent implements AfterViewInit {
                 return;
             this.user = response
             this.cdref.detectChanges()
+        })
+
+        this.appearance.blackout.subscribe(val => {
+            if (val == false) {
+                this.avatarEditing = false
+                this.photoUploadIsSet = false
+                this.imageSrc = ""
+            }
         })
     }
 
@@ -68,8 +81,6 @@ export class UserPageComponent implements AfterViewInit {
             location.reload()
         })
     }
-
-    
 
     likePostClick(post: Post): void {
         const subscription = this.content.toggleLikePost(post.id)
@@ -119,10 +130,45 @@ export class UserPageComponent implements AfterViewInit {
     }
 
     navigateToFriend(friend: UserCompressed) {
-        console.log(friend.id);
-        
         this.router.navigate([`/user`, friend.id]).then(() => {
             location.reload()
+        })
+    }
+
+    changeAvatarClick() {
+        this.avatarEditing = true
+        this.appearance.blackout.next(true)
+    }
+
+    onChangeUpload(event: Event) {
+        let target = (event.target as HTMLInputElement)
+        if (target.files && target.files[0]) {
+            const file = target.files[0];
+    
+            const reader = new FileReader();
+            reader.onload = e => this.imageSrc = reader.result as string;
+    
+            reader.readAsDataURL(file);
+            this.photoUploadIsSet = true
+        }
+    }
+
+    uploadClick() {
+        let target = this.avatarInput.nativeElement
+        if (!target.files || !target.files[0]) {
+            return
+        }
+
+        const file = target.files[0];
+
+        let subscription = this.auth.changeProfileAvatar(file)
+        if (subscription == false)
+            return
+        
+        subscription.subscribe((response) => {
+            console.log(response);
+            // if (response != false)
+            //     location.reload()
         })
     }
 
@@ -146,7 +192,6 @@ export class UserPageComponent implements AfterViewInit {
                     if (response == false)
                         return 
 
-                    // this.profile = UserPage.FromUser(response);
                     this.profile = response
                     console.log(this.profile);
                     
@@ -157,10 +202,12 @@ export class UserPageComponent implements AfterViewInit {
                             return;
                         
                         this.profile.posts = response
-                        
-        
                         this.cdref.detectChanges()
                     })
+
+                    // this.auth.GetProfileAvatar(this.profile.id).subscribe((response) => {
+
+                    // })
                 }
             )
         }

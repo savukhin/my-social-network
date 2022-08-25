@@ -1,9 +1,12 @@
 <div class="profile-wrapper">
     <div class="blocks-wrapper">
         <div class="block small-block">
-            <img class="" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+            <img class="avatar"
+                [src]="profile.avatar_url 
+                    ? profile.avatar_url
+                    : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
             <div *ngIf="user && profile.id == user.id">
-                <button class="button">Change photo</button>
+                <button class="button" (click)="changeAvatarClick()">Change photo</button>
                 <br/>
             </div>
             <div *ngIf="!user || profile.id != user.id">
@@ -20,11 +23,10 @@
             <div class="profile-friends">
                 <h4 *ngIf="profile.friends.length == 0"> No friends yet </h4>
                 <div *ngFor="let friend of profile.friends">
-                    <!-- <a class="button" [routerLink]="['/user', friend.id]" routerLinkActive="active" ariaCurrentWhenActive="page"> -->
-                    <!-- <a class="button" [routerLink]="'/messages'" routerLinkActive="active" ariaCurrentWhenActive="page"> -->
-                        <!-- <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/> -->
-                    <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp" (click)="navigateToFriend(friend)"/>
-                    <!-- </a> -->
+                    <img class="avatar-mini avatar"
+                    [src]="friend.avatar_url 
+                        ? friend.avatar_url
+                        : '/assets/img/blank-profile-picture-973460_1280.webp'" (click)="navigateToFriend(friend)"/>
                 </div>
             </div>
         </div>
@@ -88,4 +90,13 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="block banner" *ngIf="avatarEditing">
+    <input #avatarInput type="file" class="file-upload" (change)="onChangeUpload($event)" accept="image/*,image/jpeg">
+    <br/>
+    <br/>
+    <img [src]="imageSrc" class="preview-image" *ngIf="photoUploadIsSet"/>
+    <br/>
+    <button class="button" (click)="uploadClick()">Upload</button>
 </div>

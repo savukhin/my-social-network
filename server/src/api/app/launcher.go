@@ -33,7 +33,7 @@ func Launch() {
 
 	credentials := handlers.AllowCredentials()
 	methods := handlers.AllowedMethods([]string{"POST", "GET"})
-	headers := handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With", "Authorization"})
+	headers := handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With", "Authorization", "enctype"})
 	ttl := handlers.MaxAge(3600)
 	origins := handlers.AllowedOrigins([]string{"*"})
 

@@ -157,3 +157,20 @@ func (user *User) ChangeProfile() (interface{}, error) {
 
 	return temp, nil
 }
+
+func (user *User) Apply() (int, error) {
+	sql := fmt.Sprintf(`
+	UPDATE users 
+	SET
+		email = '%s',
+		username = '%s',
+		name = '%s',
+		password = '%s',
+		avatar_id = %d
+	WHERE id = %d
+	RETURNING id ; `, user.Email, user.Username, user.Username, user.Password, user.Avatar_ID.Int64, user.ID)
+
+	err := db.DB.QueryRow(sql).Scan(&user.ID)
+
+	return user.ID, err
+}

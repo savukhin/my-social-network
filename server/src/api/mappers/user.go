@@ -27,7 +27,7 @@ func ToUserProfile(user *models.User) *dto.UserProfile {
 		response.City = user.City.String
 	}
 	if user.Avatar_ID.Valid {
-		response.AvatarURL = strconv.Itoa(int(user.Avatar_ID.Int64))
+		response.AvatarURL = `http://127.0.0.1:4201/api/users/get_avatar/` + strconv.Itoa(user.ID)
 	}
 
 	return response
@@ -35,12 +35,15 @@ func ToUserProfile(user *models.User) *dto.UserProfile {
 
 func ToUserCompressed(user *models.User) *dto.UserCompressed {
 	result := &dto.UserCompressed{
-		ID:        user.ID,
-		Username:  user.Username,
-		Name:      user.Name,
-		IsOnline:  user.IsOnline,
-		Status:    user.Status.String,
-		AvatarURL: "",
+		ID:       user.ID,
+		Username: user.Username,
+		Name:     user.Name,
+		IsOnline: user.IsOnline,
+		Status:   user.Status.String,
+	}
+
+	if user.Avatar_ID.Valid {
+		result.AvatarURL = `http://127.0.0.1:4201/api/users/get_avatar/` + strconv.Itoa(user.ID)
 	}
 
 	return result

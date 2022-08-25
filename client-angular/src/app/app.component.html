@@ -7,7 +7,7 @@
             <span style="background-color: rgb(122, 239, 122)">Network</span>
         </div>
         <div *ngIf="user != undefined">
-            <img class="avatar-mini"
+            <img class="avatar-mini avatar"
                     [src]="user.avatar_url 
                         ? user.avatar_url
                         : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
@@ -18,3 +18,5 @@
     <app-main-layout *ngIf="user != undefined"></app-main-layout>
     <router-outlet *ngIf="user == undefined"></router-outlet>
 </div>
+
+<div *ngIf="blackout" class="blackout" (click)="blackoutClick()"></div>

@@ -126,6 +126,18 @@ func GetPostByID(post_id int) (*Content, error) {
 	return content, err
 }
 
+func CreateAvatarContent(path string, user_id int) *Content {
+	content := &Content{
+		Filepath:    path,
+		Type:        PhotoType,
+		ParentID:    sql.NullInt32{Int32: int32(user_id), Valid: true},
+		UserID:      user_id,
+		AttachOrder: 1,
+	}
+
+	return content
+}
+
 func (content *Content) Save() (int, error) {
 	sql := fmt.Sprintf(`
 	INSERT INTO contents (filepath, content_type, parent_id, user_id, attach_order)

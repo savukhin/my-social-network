@@ -18,6 +18,20 @@ func GetUserByID(id int) (*User, error) {
 	return temp, err
 }
 
+func GetUserAvatarURL(id int) (string, error) {
+	filename := ""
+
+	sql := fmt.Sprintf(`
+		SELECT filepath
+		FROM contents as c
+		INNER JOIN users as u ON u.avatar_id = c.id AND c.content_type = 'photo' AND u.id = %d
+	`, id)
+
+	err := db.DB.QueryRow(sql).Scan(&filename)
+
+	return filename, err
+}
+
 func CreatePersonalChat(user1_id int, user2_id int) (*Chat, error) {
 	sql := fmt.Sprintf(`
 		INSERT INTO chats (title) 

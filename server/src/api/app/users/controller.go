@@ -6,9 +6,18 @@ import (
 	"api/dto"
 	"api/mappers"
 	"api/middleware"
+	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strconv"
+	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func ExtractProfile(req *http.Request) (*models.User, error) {
@@ -79,6 +88,65 @@ func ChangeProfile(res http.ResponseWriter, req *http.Request) {
 	res.Write(b)
 }
 
+func ChangeAvatar(res http.ResponseWriter, req *http.Request) {
+	user_id := req.Context().Value(middleware.ContextUserIDKey)
+	if user_id == nil {
+		utils.ResponseError(res, errors.New("no jwt provided"), http.StatusUnauthorized)
+		return
+	}
+
+	user, err := models.GetUserByID(user_id.(int))
+	if err != nil {
+		utils.ResponseError(res, errors.New("no jwt provided"), http.StatusUnauthorized)
+		return
+	}
+
+	file, filename, err := req.FormFile("avatar")
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	defer file.Close()
+
+	err = os.MkdirAll("./uploads/avatars", os.ModePerm)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	path := fmt.Sprintf("./uploads/avatars/%d%s", time.Now().UnixNano(), filepath.Ext(filename.Filename))
+
+	dst, err := os.Create(path)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+	defer dst.Close()
+
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	content := models.CreateAvatarContent(path, user_id.(int))
+	_, err = content.Save()
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	user.Avatar_ID = sql.NullInt64{Int64: int64(content.ID), Valid: true}
+	_, err = user.Apply()
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	utils.ResponseEmptySucess(res)
+}
+
 func GetProfile(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 	current_user_id := req.Context().Value(middleware.ContextUserIDKey)
@@ -126,6 +194,23 @@ func GetProfile(res http.ResponseWriter, req *http.Request) {
 
 	b, _ := json.Marshal(profile)
 	res.Write(b)
+}
+
+func GetAvatar(res http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	user_id, err := strconv.Atoi(vars["user_id"])
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	filename, err := models.GetUserAvatarURL(user_id)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	http.ServeFile(res, req, filename)
 }
 
 func AddToFriends(res http.ResponseWriter, req *http.Request) {

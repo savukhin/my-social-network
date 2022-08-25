@@ -97,3 +97,21 @@
         width: 99%;
     }
 }
+
+.banner {
+    width: 280px;
+    position: absolute;
+    top: calc(50vh - 300px);
+    left: calc(50vw - 140px);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-image {
+    width: 280px;
+    height: 280px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    object-fit: cover;
+}

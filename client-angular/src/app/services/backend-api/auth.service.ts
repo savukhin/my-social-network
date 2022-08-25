@@ -181,6 +181,51 @@ export class AuthService {
     )
   }
 
+  changeProfileAvatar(imageSrc: File) {
+    const token = this.getToken()
+    if (!token)
+      return false
+    
+    const headers = new HttpHeaders({ "Authorization" : token, 'enctype': 'multipart/form-data' });
+    
+    var formData = new FormData();
+    formData.append('avatar', imageSrc);
+    console.log(imageSrc);
+    
+
+    let observer = this.http.post(
+      `${environment.serverUrl}/api/users/change_avatar`, 
+      formData, 
+      {headers: headers, observe: 'response'}
+    )
+
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body)
+          return response.body
+        return false;
+      })
+    )
+  }
+
+  // GetProfileAvatar(user_id: number) {
+  //   const headers = new HttpHeaders({ 'Accept': 'image/jpeg', 'enctype': 'multipart/form-data' });
+    
+  //   let observer = this.http.post(
+  //     `${environment.serverUrl}/api/users/change_avatar`, 
+  //     { user_id }, 
+  //     {headers: headers, observe: 'response'}
+  //   )
+
+  //   return observer.pipe(
+  //     map((response) => {
+  //       if (response.status == 200 && response.body)
+  //         return response.body
+  //       return false;
+  //     })
+  //   )
+  // }
+
   addToFriends(user_id: number) {
     const token = this.getToken()
     if (!token)
