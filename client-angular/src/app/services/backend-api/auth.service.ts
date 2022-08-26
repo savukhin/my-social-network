@@ -60,38 +60,40 @@ export class AuthService {
   }
 
   register(username: string, email:string, password: string, password2: string) {
-    let observer = this.http.post<{status: string, message: string, id_token: string, expires_at: string}>(
+    let observer = this.http.post<{status: string, message: string, id_token: string, expires_at: string, user_id: number}>(
       `${environment.serverUrl}/api/auth/register`, 
       {username, email, password, password2}, 
       {headers: this.headers, observe: 'response'}
     )
 
-    observer.subscribe((response) => {
-      if (response.status == 200 && response.body) {
-        this.isAuthenticated = true
-        this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
-      }
-    })
-
-    return observer
+    return observer.pipe(
+      map(response => {
+        if (response.status == 200 && response.body) {
+          this.isAuthenticated = true
+          this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
+        } 
+        return response
+      })
+    )
   }
 
   login(username: string, password: string) {
 
-    let observer = this.http.post<{status: string, message: string, id_token: string, expires_at: string}>(
+    let observer = this.http.post<{status: string, message: string, id_token: string, expires_at: string, user_id: number}>(
       `${environment.serverUrl}/api/auth/login`, 
       {username, password}, 
       {headers: this.headers, observe: 'response'}
     )
 
-    observer.subscribe((response) => {
-      if (response.status == 200 && response.body) {
-        this.isAuthenticated = true
-        this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
-      } 
-    })
-
-    return observer
+    return observer.pipe(
+      map(response => {
+        if (response.status == 200 && response.body) {
+          this.isAuthenticated = true
+          this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
+        } 
+        return response
+      })
+    )
   }
 
   getCompressedProfile(id: number) {

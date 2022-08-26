@@ -15,10 +15,12 @@
                     type="password">
             </div>
         </fieldset>
-        <div class="form-buttons">
-            <button class="button" (click)="login()">Login</button>
-            <br/>
-            <a class="button" routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">Register</a>
-    </div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="form-buttons">
+                <button class="button" (click)="login()">Login</button>
+            </div>
+            
+            <span>Have not an account? <a class="usual-link" routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">Register</a></span>
+        </div>
     </form>
 </div>

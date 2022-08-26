@@ -33,10 +33,13 @@ export class LoginComponent implements OnInit {
             this.authService.login(val.login, val.password)
                 .subscribe(
                     (response) => {
-                        console.log(response);
-                        // console.log("User is logged in");
-                        // if (response.status == "ok")
-                        //     this.router.navigateByUrl('/');
+                        if (response.status == 200) {
+                            this.router.navigate(['/user', response.body?.user_id])
+                                .then(() => { 
+                                    location.reload()
+                                }
+                            );
+                        }
                     }
                 );
         }

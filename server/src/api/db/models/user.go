@@ -94,7 +94,7 @@ func (user *User) Register() map[string]interface{} {
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	tokenString, _ := token.SignedString([]byte("asdf"))
 
-	return map[string]interface{}{"status": "valid", "message": "Account is successfully created ", "id_token": tokenString, "expires_at": timein}
+	return map[string]interface{}{"status": "valid", "message": "Account is successfully created ", "id_token": tokenString, "expires_at": timein, "user_id": idUser}
 }
 
 func (user *User) Login() map[string]interface{} {
@@ -125,7 +125,7 @@ func (user *User) Login() map[string]interface{} {
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	tokenString, _ := token.SignedString([]byte("asdf"))
 
-	return map[string]interface{}{"status": "ok", "message": "Login is Success", "id_token": tokenString, "expires_at": timein}
+	return map[string]interface{}{"status": "ok", "message": "Login is Success", "id_token": tokenString, "expires_at": timein, "user_id": temp.ID}
 }
 
 func (user *User) GetProfile() (*User, error) {
