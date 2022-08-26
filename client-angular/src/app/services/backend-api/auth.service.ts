@@ -111,11 +111,15 @@ export class AuthService {
   }
 
   getProfile(id: number) {
+    let headers = new HttpHeaders()
+
     const token = this.getToken()
-    if (!token)
+    if (token) {
+      headers.set("Authorization", token)
+    } else if (id == 0) {
       return false
+    }
     
-    let headers = new HttpHeaders().set("Authorization", token)
 
     let observer = this.http.post<UserPage>(
       `${environment.serverUrl}/api/users/profile`, 

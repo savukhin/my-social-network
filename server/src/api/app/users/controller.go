@@ -31,12 +31,14 @@ func ExtractProfile(req *http.Request) (*models.User, error) {
 	var response *models.User
 
 	if user.ID == 0 {
-		user_id := req.Context().Value(middleware.ContextUserIDKey)
-		if user_id == nil {
-			return nil, errors.New("JWT middleware error")
+		jwt := req.Header.Get("Authorization")
+		token, err := utils.UnpackJWT(jwt)
+		user_id := -1
+		if err == nil {
+			user_id = token.UserID
 		}
 
-		response, err = models.GetUserByID(user_id.(int))
+		response, err = models.GetUserByID(user_id)
 	} else {
 		response, err = models.GetUserByID(user.ID)
 	}
@@ -149,7 +151,12 @@ func ChangeAvatar(res http.ResponseWriter, req *http.Request) {
 
 func GetProfile(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
-	current_user_id := req.Context().Value(middleware.ContextUserIDKey)
+	jwt := req.Header.Get("Authorization")
+	token, err := utils.UnpackJWT(jwt)
+	current_user_id := -1
+	if err == nil {
+		current_user_id = token.UserID
+	}
 
 	response, err := ExtractProfile(req)
 
@@ -177,7 +184,7 @@ func GetProfile(res http.ResponseWriter, req *http.Request) {
 				friend_id = friendship.User2ID
 			}
 
-			if current_user_id != nil && friend_id == current_user_id {
+			if current_user_id != -1 && friend_id == current_user_id {
 				profile.AddedToFriend = true
 			}
 

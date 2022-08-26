@@ -37,6 +37,14 @@ export class UserPageComponent implements AfterViewInit {
     }
 
     constructor(private route: ActivatedRoute, private router: Router, private auth: AuthService, private cdref: ChangeDetectorRef, private content: ContentService, private appearance: AppearanceService) {
+        this.appearance.blackout.subscribe(val => {
+            if (val == false) {
+                this.avatarEditing = false
+                this.photoUploadIsSet = false
+                this.imageSrc = ""
+            }
+        })
+        
         if (this.auth.userSubscription == undefined) 
             return
         
@@ -47,13 +55,7 @@ export class UserPageComponent implements AfterViewInit {
             this.cdref.detectChanges()
         })
 
-        this.appearance.blackout.subscribe(val => {
-            if (val == false) {
-                this.avatarEditing = false
-                this.photoUploadIsSet = false
-                this.imageSrc = ""
-            }
-        })
+        
     }
 
     editStatusClick(): void {
@@ -189,7 +191,8 @@ export class UserPageComponent implements AfterViewInit {
         if (subscription != false) {
             subscription.subscribe(
                 response => {
-                    if (response == false)
+                console.log(response);
+                if (response == false)
                         return 
 
                     this.profile = response

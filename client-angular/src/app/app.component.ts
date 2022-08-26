@@ -23,18 +23,18 @@ export class AppComponent implements AfterViewInit, OnInit {
     private appearance: AppearanceService) {
 
       const subscription = this.auth.getProfile(0)
-      if (subscription == false)
-          return
+      if (subscription != false) {
+        
+        subscription.subscribe(
+          response => {
+            if (response == false)
+              return
 
-      subscription.subscribe(
-        response => {
-          if (response == false)
-            return
-
-          this.user = response;
-          this.cdref.detectChanges();
-        }
-      )
+            this.user = response;
+            this.cdref.detectChanges();
+          }
+        )
+      }
 
       this.appearance.blackout.subscribe(val => {
         this.blackout = val
