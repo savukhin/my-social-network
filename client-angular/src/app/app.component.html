@@ -13,6 +13,9 @@
                         ? user.avatar_url
                         : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
         </div>
+        <div *ngIf="user == undefined" style="display: flex; align-items: center; justify-content: flex-end;">
+            <a class="button" [routerLink]="['login']" routerLinkActive="active" ariaCurrentWhenActive="page">login</a>
+        </div>
     </div>
 </div>
 <div class="under-nav">
