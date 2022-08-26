@@ -6,7 +6,8 @@
             <span style="background-color: rgb(177, 177, 255)">Social</span>
             <span style="background-color: rgb(122, 239, 122)">Network</span>
         </div>
-        <div *ngIf="user != undefined">
+        <div *ngIf="user != undefined" style="display: flex; align-items: center; justify-content: flex-end;">
+            <button class="button" (click)="logoutClick()">Logout</button>
             <img class="avatar-mini avatar"
                     [src]="user.avatar_url 
                         ? user.avatar_url

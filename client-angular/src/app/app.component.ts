@@ -47,6 +47,13 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   }
 
+  logoutClick() {
+    this.auth.logout()
+    this.router.navigateByUrl('login').then(() => {
+      location.reload()
+    })
+  }
+
   blackoutClick() {
     this.appearance.blackout.next(false)
   }
