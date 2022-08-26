@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -13,9 +13,15 @@ export class ContentService {
   constructor(private auth: AuthService, private http: HttpClient) { }
 
   getUserPosts (user_id: number) {
+    let headers = new HttpHeaders()
+    const token = this.auth.getTokenHeader()
+    if (token != false)
+      headers = token
+      
+
     let observer = this.http.get<Post[]>(
       `${environment.serverUrl}/api/posts/user_posts/${user_id}`, 
-      {observe: 'response'}
+      {headers, observe: 'response'}
     )
 
     return observer.pipe(

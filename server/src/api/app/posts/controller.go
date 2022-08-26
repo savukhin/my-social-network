@@ -15,6 +15,13 @@ import (
 )
 
 func GetUserPosts(res http.ResponseWriter, req *http.Request) {
+	jwt := req.Header.Get("Authorization")
+	token, err := utils.UnpackJWT(jwt)
+	current_user_id := -1
+	if err == nil {
+		current_user_id = token.UserID
+	}
+
 	user_id, err := strconv.Atoi(mux.Vars(req)["user_id"])
 	if err != nil {
 		utils.ResponseError(res, err, http.StatusBadRequest)
@@ -44,7 +51,7 @@ func GetUserPosts(res http.ResponseWriter, req *http.Request) {
 			if like, err := mappers.ToLikePost(model); err == nil {
 				post.Likes = append(post.Likes, like)
 
-				if like.UserID == user_id {
+				if like.UserID == current_user_id {
 					post.HasCurrentUserLike = true
 				}
 			}
