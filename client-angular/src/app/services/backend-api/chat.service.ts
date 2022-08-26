@@ -13,8 +13,12 @@ export class ChatService {
   constructor(private auth: AuthService, private http: HttpClient) { }
 
   private processChat(chat: Chat | ChatDTO) {
+    console.log("Start processing chat");
+    console.log("is personal ", chat.is_personal);
+    
     if (!chat.is_personal || chat.participants.length != 2 || !this.auth.user) 
       return chat
+    console.log("After if");
 
     let other_user_index = 0
     if (chat.participants[0].id == this.auth.user.id) {

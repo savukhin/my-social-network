@@ -9,10 +9,12 @@
             <div class="chat-message-wrapper" *ngFor="let message of chat.messages">
                 <div class="chat-message" *ngIf="chat.participants[message.author_id] != undefined">
                     <div class="folder-picture-wrapper">
+                    <a [routerLink]="['/user', message.author_id]" routerLinkActive="active" ariaCurrentWhenActive="page">
                         <img class="avatar-mini"
                             [src]="chat.participants[message.author_id].avatar_url 
                                 ? chat.participants[message.author_id].avatar_url
                                 : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
+                    </a>
                     </div>
                     <div>
                         <span>{{ chat.participants[message.author_id].name }}</span><span> {{ message.time.toLocaleDateString("en-US") }}</span>

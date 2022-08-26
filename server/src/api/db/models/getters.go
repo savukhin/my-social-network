@@ -123,17 +123,17 @@ func GetChatsByUserID(id int) ([]*Chat, error) {
 
 func GetPersonalChat(user1_id int, user2_id int) (*Chat, error) {
 	sql := fmt.Sprintf(`
-		SELECT c.id, c.title, c.photo_id, c.created_at, c.updated_at 
+		SELECT c.id, c.title, c.is_personal, c.photo_id, c.created_at, c.updated_at 
 		FROM chats as c
 		JOIN user_to_chat AS u1 ON c.id = u1.chat_id AND u1.user_id = %d
 		JOIN user_to_chat AS u2 ON c.id = u2.chat_id AND u2.user_id = %d
-		AND c.deleted_at IS NULL
+		AND c.deleted_at IS NULL AND c.is_personal = true
 	`, user1_id, user2_id)
 
 	chat := &Chat{}
 	err :=
 		db.DB.QueryRow(sql).
-			Scan(&chat.ID, &chat.Title, &chat.PhotoID, &chat.CreatedAt, &chat.UpdatedAt)
+			Scan(&chat.ID, &chat.Title, &chat.IsPersonal, &chat.PhotoID, &chat.CreatedAt, &chat.UpdatedAt)
 
 	if err != nil {
 		chat, err = CreatePersonalChat(user1_id, user2_id)

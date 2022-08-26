@@ -257,3 +257,34 @@ func DeleteFriend(res http.ResponseWriter, req *http.Request) {
 
 	utils.ResponseEmptySucess(res)
 }
+
+func GetFriends(res http.ResponseWriter, req *http.Request) {
+	user_id, err := strconv.Atoi(mux.Vars(req)["user_id"])
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	friendships, err := models.GetFriendships(user_id)
+	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
+		return
+	}
+
+	users := make([]*dto.UserCompressed, 0)
+	for _, friendship := range friendships {
+		other_user_id := friendship.User1ID
+		if other_user_id == user_id {
+			other_user_id = friendship.User2ID
+		}
+
+		user, err := models.GetUserByID(other_user_id)
+		if err != nil {
+			continue
+		}
+		users = append(users, mappers.ToUserCompressed(user))
+	}
+
+	b, _ := json.Marshal(users)
+	res.Write(b)
+}

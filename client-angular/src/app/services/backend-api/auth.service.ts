@@ -208,23 +208,21 @@ export class AuthService {
     )
   }
 
-  // GetProfileAvatar(user_id: number) {
-  //   const headers = new HttpHeaders({ 'Accept': 'image/jpeg', 'enctype': 'multipart/form-data' });
-    
-  //   let observer = this.http.post(
-  //     `${environment.serverUrl}/api/users/change_avatar`, 
-  //     { user_id }, 
-  //     {headers: headers, observe: 'response'}
-  //   )
+  getFriends(user_id: number) {
+    let observer = this.http.get(
+      `${environment.serverUrl}/api/users/get_friends/${user_id}`, 
+      {observe: 'response'}
+    )
 
-  //   return observer.pipe(
-  //     map((response) => {
-  //       if (response.status == 200 && response.body)
-  //         return response.body
-  //       return false;
-  //     })
-  //   )
-  // }
+    return observer.pipe(
+      map((response) => {
+        if (response.status == 200 && response.body) {
+          return response.body as UserCompressed[]
+        }
+        return false;
+      })
+    )
+  }
 
   addToFriends(user_id: number) {
     const token = this.getToken()

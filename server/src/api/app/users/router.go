@@ -9,6 +9,7 @@ import (
 
 func Routes(router *mux.Router) *mux.Router {
 	router.HandleFunc("/get_avatar/{user_id:[0-9]+}", GetAvatar).Methods(http.MethodGet)
+	router.HandleFunc("/get_friends/{user_id:[0-9]+}", GetFriends).Methods(http.MethodGet)
 
 	r := router.PathPrefix("").Subrouter()
 	r.Use(middleware.JwtAuthentication)

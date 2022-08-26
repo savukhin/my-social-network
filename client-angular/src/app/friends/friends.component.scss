@@ -5,11 +5,11 @@
     ul {
         padding: 5px;
         @include columns-2(80px, auto);
-        cursor: pointer;
+        // cursor: pointer;
     }
 
     ul:hover {
-        background-color: rgb(255, 255, 255, 0.3);
+        // background-color: rgb(255, 255, 255, 0.3);
     }
 }
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/models/user';
+import { User, UserCompressed } from 'src/models/user';
+import { AuthService } from '../services/backend-api/auth.service';
 
 @Component({
   selector: 'app-friends',
@@ -7,14 +8,18 @@ import { User } from 'src/models/user';
   styleUrls: ['./friends.component.scss']
 })
 export class FriendsComponent implements OnInit {
-  friends: User[] = [
-    new User(1, "Kirill Klimonov"),
-    new User(2, "Kirill Klimonov2", false)
-  ];
+  friends: UserCompressed[] = [];
 
-  constructor() { }
+  constructor(private auth: AuthService) { }
 
   ngOnInit(): void {
+    if (!this.auth.user)
+      return
+
+    this.auth.getFriends(this.auth.user.id).subscribe(response => {
+      if (response != false)
+        this.friends = response
+    })
   }
 
 }
