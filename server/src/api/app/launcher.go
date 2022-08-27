@@ -29,6 +29,10 @@ func Launch() {
 		chat.ServeWs(hub, w, r)
 	})
 
+	r.HandleFunc("/health", func(res http.ResponseWriter, req *http.Request) {
+		res.Write([]byte("works"))
+	})
+
 	// router.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 
 	credentials := handlers.AllowCredentials()

@@ -1,0 +1,6 @@
+.git
+.gitignore
+.vscode
+pkg
+bin
+src/api/uploads

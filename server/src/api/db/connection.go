@@ -29,7 +29,7 @@ func init() {
 
 // Connect function for checking connection to postgresql
 func Connect() error {
-	host := "127.0.0.1"
+	host := "database"
 	port := "5432"
 	user := "postgres"
 	password := "admin"
