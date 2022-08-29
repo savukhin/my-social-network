@@ -7,7 +7,7 @@ export class UserPage {
     username: string = "";
     is_online: boolean = true;
     status: string = "";
-    birthDate: string = "";
+    birth_date: string = "";
     city: string = "";
     avatar_url: string | null = null;
     posts: Post[] = [];
@@ -22,7 +22,7 @@ export class UserPage {
         page.username = user.username;
         page.is_online = user.is_online;
         page.status = user.status;
-        page.birthDate = user.birthDate;
+        page.birth_date = user.birth_date;
         page.city = user.city;
         page.avatar_url = user.avatar_url;
 

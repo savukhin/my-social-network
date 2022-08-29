@@ -6,7 +6,7 @@ import (
 )
 
 func GetUserByID(id int) (*User, error) {
-	sql := fmt.Sprintf("SELECT id, username, name, email, status, city, birthdate, avatar_id, isonline FROM users WHERE id = %d", id)
+	sql := fmt.Sprintf("SELECT id, username, name, email, status, city, birth_date, avatar_id, isonline FROM users WHERE id = %d", id)
 	row := db.DB.QueryRow(sql)
 
 	temp := &User{}

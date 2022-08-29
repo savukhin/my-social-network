@@ -6,7 +6,7 @@ type UserProfile struct {
 	Name          string           `json:"name"`
 	IsOnline      bool             `json:"is_online"`
 	Status        string           `json:"status"`
-	BirthDate     string           `json:"birthDate"`
+	BirthDate     string           `json:"birth_date"`
 	City          string           `json:"city"`
 	AvatarURL     string           `json:"avatar_url"`
 	Friends       []UserCompressed `json:"friends"`

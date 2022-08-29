@@ -117,11 +117,10 @@ export class AuthService {
 
     const token = this.getToken()
     if (token) {
-      headers.set("Authorization", token)
+      headers = headers.set("Authorization", token)
     } else if (id == 0) {
       return false
     }
-    
 
     let observer = this.http.post<UserPage>(
       `${environment.serverUrl}/api/users/profile`, 
@@ -140,8 +139,10 @@ export class AuthService {
     )
   }
 
-  changeProfile(name: string, birthDate: Date, city: string) {
+  changeProfile(name: string, birth_date: Date, city: string) {
     const token = this.getToken()
+    console.log(token);
+    
     if (!token)
       return false
     
@@ -149,7 +150,7 @@ export class AuthService {
 
     let observer = this.http.post<User>(
       `${environment.serverUrl}/api/users/change_profile`, 
-      {name, birthDate, city}, 
+      {name, birth_date, city}, 
       {headers: headers, observe: 'response'}
     )
 

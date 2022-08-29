@@ -33,7 +33,7 @@
     </div>
     <div class="blocks-wrapper">
         <div class="block profile-page-top">
-            <span>{{ profile.is_online ? 'online' : 'offline' }}</span>
+            <!-- <span>{{ profile.is_online ? 'online' : 'offline' }}</span> -->
             <h1>{{ profile.name }}</h1>
             <div class="hidden-input-wrapper" *ngIf="!editStatus" (click)="showEditStatus()">   
                 <p>{{ profile.status }}</p>
@@ -49,7 +49,7 @@
                 <tbody>
                     <tr>
                         <td>Date of birth:</td>
-                        <td>{{ profile.birthDate == "" ? "Not stated" : profile.birthDate }}</td>
+                        <td>{{ profile.birth_date == "" ? "Not stated" : profile.birth_date }}</td>
                     </tr>
                     <tr>
                         <td>City:</td>

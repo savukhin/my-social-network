@@ -13,7 +13,7 @@ export class User {
     username: string = "";
     is_online: boolean = true;
     status: string = "";
-    birthDate: string = "";
+    birth_date: string = "";
     city: string = "";
     avatar_url: string | null = null;
     id_token: string | null = null;
@@ -24,7 +24,7 @@ export class User {
         this.name = name;
         this.is_online = isOnline;
         this.status = status;
-        this.birthDate = birthDate;
+        this.birth_date = birthDate;
         this.city = city;
         this.avatar_url = avatarURL;
     }

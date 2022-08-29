@@ -32,6 +32,8 @@ export class AppComponent implements AfterViewInit, OnInit {
 
             this.user = response;
             this.cdref.detectChanges();
+            console.log(this.user );
+            
           }
         )
       }

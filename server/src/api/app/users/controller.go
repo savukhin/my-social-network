@@ -31,12 +31,14 @@ func ExtractProfile(req *http.Request) (*models.User, error) {
 	var response *models.User
 
 	if user.ID == 0 {
-		user_id := req.Context().Value(middleware.ContextUserIDKey)
-		if user_id == nil {
+		jwt := req.Header.Get("Authorization")
+		token, err := utils.UnpackJWT(jwt)
+		if err != nil {
 			return nil, errors.New("JWT middleware error")
 		}
+		user_id := token.UserID
 
-		response, err = models.GetUserByID(user_id.(int))
+		response, err = models.GetUserByID(user_id)
 	} else {
 		response, err = models.GetUserByID(user.ID)
 	}

@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm start --prefix client-angular",
     "clientinstall": "npm install --prefix client-angular",
-    "start": "concurrently --kill-others-on-fail \"./serve.sh\" \"npm run client\""
+    "server": "sh ./server/build.sh && sh ./server/run.sh",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",

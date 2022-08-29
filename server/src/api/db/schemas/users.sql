@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users
     password VARCHAR(100) NOT NULL,
     status VARCHAR(100),
     city VARCHAR(100),
-    birthDate DATE,
+    birth_date DATE,
     avatar_id INTEGER,
     isOnline boolean DEFAULT false,
     created_at TIMESTAMP DEFAULT now(),

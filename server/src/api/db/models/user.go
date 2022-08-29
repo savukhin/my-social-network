@@ -129,7 +129,7 @@ func (user *User) Login() map[string]interface{} {
 }
 
 func (user *User) GetProfile() (*User, error) {
-	sql := fmt.Sprintf("SELECT id, username, name, email, status, city, birthdate, avatar_id, isOnline FROM users WHERE id = %d", user.ID)
+	sql := fmt.Sprintf("SELECT id, username, name, email, status, city, birth_date, avatar_id, isOnline FROM users WHERE id = %d", user.ID)
 	row := db.DB.QueryRow(sql)
 
 	temp := &User{}
