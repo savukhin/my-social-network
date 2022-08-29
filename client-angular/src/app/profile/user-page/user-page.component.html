@@ -1,40 +1,46 @@
 <div class="profile-wrapper">
     <div class="blocks-wrapper">
         <div class="block small-block">
-            <img class="" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
-            {{user?.id}}
-            {{profile.id}}
+            <img class="avatar"
+                [src]="profile.avatar_url 
+                    ? profile.avatar_url
+                    : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
             <div *ngIf="user && profile.id == user.id">
-                <button class="button">Change photo</button>
+                <button class="button" (click)="changeAvatarClick()">Change photo</button>
                 <br/>
             </div>
             <div *ngIf="!user || profile.id != user.id">
-                <button class="button">Add friend</button>
+                <button class="button" (click)="addFriendClick()" *ngIf="!profile.added_to_friends">Add friend</button>
+                <button class="button" (click)="deleteFriendClick()" *ngIf="profile.added_to_friends">Remove friend</button>
                 <br/>
-                <button class="button">Write message</button>
-            </div>
+                <a class="button" routerLink="/chat" [queryParams]="{user: profile.id}" routerLinkActive="active" ariaCurrentWhenActive="page">Write message</a>
+        </div>
         </div>
         <div class="block">
             <div class="block-header">
                 <button>Friends</button>
             </div>
             <div class="profile-friends">
-                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
-                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
-                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+                <h4 *ngIf="profile.friends.length == 0"> No friends yet </h4>
+                <div *ngFor="let friend of profile.friends">
+                    <img class="avatar-mini avatar"
+                    [src]="friend.avatar_url 
+                        ? friend.avatar_url
+                        : '/assets/img/blank-profile-picture-973460_1280.webp'" (click)="navigateToFriend(friend)"/>
+                </div>
             </div>
         </div>
     </div>
     <div class="blocks-wrapper">
         <div class="block profile-page-top">
-            <span>{{ profile.isOnline ? 'online' : 'offline' }}</span>
+            <!-- <span>{{ profile.is_online ? 'online' : 'offline' }}</span> -->
             <h1>{{ profile.name }}</h1>
             <div class="hidden-input-wrapper" *ngIf="!editStatus" (click)="showEditStatus()">   
                 <p>{{ profile.status }}</p>
             </div>
             <div class="edit-status" *ngIf="editStatus">
                 <input type="text" #pleaseDoIt/>
-                <button class="button">Edit</button>
+                <button class="button" (click)="editStatusClick()">Edit</button>
                 <button class="button" (click)="hideEditStatus()">Cancel</button>
             </div>
         </div>
@@ -43,27 +49,54 @@
                 <tbody>
                     <tr>
                         <td>Date of birth:</td>
-                        <td>{{ profile.birthDate }}</td>
+                        <td>{{ profile.birth_date == "" ? "Not stated" : profile.birth_date }}</td>
                     </tr>
                     <tr>
                         <td>City:</td>
-                        <td>{{ profile.city }}</td>
+                        <td>{{ profile.city == "" ? "Not stated" : profile.city }}</td>
                     </tr>
                 </tbody>
             </table>
-            <a class="button" routerLink="/edit-profile" routerLinkActive="active" ariaCurrentWhenActive="page">Change information</a>
+            <a class="button" *ngIf="profile.id == user?.id" routerLink="/edit-profile" routerLinkActive="active" ariaCurrentWhenActive="page">Change information</a>
         </div>
-        <div class="block">
+        <div class="block" *ngIf="user && profile.id == user.id">
             <div class="write-post-wrapper">
-                <textarea placeholder="Don't you want to tell something about?"></textarea>
-                <button class="button">Post</button>
+                <textarea placeholder="Don't you want to tell something about?" #postText></textarea>
+                <button class="button" (click)="createPostClick()">Post</button>
             </div>
         </div>
         <div class="blocks-header">
-            POSTS
+            <h4> POSTS </h4>
         </div>
-        <div class="block post">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h4 *ngIf="!profile.posts || profile.posts.length == 0" style="text-align: center;"> No posts yet! </h4>
+            <div *ngFor="let post of profile.posts">
+            <div [ngClass]="{'block post': true, 'liked' : post.has_current_user_like}">
+                <p>{{ post.text }}</p>
+                <hr/>
+                
+                <div class="post-footer">
+                    <div class="post-actions">
+                        <button class="button action" (click)="likePostClick(post)">
+                            <svg class="heart" viewBox="0 0 32 29.6">
+                                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                                c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                            </svg> 
+                            <span> {{ post.current_likes }} </span>
+                        </button>
+                    </div>
+
+                    <span>{{ post.created_at.toLocaleDateString("ru-RU", {hour: '2-digit', minute:'2-digit'}) }}</span>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+
+<div class="block banner" *ngIf="avatarEditing">
+    <input #avatarInput type="file" class="file-upload" (change)="onChangeUpload($event)" accept="image/*,image/jpeg">
+    <br/>
+    <br/>
+    <img [src]="imageSrc" class="preview-image" *ngIf="photoUploadIsSet"/>
+    <br/>
+    <button class="button" (click)="uploadClick()">Upload</button>
 </div>

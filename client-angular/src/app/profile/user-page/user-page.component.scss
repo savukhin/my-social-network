@@ -12,6 +12,45 @@
     }
 }
 
+.post {
+    p {
+        margin-bottom: 30px;
+    }
+    hr {
+        max-width: 100px;
+        margin-left: 0px;
+    }
+
+    .post-footer {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .action {
+        margin-right: 5px;
+
+        span {
+            top: -4px;
+            position: relative;
+            margin-left: 3px;
+        }
+    }
+
+    .heart {
+        fill: $main-text-color;
+        position: relative;
+        top: 2px;
+        width: 21px;
+    }
+}
+
+.liked {
+    .heart {
+        fill: red;
+    }
+}
+
+
 .hidden-input {
 
 }
@@ -57,4 +96,22 @@
         resize: none;
         width: 99%;
     }
+}
+
+.banner {
+    width: 280px;
+    position: absolute;
+    top: calc(50vh - 300px);
+    left: calc(50vw - 140px);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-image {
+    width: 280px;
+    height: 280px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    object-fit: cover;
 }

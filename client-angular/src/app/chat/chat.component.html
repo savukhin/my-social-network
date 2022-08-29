@@ -1,19 +1,23 @@
 <div class="block chat-block" #block (window:resize)="onResize()">
     <div class="chat-header-wrapper" [ngStyle]="{ 'width' : contentWidth + 'px'}" (click)="scroll(targetView)">
-        <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
-        <h4>Kirill Klimonov</h4>
+        <img class="avatar-mini avatar" [src]="chat.photo_url 
+                ? chat.photo_url
+                : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
+        <h4>{{ chat.title }}</h4>
     </div>
         <div class="chat-content" [ngStyle]="{ 'width' : contentWidth + 'px'}">
             <div class="chat-message-wrapper" *ngFor="let message of chat.messages">
-                <div class="chat-message">
+                <div class="chat-message" *ngIf="chat.participants[message.author_id] != undefined">
                     <div class="folder-picture-wrapper">
+                    <a [routerLink]="['/user', message.author_id]" routerLinkActive="active" ariaCurrentWhenActive="page">
                         <img class="avatar-mini"
-                            [src]="chat.participants[message.authorId].avatarURL 
-                                ? chat.participants[message.authorId].avatarURL
+                            [src]="chat.participants[message.author_id].avatar_url 
+                                ? chat.participants[message.author_id].avatar_url
                                 : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
+                    </a>
                     </div>
                     <div>
-                        <span>{{ chat.participants[message.authorId].name }}</span><span> {{ message.time.toLocaleDateString("en-US") }}</span>
+                        <span>{{ chat.participants[message.author_id].name }}</span><span> {{ message.time.toLocaleDateString("en-US") }}</span>
                         <p>{{ message.text }}</p>
                     </div>
                 </div>
@@ -22,8 +26,8 @@
         </div>
     <div class="chat-footer-wrapper" [ngStyle]="{ 'width' : contentWidth + 'px'}">
         <div class="chat-footer">
-            <textarea placeholder="Start typing..."></textarea>
-            <button class="button">Send</button>
+            <textarea placeholder="Start typing..." #messageArea></textarea>
+            <button class="button" (click)="sendMessageClick()">Send</button>
         </div>
     </div>
 </div>

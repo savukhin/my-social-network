@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Chat } from 'src/models/chat';
 import { Message } from 'src/models/message';
 import { User } from 'src/models/user';
+import { ChatService } from '../services/backend-api/chat.service';
+import { ContentService } from '../services/backend-api/content.service';
 
 class Item {
   message: Message = new Message();
@@ -18,6 +21,10 @@ class Item {
   styleUrls: ['./messages.component.scss']
 })
 export class MessagesComponent implements OnInit {
+  chats: Chat[] = [
+    
+  ]
+
   items: Item[] = [
     new Item(
       new Message("Hi! How are you doing?", new Date()),
@@ -25,9 +32,25 @@ export class MessagesComponent implements OnInit {
     )
   ];
 
-  constructor() { }
+  constructor(private chat: ChatService) { }
 
   ngOnInit(): void {
+    this.chat.getChats()?.subscribe(response => {
+      console.log(response);
+      if (response != false) {
+        for (let i = 0; i < response.length; i++) {
+          let msg = response[i].last_message
+
+          if (msg != undefined)
+            msg.time = new Date(msg.time)
+          
+          response[i].last_message = msg
+
+          this.chats.push(response[i])
+        }
+      }
+      
+    })
   }
 
 }

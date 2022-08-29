@@ -22,10 +22,12 @@
                 <input name="password2" formControlName="password2" type="password">
             </div>
         </fieldset>
-        <div class="form-buttons">
-            <button class="button" (click)="register()">Register</button>
-            <br/>
-        <a class="button" routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</a>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="form-buttons">
+                <button class="button" (click)="register()">Register</button>
+            </div>
+            
+            <span>Already have an account? <a class="usual-link" routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</a></span>
         </div>
     </form>
 </div>

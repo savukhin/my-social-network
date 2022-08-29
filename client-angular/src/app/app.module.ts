@@ -15,6 +15,11 @@ import { LoginComponent } from './auth/login/login.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ChangePasswordComponent } from './profile/change-password/change-password.component';
+import { AuthService } from './services/backend-api/auth.service';
+import { ContentService } from './services/backend-api/content.service';
+import { WebsocketService } from './services/backend-api/websocket/websocket.service';
+import { ChatService } from './services/backend-api/chat.service';
+import { AppearanceService } from './services/backend-api/appearance.service';
 
 @NgModule({
   declarations: [
@@ -37,7 +42,7 @@ import { ChangePasswordComponent } from './profile/change-password/change-passwo
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [AuthService, ContentService, ChatService, AppearanceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

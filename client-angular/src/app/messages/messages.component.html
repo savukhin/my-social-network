@@ -1,18 +1,18 @@
-<div class="block" *ngFor="let item of items">
-    <a [routerLink]="'/chat/' + item.author.id" routerLinkActive="active" ariaCurrentWhenActive="page">
-        
+<div class="block" *ngFor="let chat of this.chats">
+    <a [routerLink]="'/chat'" [queryParams]="{chat: chat.id}" routerLinkActive="active" ariaCurrentWhenActive="page" *ngIf="chat.last_message != undefined">
         <div class="chat-folder">
             <div class="folder-picture-wrapper">
-                <img class="avatar-mini" src="/assets/img/blank-profile-picture-973460_1280.webp"/>
+                <img class="avatar-mini avatar" [src]="chat.photo_url 
+                ? chat.photo_url
+                : '/assets/img/blank-profile-picture-973460_1280.webp'"/>
             </div>
             <div>
-                <p>{{ item.author.name }}</p>
+                <p>{{ chat.title }}</p>
                 <div class="folder-text">
-                    <span>{{ item.message.text }}</span>
-                    <span>{{ item.message.time.toLocaleTimeString('it-IT').substr(0, 5) }}</span>
+                    <span>{{ chat.last_message.text }}</span>
+                    <span>{{ chat.last_message.time.toLocaleTimeString('it-IT').substr(0, 5) }}</span>
                 </div>
             </div>
         </div>
-
     </a>
 </div>

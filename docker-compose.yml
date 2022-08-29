@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+  database:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: "socialNetwork"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "admin"
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+  
+  server:
+    build:
+      context: ./server/
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    networks:
+      - default
+    ports:
+    - "4201:4201"
+
+  client:
+    build:
+      context: ./client-angular/
+      dockerfile: Dockerfile
+    networks:
+      - default
+    ports:
+    - "4200:80"
+    
+volumes:
+  data:

@@ -22,3 +22,6 @@ go.work
 .vscode
 
 gin-bin
+server/bin
+server/pkg
+server/src/api/uploads

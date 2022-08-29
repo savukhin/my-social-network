@@ -29,12 +29,17 @@ export class LoginComponent implements OnInit {
     login() {
         const val = this.form.value;
 
-        if (val.email && val.password) {
+        if (val.login && val.password) {
             this.authService.login(val.login, val.password)
                 .subscribe(
-                    () => {
-                        console.log("User is logged in");
-                        // this.router.navigateByUrl('/');
+                    (response) => {
+                        if (response.status == 200) {
+                            this.router.navigate(['/user', response.body?.user_id])
+                                .then(() => { 
+                                    location.reload()
+                                }
+                            );
+                        }
                     }
                 );
         }
