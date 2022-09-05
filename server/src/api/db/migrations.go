@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 )
@@ -17,7 +18,12 @@ func RunSchema(path string) error {
 		return err
 	}
 
-	_, err = stmt.Exec()
+	fmt.Println(query)
+	fmt.Println("stmt", stmt)
+
+	res, err := stmt.Exec()
+	fmt.Println("res", res)
+
 	return err
 }
 
