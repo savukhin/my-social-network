@@ -37,14 +37,13 @@ export class RegisterComponent implements OnInit {
                 .pipe(
                     map(
                         (response) => {
-                            console.log(response);
-                            
                             if (!response.body) {
                                 this.error = "Unknown error";
                                 return;
                             }
+
                             if (response.status == 200) {
-                                this.router.navigate(['/user', response.body?.user_id])
+                                this.router.navigate(['/user', response.body.user_id])
                                     .then(() => { 
                                         location.reload()
                                     }

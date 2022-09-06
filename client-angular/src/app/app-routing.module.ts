@@ -13,14 +13,10 @@ import { UserPageComponent } from './profile/user-page/user-page.component';
 
 const routes: Routes = [
     {
-      path: '',
-      redirectTo: 'user',
-      pathMatch: 'full'
-    },
-    {
       path: 'user',
       component: UserPageComponent,
-      canActivate: [AuthGuard]
+      pathMatch: 'full',
+      canActivate: [AuthGuard],
     },
     {
         path: 'user/:id',
@@ -63,6 +59,11 @@ const routes: Routes = [
       path: 'change-password',
       component: ChangePasswordComponent,
       canActivate: [AuthGuard]
+    },
+    {
+      path: '',
+      redirectTo: 'login',
+      pathMatch: 'full'
     },
 ];
 
