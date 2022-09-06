@@ -10,6 +10,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { ChangePasswordComponent } from './profile/change-password/change-password.component';
 import { UpdateProfileComponent } from './profile/update-profile/update-profile.component';
 import { UserPageComponent } from './profile/user-page/user-page.component';
+import { NotFoundComponent } from './status-pages/not-found/not-found.component';
 
 const routes: Routes = [
     {
@@ -64,6 +65,10 @@ const routes: Routes = [
       path: '',
       redirectTo: 'login',
       pathMatch: 'full'
+    },
+    {
+      path: '**',
+      component: NotFoundComponent,
     },
 ];
 
