@@ -70,9 +70,9 @@ func (user *User) Validate() (map[string]interface{}, bool) {
 	return map[string]interface{}{"status": "ok", "message": "Requirement passed"}, true
 }
 
-func (user *User) Register() map[string]interface{} {
+func (user *User) Register() (map[string]interface{}, bool) {
 	if rsp, status := user.Validate(); !status {
-		return rsp
+		return rsp, false
 	}
 
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
@@ -83,7 +83,7 @@ func (user *User) Register() map[string]interface{} {
 						RETURNING id ; `, user.Email, user.Username, user.Username, user.Password)
 	err := db.DB.QueryRow(sql).Scan(&idUser)
 	if err != nil || idUser == 0 {
-		return map[string]interface{}{"status": "error", "message": "Insert Errors call admin or developer "}
+		return map[string]interface{}{"status": "error", "message": "Insert Errors call admin or developer "}, false
 	}
 	Hours := 24
 	Mins := 12
@@ -94,10 +94,10 @@ func (user *User) Register() map[string]interface{} {
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	tokenString, _ := token.SignedString([]byte("asdf"))
 
-	return map[string]interface{}{"status": "valid", "message": "Account is successfully created ", "id_token": tokenString, "expires_at": timein, "user_id": idUser}
+	return map[string]interface{}{"status": "valid", "message": "Account is successfully created ", "id_token": tokenString, "expires_at": timein, "user_id": idUser}, true
 }
 
-func (user *User) Login() map[string]interface{} {
+func (user *User) Login() (map[string]interface{}, bool) {
 	sql := fmt.Sprintf("SELECT id, email, password FROM users WHERE username = '%s'", user.Username)
 	row := db.DB.QueryRow(sql)
 
@@ -107,13 +107,13 @@ func (user *User) Login() map[string]interface{} {
 		return map[string]interface{}{
 			"status":  "error",
 			"message": "No such user with this username",
-		}
+		}, false
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(temp.Password), []byte(user.Password))
 
 	if err == bcrypt.ErrMismatchedHashAndPassword {
-		return map[string]interface{}{"status": "error", "message": "Password Invalid."}
+		return map[string]interface{}{"status": "error", "message": "Password Invalid."}, false
 	}
 
 	Hours := 24
@@ -125,7 +125,7 @@ func (user *User) Login() map[string]interface{} {
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	tokenString, _ := token.SignedString([]byte("asdf"))
 
-	return map[string]interface{}{"status": "ok", "message": "Login is Success", "id_token": tokenString, "expires_at": timein, "user_id": temp.ID}
+	return map[string]interface{}{"status": "ok", "message": "Login is Success", "id_token": tokenString, "expires_at": timein, "user_id": temp.ID}, true
 }
 
 func (user *User) GetProfile() (*User, error) {

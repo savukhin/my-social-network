@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, map, of } from 'rxjs';
 import { AuthService } from 'src/app/services/backend-api/auth.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { AuthService } from 'src/app/services/backend-api/auth.service';
 })
 export class RegisterComponent implements OnInit {
     form: FormGroup;
+    error?: string;
 
     constructor(private authService: AuthService, 
             private fb:FormBuilder, 
@@ -32,17 +34,34 @@ export class RegisterComponent implements OnInit {
 
         if (val.email && val.password) {
             this.authService.register(val.login, val.email, val.password, val.password2)
-                .subscribe(
-                    (response) => {
-                        if (response.status == 200) {
-                            this.router.navigate(['/user', response.body?.user_id])
-                                .then(() => { 
-                                    location.reload()
-                                }
-                            );
+                .pipe(
+                    map(
+                        (response) => {
+                            console.log(response);
+                            
+                            if (!response.body) {
+                                this.error = "Unknown error";
+                                return;
+                            }
+                            if (response.status == 200) {
+                                this.router.navigate(['/user', response.body?.user_id])
+                                    .then(() => { 
+                                        location.reload()
+                                    }
+                                );
+                            } else {
+                                this.error = response.body.message
+                                console.log("error = ", this.error);
+                                
+                            }
                         }
-                    }
-                );
+                    ),
+                    catchError((response) => {
+                        this.error = response.error.message
+                        return of([])
+                    })
+                ).subscribe()
+                
         }
     }
 

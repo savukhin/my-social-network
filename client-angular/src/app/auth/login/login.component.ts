@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, map, of } from 'rxjs';
 import { AuthService } from 'src/app/services/backend-api/auth.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { AuthService } from 'src/app/services/backend-api/auth.service';
 })
 export class LoginComponent implements OnInit {
     form: FormGroup;
+    error?: string;
 
     constructor(private authService: AuthService, 
             private fb:FormBuilder, 
@@ -31,17 +33,23 @@ export class LoginComponent implements OnInit {
 
         if (val.login && val.password) {
             this.authService.login(val.login, val.password)
-                .subscribe(
-                    (response) => {
-                        if (response.status == 200) {
-                            this.router.navigate(['/user', response.body?.user_id])
-                                .then(() => { 
-                                    location.reload()
-                                }
-                            );
+                .pipe(
+                    map(
+                        (response) => {
+                            if (response.status == 200) {
+                                this.router.navigate(['/user', response.body?.user_id])
+                                    .then(() => { 
+                                        location.reload()
+                                    }
+                                );
+                            }
                         }
-                    }
-                );
+                    ),
+                    catchError((response) => {
+                        this.error = response.error.message
+                        return of([])
+                    })
+                ).subscribe();
         }
     }
 

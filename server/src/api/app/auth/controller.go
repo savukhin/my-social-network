@@ -25,7 +25,10 @@ func Login(res http.ResponseWriter, req *http.Request) {
 		res.Write(jsonBytes)
 		return
 	}
-	response := user.Login()
+	response, status := user.Login()
+	if !status {
+		res.WriteHeader(http.StatusBadRequest)
+	}
 	b, _ := json.Marshal(response)
 	res.Write(b)
 }
@@ -34,12 +37,17 @@ func Register(res http.ResponseWriter, req *http.Request) {
 	user := &models.User{}
 	err := json.NewDecoder(req.Body).Decode(user)
 	if err != nil {
+		utils.ResponseError(res, err, http.StatusBadRequest)
 		return
 	}
 
-	response := user.Register()
+	response, status := user.Register()
 
 	res.Header().Add("Content-Type", "application/json")
+	if !status {
+		res.WriteHeader(http.StatusBadRequest)
+	}
+
 	json.NewEncoder(res).Encode(response)
 }
 
