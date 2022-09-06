@@ -26,6 +26,8 @@
             <div class="form-buttons">
                 <button class="button" (click)="register()">Register</button>
             </div>
+
+            <span *ngIf="error" class="warning-text">{{ error }}</span>
             
             <span>Already have an account? <a class="usual-link" routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</a></span>
         </div>

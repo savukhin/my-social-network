@@ -1,8 +1,9 @@
-version: "3.7"
+version: "3.9"
 services:
   database:
     image: postgres
     restart: always
+    hostname: localhost
     environment:
       POSTGRES_DB: "socialNetwork"
       POSTGRES_USER: "postgres"
@@ -11,6 +12,8 @@ services:
       - "5432:5432"
     volumes:
       - data:/var/lib/postgresql/data
+    networks:
+      - mynet
   
   server:
     build:
@@ -19,18 +22,29 @@ services:
     depends_on:
       - database
     networks:
-      - default
+      - mynet
     ports:
     - "4201:4201"
+    environment:
+      POSTGRES_HOST: "database"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "socialNetwork"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "admin"
 
   client:
     build:
       context: ./client-angular/
       dockerfile: Dockerfile
     networks:
-      - default
+      - mynet
     ports:
     - "4200:80"
     
 volumes:
   data:
+
+networks:
+  mynet:
+    driver: bridge
+    name: my-shared-db-network

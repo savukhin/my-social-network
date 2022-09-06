@@ -20,6 +20,8 @@
                 <button class="button" (click)="login()">Login</button>
             </div>
             
+            <span *ngIf="error" class="warning-text">{{ error }}</span>
+            
             <span>Have not an account? <a class="usual-link" routerLink="/register" routerLinkActive="active" ariaCurrentWhenActive="page">Register</a></span>
         </div>
     </form>

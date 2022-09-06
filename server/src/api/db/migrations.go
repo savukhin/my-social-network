@@ -18,6 +18,7 @@ func RunSchema(path string) error {
 	}
 
 	_, err = stmt.Exec()
+
 	return err
 }
 
@@ -30,7 +31,6 @@ func CreateTables() error {
 	for _, f := range files {
 		path := filepath.Join(folder, f.Name())
 		err := RunSchema(path)
-		// fmt.Println(path, " ", err)
 		if err != nil {
 			return err
 		}

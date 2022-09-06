@@ -20,6 +20,7 @@ import { ContentService } from './services/backend-api/content.service';
 import { WebsocketService } from './services/backend-api/websocket/websocket.service';
 import { ChatService } from './services/backend-api/chat.service';
 import { AppearanceService } from './services/backend-api/appearance.service';
+import { NotFoundComponent } from './status-pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AppearanceService } from './services/backend-api/appearance.service';
     MainLayoutComponent,
     RegisterComponent,
     ChangePasswordComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

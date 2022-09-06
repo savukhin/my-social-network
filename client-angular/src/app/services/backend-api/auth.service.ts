@@ -68,6 +68,8 @@ export class AuthService {
 
     return observer.pipe(
       map(response => {
+        console.log(response);
+        
         if (response.status == 200 && response.body) {
           this.isAuthenticated = true
           this.setSession({ expiresIn: response.body.expires_at, idToken: response.body.id_token })
