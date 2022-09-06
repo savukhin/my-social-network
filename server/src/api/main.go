@@ -1,18 +1,11 @@
 package main
 
 import (
-	"api/app"
-	"log"
+	_ "api/config"
 
-	"github.com/joho/godotenv"
+	"api/app"
 )
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-
 	app.Launch()
 }

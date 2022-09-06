@@ -35,8 +35,11 @@ func Connect() error {
 	user := os.Getenv("POSTGRES_USER")
 	password := os.Getenv("POSTGRES_PASSWORD")
 	dbname := os.Getenv("POSTGRES_DB")
+	fmt.Println("FROM CONNECT =", os.Getenv("POSTGRES_HOST"))
 
 	psqlInfo := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", user, password, host, port, dbname)
+	fmt.Println(psqlInfo)
+
 	result, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		fmt.Println("Error connecting: ", err)

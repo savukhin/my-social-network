@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 )
@@ -18,11 +17,7 @@ func RunSchema(path string) error {
 		return err
 	}
 
-	fmt.Println(query)
-	fmt.Println("stmt", stmt)
-
-	res, err := stmt.Exec()
-	fmt.Println("res", res)
+	_, err = stmt.Exec()
 
 	return err
 }
@@ -36,7 +31,6 @@ func CreateTables() error {
 	for _, f := range files {
 		path := filepath.Join(folder, f.Name())
 		err := RunSchema(path)
-		// fmt.Println(path, " ", err)
 		if err != nil {
 			return err
 		}
